@@ -100,7 +100,7 @@ import org.springframework.core.ResolvableType;
  * </ol>
  *
  * <p>On shutdown of a bean factory, the following lifecycle methods apply:
- * <ol>
+ * <ol>在关闭bean工厂之后，下面方法回调用
  * <li>{@code postProcessBeforeDestruction} methods of DestructionAwareBeanPostProcessors
  * <li>DisposableBean's {@code destroy}
  * <li>a custom destroy-method definition
