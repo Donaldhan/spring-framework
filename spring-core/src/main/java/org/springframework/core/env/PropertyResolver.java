@@ -18,7 +18,7 @@ package org.springframework.core.env;
 
 /**
  * Interface for resolving properties against any underlying source.
- *
+ * PropertyResolver是一个依赖于底层数据解决属性接口
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
@@ -29,6 +29,7 @@ public interface PropertyResolver {
 
 	/**
 	 * Return whether the given property key is available for resolution,
+	 * 如果给定的key不为null，返回是否包含给定属性key
 	 * i.e. if the value for the given key is not {@code null}.
 	 */
 	boolean containsProperty(String key);
@@ -36,6 +37,7 @@ public interface PropertyResolver {
 	/**
 	 * Return the property value associated with the given key,
 	 * or {@code null} if the key cannot be resolved.
+	 * 返回给定属性key的值，没有为null
 	 * @param key the property name to resolve
 	 * @see #getProperty(String, String)
 	 * @see #getProperty(String, Class)
@@ -46,6 +48,7 @@ public interface PropertyResolver {
 	/**
 	 * Return the property value associated with the given key, or
 	 * {@code defaultValue} if the key cannot be resolved.
+	 * 返回给定属性key的值，没有返回默认值defaultValue
 	 * @param key the property name to resolve
 	 * @param defaultValue the default value to return if no value is found
 	 * @see #getRequiredProperty(String)
@@ -56,6 +59,7 @@ public interface PropertyResolver {
 	/**
 	 * Return the property value associated with the given key,
 	 * or {@code null} if the key cannot be resolved.
+	 * 返回是给定类型属性key的值，没有为null
 	 * @param key the property name to resolve
 	 * @param targetType the expected type of the property value
 	 * @see #getRequiredProperty(String, Class)
@@ -65,6 +69,7 @@ public interface PropertyResolver {
 	/**
 	 * Return the property value associated with the given key,
 	 * or {@code defaultValue} if the key cannot be resolved.
+	 * 返回是给定类型属性key的值，没有返回默认值defaultValue
 	 * @param key the property name to resolve
 	 * @param targetType the expected type of the property value
 	 * @param defaultValue the default value to return if no value is found
@@ -78,6 +83,7 @@ public interface PropertyResolver {
 	 * @throws org.springframework.core.convert.ConversionException if class specified
 	 * by property value cannot be found or loaded or if targetType is not assignable
 	 * from class specified by property value
+	 * 返回是给定类型属性key的值,如果值得类型不同，则进行转换，转换异常，则抛出ConversionException，没有对应的值，则返回null
 	 * @see #getProperty(String, Class)
 	 * @deprecated as of 4.3, in favor of {@link #getProperty} with manual conversion
 	 * to {@code Class} via the application's {@code ClassLoader}
@@ -87,6 +93,7 @@ public interface PropertyResolver {
 
 	/**
 	 * Return the property value associated with the given key (never {@code null}).
+	 * 返回是给定属性key的值，没有抛出IllegalStateException
 	 * @throws IllegalStateException if the key cannot be resolved
 	 * @see #getRequiredProperty(String, Class)
 	 */
@@ -95,6 +102,7 @@ public interface PropertyResolver {
 	/**
 	 * Return the property value associated with the given key, converted to the given
 	 * targetType (never {@code null}).
+	 * 返回是给定类型属性key的值，没有抛出IllegalStateException
 	 * @throws IllegalStateException if the given key cannot be resolved
 	 */
 	<T> T getRequiredProperty(String key, Class<T> targetType) throws IllegalStateException;
@@ -103,6 +111,7 @@ public interface PropertyResolver {
 	 * Resolve ${...} placeholders in the given text, replacing them with corresponding
 	 * property values as resolved by {@link #getProperty}. Unresolvable placeholders with
 	 * no default value are ignored and passed through unchanged.
+	 * 在给定上文本中，替换引用属性“${...}”，没有默认的情况下，则忽略，不做任何改变
 	 * @param text the String to resolve
 	 * @return the resolved String (never {@code null})
 	 * @throws IllegalArgumentException if given text is {@code null}
@@ -115,6 +124,7 @@ public interface PropertyResolver {
 	 * Resolve ${...} placeholders in the given text, replacing them with corresponding
 	 * property values as resolved by {@link #getProperty}. Unresolvable placeholders with
 	 * no default value will cause an IllegalArgumentException to be thrown.
+	 * 此方法，与上面方法不同的是，没有匹配的值，则抛出异常IllegalArgumentException
 	 * @return the resolved String (never {@code null})
 	 * @throws IllegalArgumentException if given text is {@code null}
 	 * or if any placeholders are unresolvable
