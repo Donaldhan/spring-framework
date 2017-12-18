@@ -34,7 +34,7 @@ import org.springframework.core.io.ResourceLoader;
  * <p>{@link PathMatchingResourcePatternResolver} is a standalone implementation
  * that is usable outside an ApplicationContext, also used by
  * {@link ResourceArrayPropertyEditor} for populating Resource array bean properties.
- *PathMatchingResourcePatternResolver接口是ResourcePatternResolver的一个独立是吸纳，不能在ApplicationContext外部使用，
+ *PathMatchingResourcePatternResolver接口是ResourcePatternResolver的一个独立是吸纳，可以在ApplicationContext外部使用，
  *可以使用ResourceArrayPropertyEditor，设置bean的属性。
  * <p>Can be used with any sort of location pattern (e.g. "/WEB-INF/*-context.xml"):
  * Input patterns have to match the strategy implementation. This interface just
