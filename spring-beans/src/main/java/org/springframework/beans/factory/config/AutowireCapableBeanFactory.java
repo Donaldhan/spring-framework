@@ -63,6 +63,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates no externally defined autowiring. Note that
 	 * BeanFactoryAware etc and annotation-driven injection will still be applied.
+	 * 常量，表示内部没有定义自动装配。主要BeanFactoryAware等和注解驱动依赖注入，依然启作用。
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -72,6 +73,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring bean properties by name
 	 * (applying to all bean property setters).
+	 * 表示根据name自动装配bean属性（应用与bean所有setter属性）
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -81,6 +83,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring bean properties by type
 	 * (applying to all bean property setters).
+	 * 表示依赖于类型自动装配bean属性（应用与bean所有setter属性）
 	 * @see #createBean
 	 * @see #autowire
 	 * @see #autowireBeanProperties
@@ -90,6 +93,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates autowiring the greediest constructor that
 	 * can be satisfied (involves resolving the appropriate constructor).
+	 * 表示依赖于构造自动装配（解决构造相关的属性）
 	 * @see #createBean
 	 * @see #autowire
 	 */
@@ -98,6 +102,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	/**
 	 * Constant that indicates determining an appropriate autowire strategy
 	 * through introspection of the bean class.
+	 * 从spring3.o已经废弃，通过bean类的内省机制，确定一个合适的自动装配策略。
 	 * @see #createBean
 	 * @see #autowire
 	 * @deprecated as of Spring 3.0: If you are using mixed autowiring strategies,
@@ -113,27 +118,38 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 
 	/**
 	 * Fully create a new bean instance of the given class.
+	 * 完全创建一个新的给定class的bean实例。
 	 * <p>Performs full initialization of the bean, including all applicable
 	 * {@link BeanPostProcessor BeanPostProcessors}.
+	 * 执行所有bean的初始化操作，包括所有应用层的bean处理器BeanPostProcessors。
 	 * <p>Note: This is intended for creating a fresh instance, populating annotated
 	 * fields and methods as well as applying all standard bean initialization callbacks.
 	 * It does <i>not</> imply traditional by-name or by-type autowiring of properties;
 	 * use {@link #createBean(Class, int, boolean)} for those purposes.
+	 * 注意，这个方法，创建一个新的bean实例，并向所有bean初始化回调一样，处理注解fields和方法。但是，不意味着，
+	 * 依赖name或类型，自动装配属性，为了这个目的可以使用{@link #createBean(Class, int, boolean)}方法。
 	 * @param beanClass the class of the bean to create
-	 * @return the new bean instance
+	 * 创建bean的类型
+	 * @return the new bean instance 返回bean的实例
 	 * @throws BeansException if instantiation or wiring failed
+	 * 如果自动装配或初始化失败，则抛出BeansException异常。
 	 */
 	<T> T createBean(Class<T> beanClass) throws BeansException;
 
 	/**
 	 * Populate the given bean instance through applying after-instantiation callbacks
 	 * and bean property post-processing (e.g. for annotation-driven injection).
+	 * 在初始化回调处理完后，装配给定的bean实例，比如注解自动装配。
 	 * <p>Note: This is essentially intended for (re-)populating annotated fields and
 	 * methods, either for new instances or for deserialized instances. It does
 	 * <i>not</i> imply traditional by-name or by-type autowiring of properties;
 	 * use {@link #autowireBeanProperties} for those purposes.
+	 * 注意，方法用于处理注解驱动的fields的方法，比如新的实例，或反序列化实例。但是，不意味着，
+	 * 依赖name或类型，自动装配属性，为了这个目的可以使用 {@link #autowireBeanProperties}方法
 	 * @param existingBean the existing bean instance
+	 * 已经完成标准初始化回调的bean实例
 	 * @throws BeansException if wiring failed
+	 * 如果自动装配失败，则抛出BeansException异常。
 	 */
 	void autowireBean(Object existingBean) throws BeansException;
 
@@ -142,16 +158,25 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * bean property values, applying factory callbacks such as {@code setBeanName}
 	 * and {@code setBeanFactory}, and also applying all bean post processors
 	 * (including ones which might wrap the given raw bean).
+	 * 配置给定原始bean：自动装配bean属性，bean属性值，应用工厂回调，比如{@code setBeanName}，{@code setBeanFactory}，
+	 * 同时，应用所有bean后处理器，（包括，bean实例包装的原始bean）
 	 * <p>This is effectively a superset of what {@link #initializeBean} provides,
 	 * fully applying the configuration specified by the corresponding bean definition.
 	 * <b>Note: This method requires a bean definition for the given name!</b>
+	 * 此方法相当与{@link #initializeBean}与依赖bean定义全配置bean。
+	 * 注意：此方法需要一个的bean定义的name。
 	 * @param existingBean the existing bean instance
+	 * 已经存在的bean实例
 	 * @param beanName the name of the bean, to be passed to it if necessary
 	 * (a bean definition of that name has to be available)
+	 * 如果需要，则传入一个bean定义的name
 	 * @return the bean instance to use, either the original or a wrapped one
+	 *返回bean实例，或是原始实例，或包装后的实例。
 	 * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
 	 * if there is no bean definition with the given name
+	 * 如果没有给定的name对应的bean定义，则抛出NoSuchBeanDefinitionException异常。
 	 * @throws BeansException if the initialization failed
+	 * 如果初始化，则抛出BeansException异常。
 	 * @see #initializeBean
 	 */
 	Object configureBean(Object existingBean, String beanName) throws BeansException;
@@ -162,6 +187,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	//-------------------------------------------------------------------------
 
 	/**
+	 * 此方法与上述createBean(Class<T> beanClass)方法，不同的是，控制自动装配的策略，是依赖name还是类型，还是构造。
 	 * Fully create a new bean instance of the given class with the specified
 	 * autowire strategy. All constants defined in this interface are supported here.
 	 * <p>Performs full initialization of the bean, including all applicable
@@ -169,8 +195,10 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	 * of what {@link #autowire} provides, adding {@link #initializeBean} behavior.
 	 * @param beanClass the class of the bean to create
 	 * @param autowireMode by name or type, using the constants in this interface
+	 * 依赖于类型还是name，还是构造进行自动装配
 	 * @param dependencyCheck whether to perform a dependency check for objects
 	 * (not applicable to autowiring a constructor, thus ignored there)
+	 * 是否执行依赖检查
 	 * @return the new bean instance
 	 * @throws BeansException if instantiation or wiring failed
 	 * @see #AUTOWIRE_NO
@@ -181,6 +209,7 @@ public interface AutowireCapableBeanFactory extends BeanFactory {
 	Object createBean(Class<?> beanClass, int autowireMode, boolean dependencyCheck) throws BeansException;
 
 	/**
+	 * 此方法与上述autowireBean(Object existingBean)方法，不同的是，控制自动装配的策略，是依赖name还是类型，还是构造。
 	 * Instantiate a new bean instance of the given class with the specified autowire
 	 * strategy. All constants defined in this interface are supported here.
 	 * Can also be invoked with {@code AUTOWIRE_NO} in order to just apply
