@@ -35,7 +35,7 @@ import org.springframework.core.io.ProtocolResolver;
  * <p>Configuration and lifecycle methods are encapsulated here to avoid
  * making them obvious to ApplicationContext client code. The present
  * methods should only be used by startup and shutdown code.
- *相关配配置和声明周期方法被封装在此接口，以避免应用上下文客户端看见。接口当前方法啊，应该在启动和关闭代码间调用。
+ *相关配配置和生命周期方法被封装在此接口，以避免应用上下文客户端看见。接口当前方法啊，应该在启动和关闭代码间调用。
  * @author Juergen Hoeller
  * @author Chris Beams
  * @since 03.11.2003
