@@ -24,16 +24,21 @@ import java.util.Map;
  * property sources. Allows clients to set and validate required properties, customize the
  * conversion service and more through the {@link ConfigurablePropertyResolver}
  * superinterface.
- *
+ *配置环境接口ConfigurableEnvironment是大多数环境类型需要实现的配置接口。为设置激活和默认配置，及操纵底层属性源提供了
+ *便利。允许客户端通过定制转换服务设置和校验需要的属性，更多的通过{@link ConfigurablePropertyResolver}。
  * <h2>Manipulating property sources</h2>
+ * 操纵属性源。
  * <p>Property sources may be removed, reordered, or replaced; and additional
  * property sources may be added using the {@link MutablePropertySources}
  * instance returned from {@link #getPropertySources()}. The following examples
  * are against the {@link StandardEnvironment} implementation of
  * {@code ConfigurableEnvironment}, but are generally applicable to any implementation,
  * though particular default property sources may differ.
+ * 属性源可以被移除，重排序或替换；另外属性源可以通过 {@link #getPropertySources()}方法返回的{@link MutablePropertySources}
+ * 添加到环境中。下面是一个可配置环境的标准实现{@link StandardEnvironment}，尽管一些特殊的默认属性源不同，但一般情况下，适合所有实现。
  *
  * <h4>Example: adding a new property source with highest search priority</h4>
+ * 添加一个最高优先级的属性源
  * <pre class="code">
  * ConfigurableEnvironment environment = new StandardEnvironment();
  * MutablePropertySources propertySources = environment.getPropertySources();
@@ -43,12 +48,14 @@ import java.util.Map;
  * </pre>
  *
  * <h4>Example: removing the default system properties property source</h4>
+ * 移除默认系统属性源。
  * <pre class="code">
  * MutablePropertySources propertySources = environment.getPropertySources();
  * propertySources.remove(StandardEnvironment.SYSTEM_PROPERTIES_PROPERTY_SOURCE_NAME)
  * </pre>
  *
  * <h4>Example: mocking the system environment for testing purposes</h4>
+ * mock系统环境
  * <pre class="code">
  * MutablePropertySources propertySources = environment.getPropertySources();
  * MockPropertySource mockEnvVars = new MockPropertySource().withProperty("xyz", "myValue");
@@ -61,6 +68,11 @@ import java.util.Map;
  * org.springframework.context.support.AbstractApplicationContext#refresh() refresh()}
  * method is called. This ensures that all property sources are available during the
  * container bootstrap process, including use by {@linkplain
+ * org.springframework.context.support.PropertySourcesPlaceholderConfigurer property
+ * placeholder configurers}.
+ * 当一个环境被应用上下文使用时，比较重要的是，{@code PropertySource}的所有操作必须在{@link
+ * org.springframework.context.support.AbstractApplicationContext#refresh() refresh()}
+ * 调用之前。这可以确保，在容器启动的过程中，所有的属性源都可用，包括{@linkplain
  * org.springframework.context.support.PropertySourcesPlaceholderConfigurer property
  * placeholder configurers}.
  *
