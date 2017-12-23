@@ -52,6 +52,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Scope identifier for the standard singleton scope: "singleton".
 	 * Custom scopes can be added via {@code registerScope}.
+	 * 标准的单例作用域模式标识。一般的作用域可以通过{@code registerScope}方法注册。
 	 * @see #registerScope
 	 */
 	String SCOPE_SINGLETON = "singleton";
@@ -59,6 +60,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Scope identifier for the standard prototype scope: "prototype".
 	 * Custom scopes can be added via {@code registerScope}.
+	 * 标准的原型作用域模式标识。一般的作用域可以通过{@code registerScope}方法注册。
 	 * @see #registerScope
 	 */
 	String SCOPE_PROTOTYPE = "prototype";
@@ -68,6 +70,8 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	 * Set the parent of this bean factory.
 	 * <p>Note that the parent cannot be changed: It should only be set outside
 	 * a constructor if it isn't available at the time of factory instantiation.
+	 * 设置bean工厂的父bean工厂。需要注意的是，如果父类bean工厂在工厂初始化的时候，如果不可能，
+	 * 应该在构造外部进行设置，这时父类不能改变。
 	 * @param parentBeanFactory the parent BeanFactory
 	 * @throws IllegalStateException if this factory is already associated with
 	 * a parent BeanFactory
@@ -78,10 +82,13 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Set the class loader to use for loading bean classes.
 	 * Default is the thread context class loader.
+	 * 设置工厂加载bean类的类加载器。默认为当前线程上下文的类加载器。
 	 * <p>Note that this class loader will only apply to bean definitions
 	 * that do not carry a resolved bean class yet. This is the case as of
 	 * Spring 2.0 by default: Bean definitions only carry bean class names,
 	 * to be resolved once the factory processes the bean definition.
+	 * 需要注意的是，如果类的定义还有对应的bean类型解决器，类加载器只能应用于bean的定义。
+	 * 从spring2.0开始，一旦工厂处理bean的定义，仅仅拥有bean类型名字的bean定义才能被解决。
 	 * @param beanClassLoader the class loader to use,
 	 * or {@code null} to suggest the default class loader
 	 */
@@ -89,22 +96,27 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 
 	/**
 	 * Return this factory's class loader for loading bean classes.
+	 * 返回当前bean工厂的类加载器。
 	 */
 	ClassLoader getBeanClassLoader();
 
 	/**
 	 * Specify a temporary ClassLoader to use for type matching purposes.
 	 * Default is none, simply using the standard bean ClassLoader.
+	 * 设置工厂的临时类加载器，一般用于类型匹配的目的。默认为无，简单地使用标准的bean类型加载器。
 	 * <p>A temporary ClassLoader is usually just specified if
 	 * <i>load-time weaving</i> is involved, to make sure that actual bean
 	 * classes are loaded as lazily as possible. The temporary loader is
 	 * then removed once the BeanFactory completes its bootstrap phase.
+	 * 如果处于加载织入时间（load-time weaving），为确保实际的bean类型尽可能的懒加载，
+	 * 一个临时的类加载器通常需要指定。一旦在bean工厂启动完成阶段后，临时类加载器将会被移除。
 	 * @since 2.5
 	 */
 	void setTempClassLoader(ClassLoader tempClassLoader);
 
 	/**
 	 * Return the temporary ClassLoader to use for type matching purposes,
+	 * 返回临时类加载器
 	 * if any.
 	 * @since 2.5
 	 */
@@ -113,29 +125,37 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Set whether to cache bean metadata such as given bean definitions
 	 * (in merged fashion) and resolved bean classes. Default is on.
+	 *设置是否缓存bean的元数据，比如bean的定义，bean类型解决器。默认是缓存。
 	 * <p>Turn this flag off to enable hot-refreshing of bean definition objects
 	 * and in particular bean classes. If this flag is off, any creation of a bean
 	 * instance will re-query the bean class loader for newly resolved classes.
+	 * 关闭缓存bean元数据，将会开启一些特殊bean定义对象的热刷新。如果关闭缓存，
+	 * 任何bean实例创建时，将会重新为新创建的类查询bean类加载器。
 	 */
 	void setCacheBeanMetadata(boolean cacheBeanMetadata);
 
 	/**
 	 * Return whether to cache bean metadata such as given bean definitions
 	 * (in merged fashion) and resolved bean classes.
+	 * 返回当前是否缓存bean的元数据。
 	 */
 	boolean isCacheBeanMetadata();
 
 	/**
 	 * Specify the resolution strategy for expressions in bean definition values.
+	 * 设置bean定义中的表达式值的解析器。BeanExpressionResolver
 	 * <p>There is no expression support active in a BeanFactory by default.
 	 * An ApplicationContext will typically set a standard expression strategy
 	 * here, supporting "#{...}" expressions in a Unified EL compatible style.
+	 * 默认情况下，bean工厂中，是不支持表达式的。应用上下文将会设置一个标准的表达式策略
+	 * 解析器，以统一的Spring EL 兼容形式，支持"#{...}"表达式。
 	 * @since 3.0
 	 */
 	void setBeanExpressionResolver(BeanExpressionResolver resolver);
 
 	/**
 	 * Return the resolution strategy for expressions in bean definition values.
+	 * 获取bean定义中的表达式值的解析器
 	 * @since 3.0
 	 */
 	BeanExpressionResolver getBeanExpressionResolver();
@@ -143,22 +163,29 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Specify a Spring 3.0 ConversionService to use for converting
 	 * property values, as an alternative to JavaBeans PropertyEditors.
+	 * 设置用于转换bean的属性的转换服务ConversionService。可以作为java bean的属性
+	 * 编辑器PropertyEditors的一种替代。
 	 * @since 3.0
 	 */
 	void setConversionService(ConversionService conversionService);
 
 	/**
 	 * Return the associated ConversionService, if any.
+	 * 获取类型转换服务
 	 * @since 3.0
 	 */
 	ConversionService getConversionService();
 
 	/**
 	 * Add a PropertyEditorRegistrar to be applied to all bean creation processes.
+	 * 添加一个属性编辑注册器应用到所有bean的创建过程。
 	 * <p>Such a registrar creates new PropertyEditor instances and registers them
 	 * on the given registry, fresh for each bean creation attempt. This avoids
 	 * the need for synchronization on custom editors; hence, it is generally
 	 * preferable to use this method instead of {@link #registerCustomEditor}.
+	 * 属性编辑注册器创建一个属性编辑器实例，并注册到给定的注册器中，并尝试刷新每个bean的创建。
+	 * 注意需要避免与定制编辑器之间的同步，因此一般情况下，最好使用addPropertyEditorRegistrar方法，
+	 * 替代{@link #registerCustomEditor}方法。
 	 * @param registrar the PropertyEditorRegistrar to register
 	 */
 	void addPropertyEditorRegistrar(PropertyEditorRegistrar registrar);
@@ -166,10 +193,14 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Register the given custom property editor for all properties of the
 	 * given type. To be invoked during factory configuration.
+	 * 注册给定的定制属性编辑器到给定类型的所有属性。在工厂配置的过程中调用。
 	 * <p>Note that this method will register a shared custom editor instance;
 	 * access to that instance will be synchronized for thread-safety. It is
 	 * generally preferable to use {@link #addPropertyEditorRegistrar} instead
 	 * of this method, to avoid for the need for synchronization on custom editors.
+	 * 注意此方法注册一个共享的定制编辑器实例，可以线程安全地访问编辑器实例。
+	 * 最好使用addPropertyEditorRegistrar方法， 替代{@link #registerCustomEditor}方法。
+	 * 以避免定制编辑器的同步。
 	 * @param requiredType type of the property
 	 * @param propertyEditorClass the {@link PropertyEditor} class to register
 	 */
@@ -178,6 +209,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Initialize the given PropertyEditorRegistry with the custom editors
 	 * that have been registered with this BeanFactory.
+	 * 初始化已经注册到bean工厂的属性编辑注册器与定制编辑器的关系。
 	 * @param registry the PropertyEditorRegistry to initialize
 	 */
 	void copyRegisteredEditorsTo(PropertyEditorRegistry registry);
@@ -185,8 +217,10 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
 	/**
 	 * Set a custom type converter that this BeanFactory should use for converting
 	 * bean property values, constructor argument values, etc.
+	 * 谁知bean工厂用于bean属性值或构造参数值转换的类型转化器。
 	 * <p>This will override the default PropertyEditor mechanism and hence make
 	 * any custom editors or custom editor registrars irrelevant.
+	 * 此方法将会重写默认属性编辑器机制，因此使任何定制编辑器或编辑注册器不相关。
 	 * @see #addPropertyEditorRegistrar
 	 * @see #registerCustomEditor
 	 * @since 2.5
