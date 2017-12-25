@@ -80,6 +80,7 @@ public interface ComponentDefinition extends BeanMetadataElement {
 	 * Get the user-visible name of this {@code ComponentDefinition}.
 	 * <p>This should link back directly to the corresponding configuration data
 	 * for this component in a given context.
+	 * 获取用户可见的组件定义ComponentDefinition的name，与组件在上下文中的配置数据相关联。
 	 */
 	String getName();
 
@@ -87,16 +88,20 @@ public interface ComponentDefinition extends BeanMetadataElement {
 	 * Return a friendly description of the described component.
 	 * <p>Implementations are encouraged to return the same value from
 	 * {@code toString()}.
+	 * 返回组件的描述，具体的实现建议和{@code toString()}方法的返回值一样。
 	 */
 	String getDescription();
 
 	/**
 	 * Return the {@link BeanDefinition BeanDefinitions} that were registered
 	 * to form this {@code ComponentDefinition}.
+	 * 返回注册到组件的bean定义。
 	 * <p>It should be noted that a {@code ComponentDefinition} may well be related with
 	 * other {@link BeanDefinition BeanDefinitions} via {@link BeanReference references},
 	 * however these are <strong>not</strong> included as they may be not available immediately.
 	 * Important {@link BeanReference BeanReferences} are available from {@link #getBeanReferences()}.
+	 * 需要注意的是，组件定义{@code ComponentDefinition}可能通过bean引用BeanReference与其他bean定义关联，
+	 * 然而这些不包括在内。但关联的bean引用可以通过 {@link #getBeanReferences()}获取。
 	 * @return the array of BeanDefinitions, or an empty array if none
 	 */
 	BeanDefinition[] getBeanDefinitions();
@@ -104,8 +109,10 @@ public interface ComponentDefinition extends BeanMetadataElement {
 	/**
 	 * Return the {@link BeanDefinition BeanDefinitions} that represent all relevant
 	 * inner beans within this component.
+	 * 返回所有组件表示相关内部bean的定义。
 	 * <p>Other inner beans may exist within the associated {@link BeanDefinition BeanDefinitions},
 	 * however these are not considered to be needed for validation or for user visualization.
+	 * 其他bean定义内部的bean定义将不会被考虑在内。
 	 * @return the array of BeanDefinitions, or an empty array if none
 	 */
 	BeanDefinition[] getInnerBeanDefinitions();
@@ -113,9 +120,12 @@ public interface ComponentDefinition extends BeanMetadataElement {
 	/**
 	 * Return the set of {@link BeanReference BeanReferences} that are considered
 	 * to be important to this {@code ComponentDefinition}.
+	 * 组件定义需要考虑的bean的引用BeanReferences集。
 	 * <p>Other {@link BeanReference BeanReferences} may exist within the associated
 	 * {@link BeanDefinition BeanDefinitions}, however these are not considered
 	 * to be needed for validation or for user visualization.
+	 * {@link BeanReference BeanReferences}也许存在与一个关联的bean定义内，然而
+	 * 在验证和用户可视化的过程中，这些将不会被考虑。
 	 * @return the array of BeanReferences, or an empty array if none
 	 */
 	BeanReference[] getBeanReferences();
