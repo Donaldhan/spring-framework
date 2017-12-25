@@ -41,6 +41,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Scope identifier for the standard singleton scope: "singleton".
 	 * <p>Note that extended bean factories might support further scopes.
+	 * 标准单例作用域，拓展bean工厂也许支持更多的作用域。
 	 * @see #setScope
 	 */
 	String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
@@ -48,6 +49,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Scope identifier for the standard prototype scope: "prototype".
 	 * <p>Note that extended bean factories might support further scopes.
+	 * 标准原型作用域，拓展bean工厂也许支持更多的作用域。
 	 * @see #setScope
 	 */
 	String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
@@ -56,6 +58,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Role hint indicating that a {@code BeanDefinition} is a major part
 	 * of the application. Typically corresponds to a user-defined bean.
+	 * 表示一个应用的主要组成部分，比如一个用户定义的bean。
 	 */
 	int ROLE_APPLICATION = 0;
 
@@ -63,10 +66,12 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Role hint indicating that a {@code BeanDefinition} is a supporting
 	 * part of some larger configuration, typically an outer
 	 * {@link org.springframework.beans.factory.parsing.ComponentDefinition}.
+	 * 表示一个支持一些比较大的配置的bean定义，如一个外部的组件定义，{@link org.springframework.beans.factory.parsing.ComponentDefinition}
 	 * {@code SUPPORT} beans are considered important enough to be aware
 	 * of when looking more closely at a particular
 	 * {@link org.springframework.beans.factory.parsing.ComponentDefinition},
 	 * but not when looking at the overall configuration of an application.
+	 * 
 	 */
 	int ROLE_SUPPORT = 1;
 
@@ -75,6 +80,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * entirely background role and has no relevance to the end-user. This hint is
 	 * used when registering beans that are completely part of the internal workings
 	 * of a {@link org.springframework.beans.factory.parsing.ComponentDefinition}.
+	 * 表示一个内部使用的注册的bean组件定义，与终端用户无关。
 	 */
 	int ROLE_INFRASTRUCTURE = 2;
 
@@ -83,11 +89,13 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Set the name of the parent definition of this bean definition, if any.
+	 * 设置bean定义的父name
 	 */
 	void setParentName(String parentName);
 
 	/**
 	 * Return the name of the parent definition of this bean definition, if any.
+	 * 获取bean定义的父name
 	 */
 	String getParentName();
 
@@ -95,6 +103,8 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Specify the bean class name of this bean definition.
 	 * <p>The class name can be modified during bean factory post-processing,
 	 * typically replacing the original class name with a parsed variant of it.
+	 * 设置bean定义的bean class name。在bean工厂后处理的过程中，类名可以被修改，典型的情况下，
+	 * 将原始class的name，替换成一个可解析的变量。
 	 * @see #setParentName
 	 * @see #setFactoryBeanName
 	 * @see #setFactoryMethodName
@@ -103,12 +113,16 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return the current bean class name of this bean definition.
+	 * 获取当前bean定义的name。
 	 * <p>Note that this does not have to be the actual class name used at runtime, in
 	 * case of a child definition overriding/inheriting the class name from its parent.
 	 * Also, this may just be the class that a factory method is called on, or it may
 	 * even be empty in case of a factory bean reference that a method is called on.
 	 * Hence, do <i>not</i> consider this to be the definitive bean type at runtime but
 	 * rather only use it for parsing purposes at the individual bean definition level.
+	 * 需要注意的时，在孩子定义重写或从父类继承的name的情况下，此方法可能返回的不是实际运行环境下的class的name。
+	 * 在工厂bean引用方法调用的情况下，此方法仅仅返回工厂方法的调用者，也许为空。因此，此方法不能用于运行时环境下，获取bean的类型
+	 * ，仅仅用于在bean定义的层面上解析的目的。
 	 * @see #getParentName()
 	 * @see #getFactoryBeanName()
 	 * @see #getFactoryMethodName()
@@ -117,6 +131,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Override the target scope of this bean, specifying a new scope name.
+	 * 重写bean定义的作用域。
 	 * @see #SCOPE_SINGLETON
 	 * @see #SCOPE_PROTOTYPE
 	 */
@@ -124,6 +139,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return the name of the current target scope for this bean,
+	 * 获取bean的作用域
 	 * or {@code null} if not known yet.
 	 */
 	String getScope();
@@ -132,37 +148,45 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Set whether this bean should be lazily initialized.
 	 * <p>If {@code false}, the bean will get instantiated on startup by bean
 	 * factories that perform eager initialization of singletons.
+	 * 设置是否懒加载，如果为false，在bean工厂启动的时候，将会执行单例bean的预初始化。
 	 */
 	void setLazyInit(boolean lazyInit);
 
 	/**
 	 * Return whether this bean should be lazily initialized, i.e. not
 	 * eagerly instantiated on startup. Only applicable to a singleton bean.
+	 * 返回bean是否为懒加载模式，不能用于在启动过程中的懒加载初始化，仅仅可以用于单例bean。
 	 */
 	boolean isLazyInit();
 
 	/**
 	 * Set the names of the beans that this bean depends on being initialized.
 	 * The bean factory will guarantee that these beans get initialized first.
+	 * 设置bean初始化时依赖的bean的name。bean工厂在初始化bean的时候 ，保证先初始化依赖的bean。
 	 */
 	void setDependsOn(String... dependsOn);
 
 	/**
 	 * Return the bean names that this bean depends on.
+	 * 返回bean依赖的bean的name集。
 	 */
 	String[] getDependsOn();
 
 	/**
 	 * Set whether this bean is a candidate for getting autowired into some other bean.
+	 * 设置bean是否可以作为其他bean的自动注入对象。
 	 * <p>Note that this flag is designed to only affect type-based autowiring.
 	 * It does not affect explicit references by name, which will get resolved even
 	 * if the specified bean is not marked as an autowire candidate. As a consequence,
 	 * autowiring by name will nevertheless inject a bean if the name matches.
+	 * 需要注意的是，此标志仅仅用于基于类型的自动注入。此方法不会显示地影响以name方法的bean的引用，以name方法引用的bean，
+	 * 将会使用没有被标注为可自动注入的bean。因此依赖于name的自动注入，坚决不会注意name匹配的bean。
 	 */
 	void setAutowireCandidate(boolean autowireCandidate);
 
 	/**
 	 * Return whether this bean is a candidate for getting autowired into some other bean.
+	 * 判断bean是否可以作为其他bean的自动注入对象
 	 */
 	boolean isAutowireCandidate();
 
