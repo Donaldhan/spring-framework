@@ -23,19 +23,21 @@ import org.springframework.util.Assert;
 
 /**
  * Generic converter interface for converting between two or more types.
- *
+ *GenericConverter是一个两种或多种类型进行转换的转换器接口。
  * <p>This is the most flexible of the Converter SPI interfaces, but also the most complex.
  * It is flexible in that a GenericConverter may support converting between multiple source/target
  * type pairs (see {@link #getConvertibleTypes()}. In addition, GenericConverter implementations
  * have access to source/target {@link TypeDescriptor field context} during the type conversion
  * process. This allows for resolving source and target field metadata such as annotations and
  * generics information, which can be used to influence the conversion logic.
- *
+ * GenericConverter是一个灵活的系统转换器接口，但是也有复杂的。灵活的GenericConverter，可以支持多种多种源和目标类型之间的转换，
+ * 可以通过{@link #getConvertibleTypes()获取，另外在类型转换的过程中，具体的实现可以访问源目标类型描述的field上下文。
+ * 这个可以允许解决源和目标的field元数据，比如注解和泛型信息，并可以用于转换逻辑。
  * <p>This interface should generally not be used when the simpler {@link Converter} or
  * {@link ConverterFactory} interface is sufficient.
- *
+ *当{@link Converter}和{@link ConverterFactory}有效时，此接口一般应该不会用到。
  * <p>Implementations may additionally implement {@link ConditionalConverter}.
- *
+ *具体实现可以同时实现{@link ConditionalConverter}接口.
  * @author Keith Donald
  * @author Juergen Hoeller
  * @since 3.0
@@ -49,13 +51,16 @@ public interface GenericConverter {
 	/**
 	 * Return the source and target types that this converter can convert between.
 	 * <p>Each entry is a convertible source-to-target type pair.
+	 * 返回转换器可以转换的类型转换对。每个转换对是一个源类型到目标类型转换pair。
 	 * <p>For {@link ConditionalConverter conditional converters} this method may return
 	 * {@code null} to indicate all source-to-target pairs should be considered.
+	 * 对于条件转换器ConditionalConverter，此方法也许返回null，表示所有的源和目标类型之间的转换将会被考虑。
 	 */
 	Set<ConvertiblePair> getConvertibleTypes();
 
 	/**
 	 * Convert the source object to the targetType described by the {@code TypeDescriptor}.
+	 * 根据源对象、类型描述及目标类型描述，转换对象为目标类型
 	 * @param source the source object to convert (may be {@code null})
 	 * @param sourceType the type descriptor of the field we are converting from
 	 * @param targetType the type descriptor of the field we are converting to
@@ -66,6 +71,7 @@ public interface GenericConverter {
 
 	/**
 	 * Holder for a source-to-target class pair.
+	 * 源码目标类型转换对。
 	 */
 	final class ConvertiblePair {
 
