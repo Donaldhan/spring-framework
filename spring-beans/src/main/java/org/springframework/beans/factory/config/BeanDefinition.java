@@ -194,6 +194,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Set whether this bean is a primary autowire candidate.
 	 * <p>If this value is {@code true} for exactly one bean among multiple
 	 * matching candidates, it will serve as a tie-breaker.
+	 * 设置bean是否为主要的自动注入候选者。如果多个类型匹配返回true，则以primary bean注入。
 	 */
 	void setPrimary(boolean primary);
 
