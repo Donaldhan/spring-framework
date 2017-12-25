@@ -18,9 +18,9 @@ package org.springframework.core.convert.converter;
 
 /**
  * A factory for "ranged" converters that can convert objects from S to subtypes of R.
- *
+ *ConverterFactory接口提供了源类型S到目标类型R的子类的转换器。
  * <p>Implementations may additionally implement {@link ConditionalConverter}.
- *
+ *具体实现可以参见{@link ConditionalConverter}.
  * @author Keith Donald
  * @since 3.0
  * @see ConditionalConverter
@@ -32,6 +32,7 @@ public interface ConverterFactory<S, R> {
 
 	/**
 	 * Get the converter to convert from S to target type T, where T is also an instance of R.
+	 * 获取从源类型S到目标类型T的转换器，T同时是一个R的实例
 	 * @param <T> the target type
 	 * @param targetType the target type to convert to
 	 * @return a converter from S to T
