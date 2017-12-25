@@ -27,11 +27,10 @@ import org.apache.commons.logging.LogFactory;
  * Default implementation of the {@link PropertySources} interface.
  * Allows manipulation of contained property sources and provides a constructor
  * for copying an existing {@code PropertySources} instance.
- *
+ * PropertySources接口的默认实现，允许操作包含的属性源，提供了从一个已经存在的属性源集PropertySources实例的拷贝操作。
  * <p>Where <em>precedence</em> is mentioned in methods such as {@link #addFirst}
  * and {@link #addLast}, this is with regard to the order in which property sources
- * will be searched when resolving a given property with a {@link PropertyResolver}.
- *
+ * 使用{@link #addFirst}和 {@link #addLast}等方法，保证属性源的优先级，属性源的优先级与添加到属性源集中的顺序有关。
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
