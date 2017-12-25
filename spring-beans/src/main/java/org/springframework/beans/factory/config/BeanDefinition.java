@@ -24,11 +24,11 @@ import org.springframework.core.AttributeAccessor;
  * A BeanDefinition describes a bean instance, which has property values,
  * constructor argument values, and further information supplied by
  * concrete implementations.
- *
+ *bean定义BeanDefinition描述一个bean实例，即属性值和构造参数，具体的实现提供的更多信息。
  * <p>This is just a minimal interface: The main intention is to allow a
  * {@link BeanFactoryPostProcessor} such as {@link PropertyPlaceholderConfigurer}
  * to introspect and modify property values and other bean metadata.
- *
+ *这个仅仅是一个最小化的接口，主要的作用是允许bean工厂后处理器，可以内省和修改属性值及其他bean元数据。
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @since 19.03.2004
@@ -200,18 +200,21 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return whether this bean is a primary autowire candidate.
+	 * 判断bean是否为主要的自动注入候选者。
 	 */
 	boolean isPrimary();
 
 	/**
 	 * Specify the factory bean to use, if any.
 	 * This the name of the bean to call the specified factory method on.
+	 * 设置工厂bean的name，bean的name可以被工厂方法使用。
 	 * @see #setFactoryMethodName
 	 */
 	void setFactoryBeanName(String factoryBeanName);
 
 	/**
 	 * Return the factory bean name, if any.
+	 * 返回工厂bean的name
 	 */
 	String getFactoryBeanName();
 
@@ -220,6 +223,9 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * constructor arguments, or with no arguments if none are specified.
 	 * The method will be invoked on the specified factory bean, if any,
 	 * or otherwise as a static method on the local bean class.
+	 * 设置工厂bean方法。此方法调用将会使用构造参数，如果没有方法，则没有参数。
+	 * 此方法将会被特定的工厂bean调用，或者本地bean类型的静态方法调用。
+	 * 
 	 * @see #setFactoryBeanName
 	 * @see #setBeanClassName
 	 */
@@ -227,12 +233,15 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return a factory method, if any.
+	 * 获取工厂方法
 	 */
 	String getFactoryMethodName();
 
 	/**
 	 * Return the constructor argument values for this bean.
+	 * 返回bean的构造参数值。
 	 * <p>The returned instance can be modified during bean factory post-processing.
+	 * 在bean工厂后处理的过程中，返回的实例可以本修改。
 	 * @return the ConstructorArgumentValues object (never {@code null})
 	 */
 	ConstructorArgumentValues getConstructorArgumentValues();
@@ -240,6 +249,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Return the property values to be applied to a new instance of the bean.
 	 * <p>The returned instance can be modified during bean factory post-processing.
+	 * 返回将要应用到bean新实例的属性值。在bean工厂后处理的过程中，返回的实例可以本修改。
 	 * @return the MutablePropertyValues object (never {@code null})
 	 */
 	MutablePropertyValues getPropertyValues();
@@ -250,6 +260,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Return whether this a <b>Singleton</b>, with a single, shared instance
 	 * returned on all calls.
+	 * 判断bean是否为单例共享实例。
 	 * @see #SCOPE_SINGLETON
 	 */
 	boolean isSingleton();
@@ -257,6 +268,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	/**
 	 * Return whether this a <b>Prototype</b>, with an independent instance
 	 * returned for each call.
+	 * 判断bean是否为原型bean实例。
 	 * @since 3.0
 	 * @see #SCOPE_PROTOTYPE
 	 */
@@ -264,6 +276,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return whether this bean is "abstract", that is, not meant to be instantiated.
+	 * 判断bean是否为抽象类，意味着不可实例化
 	 */
 	boolean isAbstract();
 
@@ -271,6 +284,7 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 	 * Get the role hint for this {@code BeanDefinition}. The role hint
 	 * provides the frameworks as well as tools with an indication of
 	 * the role and importance of a particular {@code BeanDefinition}.
+	 * 获取bean定义的角色。
 	 * @see #ROLE_APPLICATION
 	 * @see #ROLE_SUPPORT
 	 * @see #ROLE_INFRASTRUCTURE
@@ -279,20 +293,24 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**
 	 * Return a human-readable description of this bean definition.
+	 * 返回bean定义的描述
 	 */
 	String getDescription();
 
 	/**
 	 * Return a description of the resource that this bean definition
 	 * came from (for the purpose of showing context in case of errors).
+	 * 返回bean定义资源的描述
 	 */
 	String getResourceDescription();
 
 	/**
 	 * Return the originating BeanDefinition, or {@code null} if none.
+	 * 返回原始的bean定义，如果没有，则为null。
 	 * Allows for retrieving the decorated bean definition, if any.
 	 * <p>Note that this method returns the immediate originator. Iterate through the
 	 * originator chain to find the original BeanDefinition as defined by the user.
+	 * 此方法将返回即时的originator，通过迭代originator链，可以获取用户定义的原始bean定义。
 	 */
 	BeanDefinition getOriginatingBeanDefinition();
 
