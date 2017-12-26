@@ -22,6 +22,10 @@ package org.springframework.core.io;
  * {@link javax.portlet.PortletContext} but also from plain classpath paths
  * or relative file system paths (specified without an explicit prefix,
  * hence applying relative to the local {@link ResourceLoader}'s context).
+ *上下文资源接口ContextResource，是一个从封闭上下文加载的拓展资源接口。
+ *比如Servlet上下文{@link javax.servlet.ServletContext}及Portlet上下文，
+ *类路径，文件系统的相对路径（没有明确的前缀，因此为一个本地的资源加载器上下文）。
+ *
  *
  * @author Juergen Hoeller
  * @since 2.5
@@ -32,7 +36,9 @@ public interface ContextResource extends Resource {
 
 	/**
 	 * Return the path within the enclosing 'context'.
+	 * 返回上下文中的资源路径。
 	 * <p>This is typically path relative to a context-specific root directory,
+	 * 典型的是相对于上下文根目录的路径的路径，比如Servlet上下文Context
 	 * e.g. a ServletContext root or a PortletContext root.
 	 */
 	String getPathWithinContext();
