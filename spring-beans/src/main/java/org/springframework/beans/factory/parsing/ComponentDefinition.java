@@ -23,12 +23,14 @@ import org.springframework.beans.factory.config.BeanReference;
 /**
  * Interface that describes the logical view of a set of {@link BeanDefinition BeanDefinitions}
  * and {@link BeanReference BeanReferences} as presented in some configuration context.
- *
+ * 组件定义接口ComponentDefinition描述着配置上下文中的bean定义BeanDefinition和bean引用BeanReferences的一个逻辑视图。
  * <p>With the introduction of {@link org.springframework.beans.factory.xml.NamespaceHandler pluggable custom XML tags},
  * it is now possible for a single logical configuration entity, in this case an XML tag, to
  * create multiple {@link BeanDefinition BeanDefinitions} and {@link BeanReference RuntimeBeanReferences}
  * in order to provide more succinct configuration and greater convenience to end users. As such, it can
  * no longer be assumed that each configuration entity (e.g. XML tag) maps to one {@link BeanDefinition}.
+ * 为了提供更简约方便的配置，在xml配置 中当前可以通过一个单独的逻辑配置实体（XML标记），创建多个bean定义{@link BeanDefinition BeanDefinitions}和bean引用
+ * {@link BeanReference RuntimeBeanReferences}
  * For tool vendors and other users who wish to present visualization or support for configuring Spring
  * applications it is important that there is some mechanism in place to tie the {@link BeanDefinition BeanDefinitions}
  * in the {@link org.springframework.beans.factory.BeanFactory} back to the configuration data in a way
@@ -45,7 +47,10 @@ import org.springframework.beans.factory.config.BeanReference;
  * as the {@link org.springframework.beans.PropertyValue PropertyValues} may also have a source object giving an
  * even greater level of detail. Source object extraction is handled through the
  * {@link SourceExtractor} which can be customized as required.
- *
+ *每个组件定义ComponentDefinition有一个配置源，可以通过{@link #getSource source object}获取。在基于xml的配置中,{@link org.w3c.dom.Node}
+ *包含用于提供的配置信息。每个bean定义包含于拥有bean定义源{@link BeanDefinition#getSource() source object}的组件定义中，源对象可能是
+ *一个不同的，精确的配置数据集。除此 之外，一些bean的元数据，比如属性值{@link org.springframework.beans.PropertyValue PropertyValues}，
+ *也许有一个源对象，如果需要可以通过{@link SourceExtractor}去定制.
  * <p>Whilst direct access to important {@link BeanReference BeanReferences} is provided through
  * {@link #getBeanReferences}, tools may wish to inspect all {@link BeanDefinition BeanDefinitions} to gather
  * the full set of {@link BeanReference BeanReferences}. Implementations are required to provide
