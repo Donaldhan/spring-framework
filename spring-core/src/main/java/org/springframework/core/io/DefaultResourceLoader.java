@@ -128,7 +128,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 				return resource;
 			}
 		}
-        //若果资源位置以"/"开头，则获取路径资源
+        //如果资源位置以"/"开头，则获取路径资源
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
