@@ -45,55 +45,56 @@ import java.net.URLConnection;
  */
 public abstract class ResourceUtils {
 
-	/** Pseudo URL prefix for loading from the class path: "classpath:" */
+	/** Pseudo URL prefix for loading from the class path: "classpath:" 从类路径加载的伪URL前缀*/
 	public static final String CLASSPATH_URL_PREFIX = "classpath:";
 
-	/** URL prefix for loading from the file system: "file:" */
+	/** URL prefix for loading from the file system: "file:" 从文件系统加载的URL前缀*/
 	public static final String FILE_URL_PREFIX = "file:";
 
-	/** URL prefix for loading from a jar file: "jar:" */
+	/** URL prefix for loading from a jar file: "jar:" 从jar包加载的URL前缀*/
 	public static final String JAR_URL_PREFIX = "jar:";
 
-	/** URL prefix for loading from a war file on Tomcat: "war:" */
+	/** URL prefix for loading from a war file on Tomcat: "war:" 从Tomcat war包加载的URL前缀*/
 	public static final String WAR_URL_PREFIX = "war:";
 
-	/** URL protocol for a file in the file system: "file" */
+	/** URL protocol for a file in the file system: "file" 文件系统中的文件URL协议*/
 	public static final String URL_PROTOCOL_FILE = "file";
 
-	/** URL protocol for an entry from a jar file: "jar" */
+	/** URL protocol for an entry from a jar file: "jar" jar包文件的URL协议*/
 	public static final String URL_PROTOCOL_JAR = "jar";
 
-	/** URL protocol for an entry from a war file: "war" */
+	/** URL protocol for an entry from a war file: "war" war包文件的URL协议*/
 	public static final String URL_PROTOCOL_WAR = "war";
 
-	/** URL protocol for an entry from a zip file: "zip" */
+	/** URL protocol for an entry from a zip file: "zip" 压缩文件zip的URL协议*/
 	public static final String URL_PROTOCOL_ZIP = "zip";
 
-	/** URL protocol for an entry from a WebSphere jar file: "wsjar" */
+	/** URL protocol for an entry from a WebSphere jar file: "wsjar" WebSphere jar包文件的URL协议*/
 	public static final String URL_PROTOCOL_WSJAR = "wsjar";
 
-	/** URL protocol for an entry from a JBoss jar file: "vfszip" */
+	/** URL protocol for an entry from a JBoss jar file: "vfszip" JBoss jar包文件的URL协议*/
 	public static final String URL_PROTOCOL_VFSZIP = "vfszip";
 
-	/** URL protocol for a JBoss file system resource: "vfsfile" */
+	/** URL protocol for a JBoss file system resource: "vfsfile" JBoss 文件系统资源的URL协议*/
 	public static final String URL_PROTOCOL_VFSFILE = "vfsfile";
 
-	/** URL protocol for a general JBoss VFS resource: "vfs" */
+	/** URL protocol for a general JBoss VFS resource: "vfs" JBoss VFS资源的URL协议*/
 	public static final String URL_PROTOCOL_VFS = "vfs";
 
-	/** File extension for a regular jar file: ".jar" */
+	/** File extension for a regular jar file: ".jar" jar包文件拓展名*/
 	public static final String JAR_FILE_EXTENSION = ".jar";
 
-	/** Separator between JAR URL and file path within the JAR: "!/" */
+	/** Separator between JAR URL and file path within the JAR: "!/"  在jar包中的jar URL与文件路径的分割符*/
 	public static final String JAR_URL_SEPARATOR = "!/";
 
-	/** Special separator between WAR URL and jar part on Tomcat */
+	/** Special separator between WAR URL and jar part on Tomcat 在Tomcat中，war资源URL与jar的分割符*/
 	public static final String WAR_URL_SEPARATOR = "*/";
 
 
 	/**
 	 * Return whether the given resource location is a URL:
 	 * either a special "classpath" pseudo URL or a standard URL.
+	 * 判断给定资源位置是否为一个URL，一个标准的RUL或者 "classpath"伪URL
 	 * @param resourceLocation the location String to check
 	 * @return whether the location qualifies as a URL
 	 * @see #CLASSPATH_URL_PREFIX
@@ -359,6 +360,7 @@ public abstract class ResourceUtils {
 	/**
 	 * Create a URI instance for the given URL,
 	 * replacing spaces with "%20" URI encoding first.
+	 * 从给定的URL，创建一个URI实例，并使用"%20"，替代空格符。
 	 * @param url the URL to convert into a URI instance
 	 * @return the URI instance
 	 * @throws URISyntaxException if the URL wasn't a valid URI
@@ -371,6 +373,7 @@ public abstract class ResourceUtils {
 	/**
 	 * Create a URI instance for the given location String,
 	 * replacing spaces with "%20" URI encoding first.
+	 * 根据给定的位置，建一个URI实例，并使用"%20"，替代空格符。
 	 * @param location the location String to convert into a URI instance
 	 * @return the URI instance
 	 * @throws URISyntaxException if the location wasn't a valid URI
