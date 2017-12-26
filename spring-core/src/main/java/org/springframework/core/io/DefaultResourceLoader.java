@@ -31,11 +31,13 @@ import org.springframework.util.StringUtils;
  * Used by {@link ResourceEditor}, and serves as base class for
  * {@link org.springframework.context.support.AbstractApplicationContext}.
  * Can also be used standalone.
- *
+ *默认资源加载器DefaultResourceLoader为资源加载器接口的默认使用，可以通过资源编辑器使用，作为
+ * {@link org.springframework.context.support.AbstractApplicationContext}的基类，
+ * 也可以单独使用。
  * <p>Will return a {@link UrlResource} if the location value is a URL,
  * and a {@link ClassPathResource} if it is a non-URL path or a
  * "classpath:" pseudo-URL.
- *
+ *如果资源为值为URL则返回URL资源
  * @author Juergen Hoeller
  * @since 10.03.2004
  * @see FileSystemResourceLoader
@@ -52,6 +54,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * Create a new DefaultResourceLoader.
 	 * <p>ClassLoader access will happen using the thread context class loader
 	 * at the time of this ResourceLoader's initialization.
+	 * 创建一默认的资源加载器。在资源加载器初始化的时候，线程类上下文加载器将会访问类加载器。
 	 * @see java.lang.Thread#getContextClassLoader()
 	 */
 	public DefaultResourceLoader() {
@@ -92,8 +95,10 @@ public class DefaultResourceLoader implements ResourceLoader {
 	/**
 	 * Register the given resolver with this resource loader, allowing for
 	 * additional protocols to be handled.
+	 * 注册跟定的资源协议解决器到资源加载器，以允许额外的协议被处理。
 	 * <p>Any such resolver will be invoked ahead of this loader's standard
 	 * resolution rules. It may therefore also override any default rules.
+	 * 任何协议解决器将会加载器的标准解决规则前被调用。因此有可能重写默认的规则。
 	 * @since 4.3
 	 * @see #getProtocolResolvers()
 	 */
@@ -105,6 +110,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	/**
 	 * Return the collection of currently registered protocol resolvers,
 	 * allowing for introspection as well as modification.
+	 * 返回当前注册到资源加载器的协议解决器集，允许监视和修改。
 	 * @since 4.3
 	 */
 	public Collection<ProtocolResolver> getProtocolResolvers() {
@@ -115,22 +121,24 @@ public class DefaultResourceLoader implements ResourceLoader {
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
-
+        //遍历协议解决器集，如果可以解决，则返回位置相应的资源
 		for (ProtocolResolver protocolResolver : this.protocolResolvers) {
 			Resource resource = protocolResolver.resolve(location, this);
 			if (resource != null) {
 				return resource;
 			}
 		}
-
+        //若果资源位置以"/"开头，则获取路径资源
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
 		else if (location.startsWith(CLASSPATH_URL_PREFIX)) {
+			//如果资源位置以"classpath:"开头，创建路径位置的的类路径资源ClassPathResource
 			return new ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());
 		}
 		else {
 			try {
+				//否则创建URL资源
 				// Try to parse the location as a URL...
 				URL url = new URL(location);
 				return new UrlResource(url);
@@ -144,9 +152,11 @@ public class DefaultResourceLoader implements ResourceLoader {
 
 	/**
 	 * Return a Resource handle for the resource at the given path.
+	 * 返回给定路径位置的资源Handle。
 	 * <p>The default implementation supports class path locations. This should
 	 * be appropriate for standalone implementations but can be overridden,
 	 * e.g. for implementations targeted at a Servlet container.
+	 * 默认实现支持类路径位置。这个应该使用与独立的版本实现，但是可以被重写。比如针对Servlet容器的实现。
 	 * @param path the path to the resource
 	 * @return the corresponding Resource handle
 	 * @see ClassPathResource

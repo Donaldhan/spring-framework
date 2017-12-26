@@ -36,7 +36,7 @@ import java.util.Set;
 /**
  * Miscellaneous class utility methods.
  * Mainly for internal use within the framework.
- *
+ *Class适用的方法工具，主要为框架内部使用
  * @author Juergen Hoeller
  * @author Keith Donald
  * @author Rob Harrop
@@ -47,57 +47,62 @@ import java.util.Set;
  */
 public abstract class ClassUtils {
 
-	/** Suffix for array class names: "[]" */
+	/** Suffix for array class names: "[]" 数组类型名的后缀*/
 	public static final String ARRAY_SUFFIX = "[]";
 
-	/** Prefix for internal array class names: "[" */
+	/** Prefix for internal array class names: "["  内部数组类名的前缀*/
 	private static final String INTERNAL_ARRAY_PREFIX = "[";
 
-	/** Prefix for internal non-primitive array class names: "[L" */
+	/** Prefix for internal non-primitive array class names: "[L"  内部非原始数组类型名的前缀*/
 	private static final String NON_PRIMITIVE_ARRAY_PREFIX = "[L";
 
-	/** The package separator character: '.' */
+	/** The package separator character: '.' 包名分割符*/
 	private static final char PACKAGE_SEPARATOR = '.';
 
-	/** The path separator character: '/' */
+	/** The path separator character: '/' 路径分割符*/
 	private static final char PATH_SEPARATOR = '/';
 
-	/** The inner class separator character: '$' */
+	/** The inner class separator character: '$'内部类分割符 */
 	private static final char INNER_CLASS_SEPARATOR = '$';
 
-	/** The CGLIB class separator: "$$" */
+	/** The CGLIB class separator: "$$" 动态代理类分割符*/
 	public static final String CGLIB_CLASS_SEPARATOR = "$$";
 
-	/** The ".class" file suffix */
+	/** The ".class" file suffix 类文件的后缀*/
 	public static final String CLASS_FILE_SUFFIX = ".class";
 
 
 	/**
 	 * Map with primitive wrapper type as key and corresponding primitive
 	 * type as value, for example: Integer.class -> int.class.
+	 * 原始包装类作为key，相关的原始类型作为value的原始包装类型映射Map
 	 */
 	private static final Map<Class<?>, Class<?>> primitiveWrapperTypeMap = new IdentityHashMap<Class<?>, Class<?>>(8);
 
 	/**
 	 * Map with primitive type as key and corresponding wrapper
 	 * type as value, for example: int.class -> Integer.class.
+	 * 原始类作为key，相关的原始类型包装了作为vaule的原始类型映射map
 	 */
 	private static final Map<Class<?>, Class<?>> primitiveTypeToWrapperMap = new IdentityHashMap<Class<?>, Class<?>>(8);
 
 	/**
 	 * Map with primitive type name as key and corresponding primitive
 	 * type as value, for example: "int" -> "int.class".
+	 * 原始类型名作为key，相关的原始类型作为value的原始类型名Map
 	 */
 	private static final Map<String, Class<?>> primitiveTypeNameMap = new HashMap<String, Class<?>>(32);
 
 	/**
 	 * Map with common "java.lang" class name as key and corresponding Class as value.
 	 * Primarily for efficient deserialization of remote invocations.
+	 * 一般的java.lang包下的类名作为key，相关的类型作为value的Map集。主要用于加快远程调用的反序列化效率。
 	 */
 	private static final Map<String, Class<?>> commonClassCache = new HashMap<String, Class<?>>(32);
 
 
 	static {
+		//初始化原始包装类与原始类型的映射集-
 		primitiveWrapperTypeMap.put(Boolean.class, boolean.class);
 		primitiveWrapperTypeMap.put(Byte.class, byte.class);
 		primitiveWrapperTypeMap.put(Character.class, char.class);
@@ -106,12 +111,13 @@ public abstract class ClassUtils {
 		primitiveWrapperTypeMap.put(Integer.class, int.class);
 		primitiveWrapperTypeMap.put(Long.class, long.class);
 		primitiveWrapperTypeMap.put(Short.class, short.class);
-
+        //初始化原始类型与原始包装类的映射集
 		for (Map.Entry<Class<?>, Class<?>> entry : primitiveWrapperTypeMap.entrySet()) {
 			primitiveTypeToWrapperMap.put(entry.getValue(), entry.getKey());
+			//注册原始类型到原始类型缓存Map
 			registerCommonClasses(entry.getKey());
 		}
-
+        //添加原始类型数组类型名与原始类型数组类型的映射到原始类型名映射集合
 		Set<Class<?>> primitiveTypes = new HashSet<Class<?>>(32);
 		primitiveTypes.addAll(primitiveWrapperTypeMap.values());
 		primitiveTypes.addAll(Arrays.asList(new Class<?>[] {
@@ -121,7 +127,7 @@ public abstract class ClassUtils {
 		for (Class<?> primitiveType : primitiveTypes) {
 			primitiveTypeNameMap.put(primitiveType.getName(), primitiveType);
 		}
-
+        //注册原始类型包装类数组类型到ClassUtils的commonClassCache缓存（name，type）
 		registerCommonClasses(Boolean[].class, Byte[].class, Character[].class, Double[].class,
 				Float[].class, Integer[].class, Long[].class, Short[].class);
 		registerCommonClasses(Number.class, Number[].class, String.class, String[].class,
@@ -133,6 +139,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Register the given common classes with the ClassUtils cache.
+	 * 注册给定类型的name与类型的映射到ClassUtils的commonClassCache缓存。
 	 */
 	private static void registerCommonClasses(Class<?>... commonClasses) {
 		for (Class<?> clazz : commonClasses) {
@@ -144,19 +151,23 @@ public abstract class ClassUtils {
 	 * Return the default ClassLoader to use: typically the thread context
 	 * ClassLoader, if available; the ClassLoader that loaded the ClassUtils
 	 * class will be used as fallback.
+	 * 返回默认的类型加载器：如果可用的话，返回当前线程上下文加载器，否则返回ClassUtils的类的类加载。
 	 * <p>Call this method if you intend to use the thread context ClassLoader
 	 * in a scenario where you clearly prefer a non-null ClassLoader reference:
 	 * for example, for class path resource loading (but not necessarily for
 	 * {@code Class.forName}, which accepts a {@code null} ClassLoader
 	 * reference as well).
+	 * 
 	 * @return the default ClassLoader (only {@code null} if even the system
 	 * ClassLoader isn't accessible)
+	 * 如果系统类加载器不可访问你，则默认的类加载器为null。
 	 * @see Thread#getContextClassLoader()
 	 * @see ClassLoader#getSystemClassLoader()
 	 */
 	public static ClassLoader getDefaultClassLoader() {
 		ClassLoader cl = null;
 		try {
+			//获取当前线程上下文类加载器
 			cl = Thread.currentThread().getContextClassLoader();
 		}
 		catch (Throwable ex) {
@@ -164,10 +175,12 @@ public abstract class ClassUtils {
 		}
 		if (cl == null) {
 			// No thread context class loader -> use class loader of this class.
+			//如果当前线程上下文类加载器为空，则获取ClassUtils类的类加载
 			cl = ClassUtils.class.getClassLoader();
 			if (cl == null) {
 				// getClassLoader() returning null indicates the bootstrap ClassLoader
 				try {
+					//如果ClassUtils类的类加载为空，则获取系统类加载器
 					cl = ClassLoader.getSystemClassLoader();
 				}
 				catch (Throwable ex) {
@@ -182,6 +195,7 @@ public abstract class ClassUtils {
 	 * Override the thread context ClassLoader with the environment's bean ClassLoader
 	 * if necessary, i.e. if the bean ClassLoader is not equivalent to the thread
 	 * context ClassLoader already.
+	 * 如果需要，重写线程上下文类加载器为环境bean类加载器，比如bean的类加载器与线程上下文加载器已经不一样。
 	 * @param classLoaderToUse the actual ClassLoader to use for the thread context
 	 * @return the original thread context ClassLoader, or {@code null} if not overridden
 	 */
