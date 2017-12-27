@@ -27,12 +27,15 @@ import org.springframework.util.Assert;
 
 /**
  * JBoss VFS based {@link Resource} implementation.
- *
+ * JBoss VFS 文件资源实现
  * <p>As of Spring 4.0, this class supports VFS 3.x on JBoss AS 6+ (package
  * {@code org.jboss.vfs}) and is in particular compatible with JBoss AS 7 and
  * WildFly 8.
- *
- * @author Ales Justin
+ * 从spring4.0开始，此类支持VFS 3.x on JBoss AS 6+ (package
+ * {@code org.jboss.vfs})，在一些特性上兼容JBoss AS 7 and
+ * WildFly 8.
+ * 
+ *VfsResource的打开文件获取URL，获取输入流等方法，实际为通过VfsUtils调用org.jboss.vfs.VirtualFile的方法。
  * @author Juergen Hoeller
  * @author Costin Leau
  * @author Sam Brannen
@@ -41,15 +44,18 @@ import org.springframework.util.Assert;
  */
 public class VfsResource extends AbstractResource {
 
-	private final Object resource;
+	private final Object resource;//资源对象
 
 
 	public VfsResource(Object resource) {
 		Assert.notNull(resource, "VirtualFile must not be null");
 		this.resource = resource;
 	}
-
-
+	
+	
+    /**
+     * 实际委托给VfsUtils打开文件返回输入流，VfsUtils则是调用org.jboss.vfs.VirtualFile的openStream
+     */
 	@Override
 	public InputStream getInputStream() throws IOException {
 		return VfsUtils.getInputStream(this.resource);
@@ -84,7 +90,10 @@ public class VfsResource extends AbstractResource {
 			throw new NestedIOException("Failed to obtain URI for " + this.resource, ex);
 		}
 	}
-
+   /**
+    *
+    * 实际委托给VfsUtils打开文件返回输入流，VfsUtils则是调用org.jboss.vfs.VirtualFile的getPhysicalFile
+    */
 	@Override
 	public File getFile() throws IOException {
 		return VfsUtils.getFile(this.resource);

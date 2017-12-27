@@ -43,21 +43,21 @@ import org.springframework.util.ReflectionUtils;
  */
 public abstract class VfsUtils {
 
-	private static final String VFS3_PKG = "org.jboss.vfs.";
+	private static final String VFS3_PKG = "org.jboss.vfs.";//Jboos，vfs包名
 	private static final String VFS_NAME = "VFS";
 
 	private static Method VFS_METHOD_GET_ROOT_URL;
 	private static Method VFS_METHOD_GET_ROOT_URI;
 
 	private static Method VIRTUAL_FILE_METHOD_EXISTS;
-	private static Method VIRTUAL_FILE_METHOD_GET_INPUT_STREAM;
-	private static Method VIRTUAL_FILE_METHOD_GET_SIZE;
-	private static Method VIRTUAL_FILE_METHOD_GET_LAST_MODIFIED;
-	private static Method VIRTUAL_FILE_METHOD_TO_URL;
-	private static Method VIRTUAL_FILE_METHOD_TO_URI;
-	private static Method VIRTUAL_FILE_METHOD_GET_NAME;
-	private static Method VIRTUAL_FILE_METHOD_GET_PATH_NAME;
-	private static Method VIRTUAL_FILE_METHOD_GET_CHILD;
+	private static Method VIRTUAL_FILE_METHOD_GET_INPUT_STREAM;//VirtualFile的打开输入流方法
+	private static Method VIRTUAL_FILE_METHOD_GET_SIZE;//获取文件size方法
+	private static Method VIRTUAL_FILE_METHOD_GET_LAST_MODIFIED;//获取文件上次修改时间戳方法
+	private static Method VIRTUAL_FILE_METHOD_TO_URL;//转换资源为URL方法
+	private static Method VIRTUAL_FILE_METHOD_TO_URI;//转换资源为URI方法
+	private static Method VIRTUAL_FILE_METHOD_GET_NAME;//获取文件名方法
+	private static Method VIRTUAL_FILE_METHOD_GET_PATH_NAME;//获取文件路径方法
+	private static Method VIRTUAL_FILE_METHOD_GET_CHILD;//获取资源的孩子文件
 
 	protected static Class<?> VIRTUAL_FILE_VISITOR_INTERFACE;
 	protected static Method VIRTUAL_FILE_METHOD_VISIT;
@@ -66,13 +66,15 @@ public abstract class VfsUtils {
 	private static Method GET_PHYSICAL_FILE;
 
 	static {
+		//获取VfsUtils的类加载器
 		ClassLoader loader = VfsUtils.class.getClassLoader();
 		try {
 			Class<?> vfsClass = loader.loadClass(VFS3_PKG + VFS_NAME);
 			VFS_METHOD_GET_ROOT_URL = ReflectionUtils.findMethod(vfsClass, "getChild", URL.class);
 			VFS_METHOD_GET_ROOT_URI = ReflectionUtils.findMethod(vfsClass, "getChild", URI.class);
-
+           //加载Jboss的VirtualFile类
 			Class<?> virtualFile = loader.loadClass(VFS3_PKG + "VirtualFile");
+			//初始化VirtualFile类的相关方法
 			VIRTUAL_FILE_METHOD_EXISTS = ReflectionUtils.findMethod(virtualFile, "exists");
 			VIRTUAL_FILE_METHOD_GET_INPUT_STREAM = ReflectionUtils.findMethod(virtualFile, "openStream");
 			VIRTUAL_FILE_METHOD_GET_SIZE = ReflectionUtils.findMethod(virtualFile, "getSize");
@@ -139,6 +141,12 @@ public abstract class VfsUtils {
 		return (Long) invokeVfsMethod(VIRTUAL_FILE_METHOD_GET_LAST_MODIFIED, vfsResource);
 	}
 
+	/**
+	 * 获取文件输入流，调用VirtualFile的openStream
+	 * @param vfsResource
+	 * @return
+	 * @throws IOException
+	 */
 	static InputStream getInputStream(Object vfsResource) throws IOException {
 		return (InputStream) invokeVfsMethod(VIRTUAL_FILE_METHOD_GET_INPUT_STREAM, vfsResource);
 	}
@@ -168,16 +176,34 @@ public abstract class VfsUtils {
 		return invokeVfsMethod(VIRTUAL_FILE_METHOD_GET_CHILD, vfsResource, path);
 	}
 
+	/**
+	 * 获取文件，调用VirtualFile的getPhysicalFile
+	 * @param vfsResource
+	 * @return
+	 * @throws IOException
+	 */
 	static File getFile(Object vfsResource) throws IOException {
 		return (File) invokeVfsMethod(GET_PHYSICAL_FILE, vfsResource);
 	}
 
+	/**
+	 * 获取URI
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
 	static Object getRoot(URI url) throws IOException {
 		return invokeVfsMethod(VFS_METHOD_GET_ROOT_URI, null, url);
 	}
 
 	// protected methods used by the support sub-package
 
+	/**
+	 * 获取URL
+	 * @param url
+	 * @return
+	 * @throws IOException
+	 */
 	protected static Object getRoot(URL url) throws IOException {
 		return invokeVfsMethod(VFS_METHOD_GET_ROOT_URL, null, url);
 	}

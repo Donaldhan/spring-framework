@@ -203,6 +203,7 @@ public abstract class ResourceUtils {
 	/**
 	 * Resolve the given resource URL to a {@code java.io.File},
 	 * i.e. to a file in the file system.
+	 * 解决给定资源的URL为 {@code java.io.File}。
 	 * @param resourceUrl the resource URL to resolve
 	 * @param description a description of the original resource that
 	 * the URL was created for (for example, a class path location)
@@ -212,16 +213,19 @@ public abstract class ResourceUtils {
 	 */
 	public static File getFile(URL resourceUrl, String description) throws FileNotFoundException {
 		Assert.notNull(resourceUrl, "Resource URL must not be null");
+		//如果为非文件系统，则抛出异常
 		if (!URL_PROTOCOL_FILE.equals(resourceUrl.getProtocol())) {
 			throw new FileNotFoundException(
 					description + " cannot be resolved to absolute file path " +
 					"because it does not reside in the file system: " + resourceUrl);
 		}
 		try {
+			//否则，根据资源的URI创建文件
 			return new File(toURI(resourceUrl).getSchemeSpecificPart());
 		}
 		catch (URISyntaxException ex) {
 			// Fallback for URLs that are not valid URIs (should hardly ever happen).
+			//如果URI资源语义异常，根据URL的文件路径创建文件
 			return new File(resourceUrl.getFile());
 		}
 	}
@@ -242,6 +246,7 @@ public abstract class ResourceUtils {
 	/**
 	 * Resolve the given resource URI to a {@code java.io.File},
 	 * i.e. to a file in the file system.
+	 * 解决给定URI资源为java.io.File，比如文件系统中的文件
 	 * @param resourceUri the resource URI to resolve
 	 * @param description a description of the original resource that
 	 * the URI was created for (for example, a class path location)
@@ -263,6 +268,7 @@ public abstract class ResourceUtils {
 	/**
 	 * Determine whether the given URL points to a resource in the file system,
 	 * i.e. has protocol "file", "vfsfile" or "vfs".
+	 * 判断给定URL是否指向的文件系统资源，比如协议"file", "vfsfile" or "vfs"
 	 * @param url the URL to check
 	 * @return whether the URL has been identified as a file system URL
 	 */
@@ -275,6 +281,7 @@ public abstract class ResourceUtils {
 	/**
 	 * Determine whether the given URL points to a resource in a jar file.
 	 * i.e. has protocol "jar", "war, ""zip", "vfszip" or "wsjar".
+	 * 判断给定的URL指定的资源是否在jar包文件中
 	 * @param url the URL to check
 	 * @return whether the URL has been identified as a JAR URL
 	 */
@@ -300,21 +307,25 @@ public abstract class ResourceUtils {
 	/**
 	 * Extract the URL for the actual jar file from the given URL
 	 * (which may point to a resource in a jar file or to a jar file itself).
+	 * 从给定的URL中抽取实际的jar文件的URL
 	 * @param jarUrl the original URL
 	 * @return the URL for the actual jar file
 	 * @throws MalformedURLException if no valid jar file URL could be extracted
 	 */
 	public static URL extractJarFileURL(URL jarUrl) throws MalformedURLException {
+		// Regular "jar:file:...myjar.jar!/myentry.txt"
 		String urlFile = jarUrl.getFile();
 		int separatorIndex = urlFile.indexOf(JAR_URL_SEPARATOR);
 		if (separatorIndex != -1) {
-			String jarFile = urlFile.substring(0, separatorIndex);
+			String jarFile = urlFile.substring(0, separatorIndex);//jar:file:...myjar.jar
 			try {
 				return new URL(jarFile);
 			}
 			catch (MalformedURLException ex) {
 				// Probably no protocol in original jar URL, like "jar:C:/mypath/myjar.jar".
 				// This usually indicates that the jar file resides in the file system.
+				//有可能在原始Jar包URL中不存在协议，如："jar:C:/mypath/myjar.jar".
+				//则通常意味着jar包文件存在于文件系统中。
 				if (!jarFile.startsWith("/")) {
 					jarFile = "/" + jarFile;
 				}
@@ -329,8 +340,10 @@ public abstract class ResourceUtils {
 	/**
 	 * Extract the URL for the outermost archive from the given jar/war URL
 	 * (which may point to a resource in a jar file or to a jar file itself).
+	 * 从给定的最外层的Jar或War URL 中抽取出，抽取内部的文件系统URL（可以指向jar包中的文件，或者一个jar文件）。
 	 * <p>In the case of a jar file nested within a war file, this will return
 	 * a URL to the war file since that is the one resolvable in the file system.
+	 * 在jar嵌入war包中的情况，由于war在文件系统中是一种解决的URL，所以方法返回的为War的URL
 	 * @param jarUrl the original URL
 	 * @return the URL for the actual jar file
 	 * @throws MalformedURLException if no valid jar file URL could be extracted
@@ -340,19 +353,20 @@ public abstract class ResourceUtils {
 	public static URL extractArchiveURL(URL jarUrl) throws MalformedURLException {
 		String urlFile = jarUrl.getFile();
 
-		int endIndex = urlFile.indexOf(WAR_URL_SEPARATOR);
+		int endIndex = urlFile.indexOf(WAR_URL_SEPARATOR);//如果是war资源文件
 		if (endIndex != -1) {
 			// Tomcat's "war:file:...mywar.war*/WEB-INF/lib/myjar.jar!/myentry.txt"
-			String warFile = urlFile.substring(0, endIndex);
+			String warFile = urlFile.substring(0, endIndex);//war:file:...mywar.war
+			//如果是war包
 			if (URL_PROTOCOL_WAR.equals(jarUrl.getProtocol())) {
 				return new URL(warFile);
 			}
 			int startIndex = warFile.indexOf(WAR_URL_PREFIX);
-			if (startIndex != -1) {
+			if (startIndex != -1) {//file:...mywar.war
 				return new URL(warFile.substring(startIndex + WAR_URL_PREFIX.length()));
 			}
 		}
-
+        //否则从jar中抽出资源文件
 		// Regular "jar:file:...myjar.jar!/myentry.txt"
 		return extractJarFileURL(jarUrl);
 	}
@@ -386,6 +400,7 @@ public abstract class ResourceUtils {
 	 * Set the {@link URLConnection#setUseCaches "useCaches"} flag on the
 	 * given connection, preferring {@code false} but leaving the
 	 * flag at {@code true} for JNLP based resources.
+	 * 设置给定的URLConnection的useCaches标志，一般为false，但是对于JNLP资源则为true。
 	 * @param con the URLConnection to set the flag on
 	 */
 	public static void useCachesIfNecessary(URLConnection con) {

@@ -165,6 +165,7 @@ public abstract class ReflectionUtils {
 	 * Attempt to find a {@link Method} on the supplied class with the supplied name
 	 * and parameter types. Searches all superclasses up to {@code Object}.
 	 * <p>Returns {@code null} if no {@link Method} can be found.
+	 * 尝试获取给定类的name方法名和参数类型对应的方法Method。追溯到Object。如果没有发现，则返回null。
 	 * @param clazz the class to introspect
 	 * @param name the name of the method
 	 * @param paramTypes the parameter types of the method
@@ -175,6 +176,7 @@ public abstract class ReflectionUtils {
 		Assert.notNull(clazz, "Class must not be null");
 		Assert.notNull(name, "Method name must not be null");
 		Class<?> searchType = clazz;
+		//从类型及其父类，获取匹配方法名name和参数paramTypes的方法Method
 		while (searchType != null) {
 			Method[] methods = (searchType.isInterface() ? searchType.getMethods() : getDeclaredMethods(searchType));
 			for (Method method : methods) {
@@ -288,7 +290,9 @@ public abstract class ReflectionUtils {
 	/**
 	 * Handle the given invocation target exception. Should only be called if no
 	 * checked exception is expected to be thrown by the target method.
+	 * 处理给定调用目标异常。如果没有检查目标方法抛出的异常，应该调用此方法。
 	 * <p>Throws the underlying RuntimeException or Error in case of such a root
+	 * 抛出底层运行时异常，或错误
 	 * cause. Throws an UndeclaredThrowableException otherwise.
 	 * @param ex the invocation target exception to handle
 	 */
@@ -299,11 +303,14 @@ public abstract class ReflectionUtils {
 	/**
 	 * Rethrow the given {@link Throwable exception}, which is presumably the
 	 * <em>target exception</em> of an {@link InvocationTargetException}.
+	 * 重新抛出给定的异常，大概是一个InvocationTargetException的目标异常。
 	 * Should only be called if no checked exception is expected to be thrown
 	 * by the target method.
+	 * 如果没有检查目标方法抛出的异常，应该调用此方法。
 	 * <p>Rethrows the underlying exception cast to a {@link RuntimeException} or
 	 * {@link Error} if appropriate; otherwise, throws an
 	 * {@link UndeclaredThrowableException}.
+	 * 重新抛出底层的异常，如果可以，则将异常投射成运行时异常，或者error，否则抛出UndeclaredThrowableException
 	 * @param ex the exception to rethrow
 	 * @throws RuntimeException the rethrown exception
 	 */
