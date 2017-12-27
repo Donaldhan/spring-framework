@@ -171,6 +171,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 	/**
 	 * ClassPathResource that explicitly expresses a context-relative path
 	 * through implementing the ContextResource interface.
+	 * ClassPathContextResource显示地表示一个上下文相对路径的类路径资源
 	 */
 	protected static class ClassPathContextResource extends ClassPathResource implements ContextResource {
 
