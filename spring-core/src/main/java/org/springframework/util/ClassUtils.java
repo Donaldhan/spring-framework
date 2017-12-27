@@ -1020,6 +1020,8 @@ public abstract class ClassUtils {
 	 * directly to {@code ClassLoader.getResource()}. For it to be fed to
 	 * {@code Class.getResource} instead, a leading slash would also have
 	 * to be prepended to the returned value.
+	 * 从给定类对象，获取包含包名的路径名，并将包名分割符，替换为路径分割符。leading和trailing slash
+	 * '\'不会被添加。
 	 * @param clazz the input class. A {@code null} value or the default
 	 * (empty) package will result in an empty string ("") being returned.
 	 * @return a path which represents the package name
@@ -1030,12 +1032,15 @@ public abstract class ClassUtils {
 		if (clazz == null) {
 			return "";
 		}
+		//获取class的name
 		String className = clazz.getName();
 		int packageEndIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
 		if (packageEndIndex == -1) {
 			return "";
 		}
+		//获取class的包名
 		String packageName = className.substring(0, packageEndIndex);
+		//将包名分隔符替换为路径分割符
 		return packageName.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
 	}
 

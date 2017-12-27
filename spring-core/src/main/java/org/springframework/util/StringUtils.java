@@ -55,15 +55,15 @@ import java.util.TimeZone;
  */
 public abstract class StringUtils {
 
-	private static final String FOLDER_SEPARATOR = "/";
+	private static final String FOLDER_SEPARATOR = "/";//文件分割符
 
-	private static final String WINDOWS_FOLDER_SEPARATOR = "\\";
+	private static final String WINDOWS_FOLDER_SEPARATOR = "\\";//window文件夹分割符
 
-	private static final String TOP_PATH = "..";
+	private static final String TOP_PATH = "..";//上级目录
 
-	private static final String CURRENT_PATH = ".";
+	private static final String CURRENT_PATH = ".";//当前目录
 
-	private static final char EXTENSION_SEPARATOR = '.';
+	private static final char EXTENSION_SEPARATOR = '.';//文件拓展名分割符
 
 
 	//---------------------------------------------------------------------
@@ -108,6 +108,7 @@ public abstract class StringUtils {
 	 * Check that the given {@code String} is neither {@code null} nor of length 0.
 	 * <p>Note: this method returns {@code true} for a {@code String} that
 	 * purely consists of whitespace.
+	 * 检查跟定的字符串是否为null或者长度为0，这对空白字符串此方法返回true。
 	 * @param str the {@code String} to check (may be {@code null})
 	 * @return {@code true} if the {@code String} is not {@code null} and has length
 	 * @see #hasLength(CharSequence)
@@ -422,6 +423,7 @@ public abstract class StringUtils {
 
 	/**
 	 * Delete any character in a given {@code String}.
+	 * 从原始字符串中删除存在与给定字符串中的字符
 	 * @param inString the original {@code String}
 	 * @param charsToDelete a set of characters to delete.
 	 * E.g. "az\n" will delete 'a's, 'z's and new lines.
@@ -534,6 +536,7 @@ public abstract class StringUtils {
 	/**
 	 * Extract the filename from the given Java resource path,
 	 * e.g. {@code "mypath/myfile.txt" -> "myfile.txt"}.
+	 * 获取路径资源的文件名
 	 * @param path the file path (may be {@code null})
 	 * @return the extracted filename, or {@code null} if none
 	 */
@@ -597,8 +600,9 @@ public abstract class StringUtils {
 	/**
 	 * Apply the given relative path to the given Java resource path,
 	 * assuming standard Java folder separation (i.e. "/" separators).
-	 * @param path the path to start from (usually a full file path)
-	 * @param relativePath the relative path to apply
+	 * 根据给定的java资源路径，及资源相对路径，创建标准的java文件路径，假设文件分割符为'/'
+	 * @param path the path to start from (usually a full file path) 全路径
+	 * @param relativePath the relative path to apply 相对路径
 	 * (relative to the full file path above)
 	 * @return the full file path that results from applying the relative path
 	 */
@@ -628,6 +632,7 @@ public abstract class StringUtils {
 		if (path == null) {
 			return null;
 		}
+		//替代widows文件夹分割符为统一文件夹分割符
 		String pathToUse = replace(path, WINDOWS_FOLDER_SEPARATOR, FOLDER_SEPARATOR);
 
 		// Strip prefix from path to analyze, to not treat it as part of the
@@ -636,6 +641,7 @@ public abstract class StringUtils {
 		// strip the first "core" directory while keeping the "file:" prefix.
 		int prefixIndex = pathToUse.indexOf(":");
 		String prefix = "";
+		//获取文件路径资源前缀
 		if (prefixIndex != -1) {
 			prefix = pathToUse.substring(0, prefixIndex + 1);
 			if (prefix.contains("/")) {
@@ -649,37 +655,42 @@ public abstract class StringUtils {
 			prefix = prefix + FOLDER_SEPARATOR;
 			pathToUse = pathToUse.substring(1);
 		}
-
+       //以文件夹分割符，分割资源路径为字符串
 		String[] pathArray = delimitedListToStringArray(pathToUse, FOLDER_SEPARATOR);
-		List<String> pathElements = new LinkedList<String>();
+		List<String> pathElements = new LinkedList<String>();//有效路径
 		int tops = 0;
 
 		for (int i = pathArray.length - 1; i >= 0; i--) {
 			String element = pathArray[i];
 			if (CURRENT_PATH.equals(element)) {
 				// Points to current directory - drop it.
+				//当前路径，则直接丢弃
 			}
 			else if (TOP_PATH.equals(element)) {
 				// Registering top path found.
+				//上一级路径则，则跳过上一级路径
 				tops++;
 			}
 			else {
 				if (tops > 0) {
 					// Merging path element with element corresponding to top path.
+					//跳过上级路径
 					tops--;
 				}
 				else {
 					// Normal path element found.
+					//正常路径
 					pathElements.add(0, element);
 				}
 			}
 		}
 
 		// Remaining top paths need to be retained.
+		//添加上级目录符
 		for (int i = 0; i < tops; i++) {
 			pathElements.add(0, TOP_PATH);
 		}
-
+        //组合资源路径
 		return prefix + collectionToDelimitedString(pathElements, FOLDER_SEPARATOR);
 	}
 
@@ -1050,10 +1061,13 @@ public abstract class StringUtils {
 	/**
 	 * Take a {@code String} that is a delimited list and convert it into a
 	 * {@code String} array.
+	 * 将一个分隔符字符串转换为字符串数组。
 	 * <p>A single {@code delimiter} may consist of more than one character,
 	 * but it will still be considered as a single delimiter string, rather
 	 * than as bunch of potential delimiter characters, in contrast to
 	 * {@link #tokenizeToStringArray}.
+	 * 分割符可以有多个字符组成，但是被认为一个单独的分割字符串，而不是潜在字符串的捆绑，这个与{@link #tokenizeToStringArray}
+	 * 方法相反。
 	 * @param str the input {@code String}
 	 * @param delimiter the delimiter between elements (this is a single delimiter,
 	 * rather than a bunch individual delimiter characters)
@@ -1076,6 +1090,7 @@ public abstract class StringUtils {
 	 * rather than a bunch individual delimiter characters)
 	 * @param charsToDelete a set of characters to delete; useful for deleting unwanted
 	 * line breaks: e.g. "\r\n\f" will delete all new lines and line feeds in a {@code String}
+	 * 要删除的字符set，用于删除不想要的换行。比如"\r\n\f"。
 	 * @return an array of the tokens in the list
 	 * @see #tokenizeToStringArray
 	 */
@@ -1138,6 +1153,7 @@ public abstract class StringUtils {
 	/**
 	 * Convert a {@link Collection} to a delimited {@code String} (e.g. CSV).
 	 * <p>Useful for {@code toString()} implementations.
+	 * 根据将给定路径集与分割符，及路径的前后缀，组合资源路径
 	 * @param coll the {@code Collection} to convert
 	 * @param delim the delimiter to use (typically a ",")
 	 * @param prefix the {@code String} to start each element with
@@ -1163,6 +1179,7 @@ public abstract class StringUtils {
 	/**
 	 * Convert a {@code Collection} into a delimited {@code String} (e.g. CSV).
 	 * <p>Useful for {@code toString()} implementations.
+	 * 将给定路径集与分割符组成路径
 	 * @param coll the {@code Collection} to convert
 	 * @param delim the delimiter to use (typically a ",")
 	 * @return the delimited {@code String}
@@ -1174,6 +1191,7 @@ public abstract class StringUtils {
 	/**
 	 * Convert a {@code Collection} into a delimited {@code String} (e.g., CSV).
 	 * <p>Useful for {@code toString()} implementations.
+	 * 默认的分割为","
 	 * @param coll the {@code Collection} to convert
 	 * @return the delimited {@code String}
 	 */

@@ -44,6 +44,7 @@ public abstract class CollectionUtils {
 	/**
 	 * Return {@code true} if the supplied Collection is {@code null} or empty.
 	 * Otherwise, return {@code false}.
+	 * 判断集合是否为null或空
 	 * @param collection the Collection to check
 	 * @return whether the given Collection is empty
 	 */
