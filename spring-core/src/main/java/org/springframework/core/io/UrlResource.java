@@ -34,7 +34,8 @@ import org.springframework.util.StringUtils;
  * {@link Resource} implementation for {@code java.net.URL} locators.
  * Supports resolution as a {@code URL} and also as a {@code File} in
  * case of the {@code "file:"} protocol.
- *
+ *UrlResource作为 {@code java.net.URL}定位器的资源实现，支持在{@code "file:"} 协议的情况下，
+ *支持URL和FILE形式
  * @author Juergen Hoeller
  * @since 28.12.2003
  * @see java.net.URL
@@ -43,22 +44,26 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 	/**
 	 * Original URI, if available; used for URI and File access.
+	 * 原始URI，如果可用，用于URI和文件访问
 	 */
 	private final URI uri;
 
 	/**
 	 * Original URL, used for actual access.
+	 * 原始URL，用于实际访问
 	 */
 	private final URL url;
 
 	/**
 	 * Cleaned URL (with normalized path), used for comparisons.
+	 * 正常路径的干净URL，用于比较
 	 */
 	private final URL cleanedUrl;
 
 
 	/**
 	 * Create a new {@code UrlResource} based on the given URI object.
+	 * 根据URi，创建UrlResource资源
 	 * @param uri a URI
 	 * @throws MalformedURLException if the given URL path is not valid
 	 * @since 2.5
@@ -72,6 +77,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 	/**
 	 * Create a new {@code UrlResource} based on the given URL object.
+	 * 根据URL，创建UrlResource资源
 	 * @param url a URL
 	 */
 	public UrlResource(URL url) {
@@ -84,6 +90,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	/**
 	 * Create a new {@code UrlResource} based on a URL path.
 	 * <p>Note: The given path needs to be pre-encoded if necessary.
+	 * 根据给定的路径，创建UrlResource资源，如果需要给定的路径需要预编码
 	 * @param path a URL path
 	 * @throws MalformedURLException if the given URL path is not valid
 	 * @see java.net.URL#URL(String)
@@ -97,11 +104,14 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 	/**
 	 * Create a new {@code UrlResource} based on a URI specification.
+	 * 根据URI创建UrlResource
 	 * <p>The given parts will automatically get encoded if necessary.
 	 * @param protocol the URL protocol to use (e.g. "jar" or "file" - without colon);
 	 * also known as "scheme"
+	 * 协议机制scheme，比如jar或file，没有冒号
 	 * @param location the location (e.g. the file path within that protocol);
 	 * also known as "scheme-specific part"
+	 * 定位位置，比如协议中的文件路径，比较熟悉的为scheme-specific part。
 	 * @throws MalformedURLException if the given URL specification is not valid
 	 * @see java.net.URI#URI(String, String, String)
 	 */
@@ -111,6 +121,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 	/**
 	 * Create a new {@code UrlResource} based on a URI specification.
+	 * 根据URI创建UrlResource
 	 * <p>The given parts will automatically get encoded if necessary.
 	 * @param protocol the URL protocol to use (e.g. "jar" or "file" - without colon);
 	 * also known as "scheme"
@@ -118,6 +129,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * also known as "scheme-specific part"
 	 * @param fragment the fragment within that location (e.g. anchor on an HTML page,
 	 * as following after a "#" separator)
+	 * 片段，在位置中的片段，比如HTML页面中的锚点
 	 * @throws MalformedURLException if the given URL specification is not valid
 	 * @see java.net.URI#URI(String, String, String)
 	 */
@@ -137,6 +149,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 
 	/**
 	 * Determine a cleaned URL for the given original URL.
+	 * 跟定给定原始URL，获取干净的URL
 	 * @param originalUrl the original URL
 	 * @param originalPath the original URL path
 	 * @return the cleaned URL
@@ -157,6 +170,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	 * This implementation opens an InputStream for the given URL.
 	 * <p>It sets the {@code useCaches} flag to {@code false},
 	 * mainly to avoid jar file locking on Windows.
+	 * 获取URL资源输入流
 	 * @see java.net.URL#openConnection()
 	 * @see java.net.URLConnection#setUseCaches(boolean)
 	 * @see java.net.URLConnection#getInputStream()
@@ -202,6 +216,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	/**
 	 * This implementation returns a File reference for the underlying URL/URI,
 	 * provided that it refers to a file in the file system.
+	 * 获取文件系统中，URL/URI对应的底层文件。
 	 * @see org.springframework.util.ResourceUtils#getFile(java.net.URL, String)
 	 */
 	@Override
@@ -217,6 +232,7 @@ public class UrlResource extends AbstractFileResolvingResource {
 	/**
 	 * This implementation creates a {@code UrlResource}, applying the given path
 	 * relative to the path of the underlying URL of this resource descriptor.
+	 * 根据相对路径创建URL资源
 	 * @see java.net.URL#URL(java.net.URL, String)
 	 */
 	@Override
