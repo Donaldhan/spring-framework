@@ -105,6 +105,7 @@ public class CachedIntrospectionResults {
 	/**
 	 * Set of ClassLoaders that this CachedIntrospectionResults class will always
 	 * accept classes from, even if the classes do not qualify as cache-safe.
+	 * 缓存内存结果类CachedIntrospectionResults，将总是从类加载器集合中，即使没有缓存安全的类，接受类。
 	 */
 	static final Set<ClassLoader> acceptedClassLoaders =
 			Collections.newSetFromMap(new ConcurrentHashMap<ClassLoader, Boolean>(16));
@@ -112,6 +113,7 @@ public class CachedIntrospectionResults {
 	/**
 	 * Map keyed by Class containing CachedIntrospectionResults, strongly held.
 	 * This variant is being used for cache-safe bean classes.
+	 * 映射包含CachedIntrospectionResults的类与其强引用的关系。此变量用于安全缓存bean类。
 	 */
 	static final ConcurrentMap<Class<?>, CachedIntrospectionResults> strongClassCache =
 			new ConcurrentHashMap<Class<?>, CachedIntrospectionResults>(64);
@@ -119,6 +121,7 @@ public class CachedIntrospectionResults {
 	/**
 	 * Map keyed by Class containing CachedIntrospectionResults, softly held.
 	 * This variant is being used for non-cache-safe bean classes.
+	 * 映射包含CachedIntrospectionResults的类与其弱引用的关系。此变量用于安全缓存bean类。
 	 */
 	static final ConcurrentMap<Class<?>, CachedIntrospectionResults> softClassCache =
 			new ConcurrentReferenceHashMap<Class<?>, CachedIntrospectionResults>(64);
@@ -146,6 +149,8 @@ public class CachedIntrospectionResults {
 	 * Clear the introspection cache for the given ClassLoader, removing the
 	 * introspection results for all classes underneath that ClassLoader, and
 	 * removing the ClassLoader (and its children) from the acceptance list.
+	 * 清除给定类加载器的内省缓存，移除在类加载器下的所有类的内省结果CachedIntrospectionResults，
+	 * 并从接受集合acceptedClassLoaders中，移除类加载器。
 	 * @param classLoader the ClassLoader to clear the cache for
 	 */
 	public static void clearClassLoader(ClassLoader classLoader) {
@@ -223,6 +228,7 @@ public class CachedIntrospectionResults {
 	/**
 	 * Check whether the given ClassLoader is underneath the given parent,
 	 * that is, whether the parent is within the candidate's hierarchy.
+	 * 检查给定的类加载器是否在给定的父类加载器下，也就是说，父类加载器是否在候选类加载器的层次接口中。
 	 * @param candidate the candidate ClassLoader to check
 	 * @param parent the parent ClassLoader to check for
 	 */

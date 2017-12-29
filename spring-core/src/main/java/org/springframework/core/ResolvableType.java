@@ -84,6 +84,7 @@ public class ResolvableType implements Serializable {
 	/**
 	 * {@code ResolvableType} returned when no value is available. {@code NONE} is used
 	 * in preference to {@code null} so that multiple method calls can be safely chained.
+	 * 当没有值可利用时，返回{@code ResolvableType}方法。{@code NONE}用于null情况，以便方法多次调用时，可以安全地链式操作。
 	 */
 	public static final ResolvableType NONE = new ResolvableType(null, null, null, 0);
 

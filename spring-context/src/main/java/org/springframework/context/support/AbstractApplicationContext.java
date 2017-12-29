@@ -998,6 +998,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Cancel this context's refresh attempt, resetting the {@code active} flag
 	 * after an exception got thrown.
+	 * 取消上下文刷新尝试，在异常抛出后，重置激活状态标志。
 	 * @param ex the exception that led to the cancellation
 	 */
 	protected void cancelRefresh(BeansException ex) {
@@ -1007,6 +1008,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Reset Spring's common core caches, in particular the {@link ReflectionUtils},
 	 * {@link ResolvableType} and {@link CachedIntrospectionResults} caches.
+	 * 重置spring的一般核心缓存，特别是 {@link ReflectionUtils},{@link ResolvableType},{@link CachedIntrospectionResults}
+	 * 中缓存。
 	 * @since 4.2
 	 * @see ReflectionUtils#clearCache()
 	 * @see ResolvableType#clearCache()
@@ -1131,9 +1134,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * The default implementation destroy all cached singletons in this context,
 	 * invoking {@code DisposableBean.destroy()} and/or the specified
 	 * "destroy-method".
+	 * 此模板方法用于销毁所有上下文管理的bean。默认实现，调用{@code DisposableBean.destroy()}
+	 * 方法，或者特殊的"destroy-method"，销毁所有上下文中缓存的单例bean.
 	 * <p>Can be overridden to add context-specific bean destruction steps
 	 * right before or right after standard singleton destruction,
 	 * while the context's BeanFactory is still active.
+	 * 当上下文bean工厂仍处于激活状态，在标准的单例bean析构前或后，可以重写上下文特殊bean的析构
 	 * @see #getBeanFactory()
 	 * @see org.springframework.beans.factory.config.ConfigurableBeanFactory#destroySingletons()
 	 */

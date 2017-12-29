@@ -59,12 +59,14 @@ public abstract class ReflectionUtils {
 	/**
 	 * Cache for {@link Class#getDeclaredMethods()} plus equivalent default methods
 	 * from Java 8 based interfaces, allowing for fast iteration.
+	 * 缓存 {@link Class#getDeclaredMethods()} 方法，加上Java 8 基础接口的默认方法，运行快速迭代。
 	 */
 	private static final Map<Class<?>, Method[]> declaredMethodsCache =
 			new ConcurrentReferenceHashMap<Class<?>, Method[]>(256);
 
 	/**
 	 * Cache for {@link Class#getDeclaredFields()}, allowing for fast iteration.
+	 * 缓存{@link Class#getDeclaredFields()}方法返回的Field
 	 */
 	private static final Map<Class<?>, Field[]> declaredFieldsCache =
 			new ConcurrentReferenceHashMap<Class<?>, Field[]>(256);
@@ -749,6 +751,7 @@ public abstract class ReflectionUtils {
 
 	/**
 	 * Clear the internal method/field cache.
+	 * 清除内部方法与Field缓存
 	 * @since 4.2.4
 	 */
 	public static void clearCache() {
