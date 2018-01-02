@@ -86,7 +86,8 @@ import org.springframework.util.StringValueResolver;
  * interface. Doesn't mandate the type of storage used for configuration; simply
  * implements common context functionality. Uses the Template Method design pattern,
  * requiring concrete subclasses to implement abstract methods.
- *
+ *AbstractApplicationContext为应用上下文的抽象实现。不不托管配置的存储类型；仅仅实现的一般上下文的功能性。
+ *使用了模板方法设计模式，需要具体的子类实现抽象方法。
  * <p>In contrast to a plain BeanFactory, an ApplicationContext is supposed
  * to detect special beans defined in its internal bean factory:
  * Therefore, this class automatically registers
@@ -94,6 +95,8 @@ import org.springframework.util.StringValueResolver;
  * {@link org.springframework.beans.factory.config.BeanPostProcessor BeanPostProcessors}
  * and {@link org.springframework.context.ApplicationListener ApplicationListeners}
  * which are defined as beans in the context.
+ * 相对于一个空白的bean工厂，一个应用上下文应该探测bean工厂内部特殊bean的定义：
+ * 因此，子类将自动探测上下文中的bean工厂后处理器，bean后处理器，以及应用监听器定义bean。
  *
  * <p>A {@link org.springframework.context.MessageSource} may also be supplied
  * as a bean in the context, with the name "messageSource"; otherwise, message
@@ -102,6 +105,9 @@ import org.springframework.util.StringValueResolver;
  * of type {@link org.springframework.context.event.ApplicationEventMulticaster}
  * in the context; otherwise, a default multicaster of type
  * {@link org.springframework.context.event.SimpleApplicationEventMulticaster} will be used.
+ * 消息源应该在上下文中提供一个名字为messageSource的bean；否则将使用父上下文的消息源代理。进一步说，
+ * 在上下文配置，应该提供一个类型为ApplicationEventMulticaster的应用事件多播bean定义。否则，
+ * 默认的多播器SimpleApplicationEventMulticaster将会被使用。
  *
  * <p>Implements resource loading through extending
  * {@link org.springframework.core.io.DefaultResourceLoader}.
@@ -109,6 +115,8 @@ import org.springframework.util.StringValueResolver;
  * (supporting full class path resource names that include the package path,
  * e.g. "mypackage/myresource.dat"), unless the {@link #getResourceByPath}
  * method is overwritten in a subclass.
+ * 抽象应用上下文通过继承DefaultResourceLoader实现资源的加载。因此除非子类重写{@link #getResourceByPath}方法，
+ * 否则将一个非URL资源路径对待为一个类路径资源（支持包括包路径的全类路径资源name）。
  *
  * @author Rod Johnson
  * @author Juergen Hoeller
@@ -286,6 +294,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Return the parent context, or {@code null} if there is no parent
 	 * (that is, this context is the root of the context hierarchy).
+	 * 返回父上下文
 	 */
 	@Override
 	public ApplicationContext getParent() {
@@ -1050,8 +1059,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * DisposableBean callback for destruction of this instance.
+	 * 析构当前工厂实例的DisposableBean回调。
 	 * <p>The {@link #close()} method is the native way to shut down
 	 * an ApplicationContext, which this method simply delegates to.
+	 * 此方法为本地关闭上下文的{@link #close()} 的代理。
 	 * @see #close()
 	 */
 	@Override
@@ -1061,8 +1072,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Close this application context, destroying all beans in its bean factory.
+	 * 关闭应用上下文，销毁所有bean工厂中的bean。
 	 * <p>Delegates to {@code doClose()} for the actual closing procedure.
 	 * Also removes a JVM shutdown hook, if registered, as it's not needed anymore.
+	 * 代理{@code doClose()}方法，完成实际的关闭过程。
+	 * 同时移除虚拟机关闭Hook，如果注册移除不需要的hook。
 	 * @see #doClose()
 	 * @see #registerShutdownHook()
 	 */
@@ -1087,6 +1101,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	 * Actually performs context closing: publishes a ContextClosedEvent and
 	 * destroys the singletons in the bean factory of this application context.
 	 * <p>Called by both {@code close()} and a JVM shutdown hook, if any.
+	 * 执行实际的关闭上下文：发布上下文关闭事件ContextClosedEvent，销毁应用上下文中的bean工厂内的单例bean。
+	 * 如果需要，可以通过{@code close()}方法和添加虚拟机Hook调用。
 	 * @see org.springframework.context.event.ContextClosedEvent
 	 * @see #destroyBeans()
 	 * @see #close()
@@ -1097,11 +1113,11 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			if (logger.isInfoEnabled()) {
 				logger.info("Closing " + this);
 			}
-
+            //从bean视图中移除上下文
 			LiveBeansView.unregisterApplicationContext(this);
 
 			try {
-				// Publish shutdown event.
+				// Publish shutdown event.发布关闭事件
 				publishEvent(new ContextClosedEvent(this));
 			}
 			catch (Throwable ex) {
@@ -1109,6 +1125,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 
 			// Stop all Lifecycle beans, to avoid delays during individual destruction.
+			//停止所有生命周期bean，以避免在个人析构过程中的延迟。
 			if (this.lifecycleProcessor != null) {
 				try {
 					this.lifecycleProcessor.onClose();
@@ -1119,14 +1136,17 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			}
 
 			// Destroy all cached singletons in the context's BeanFactory.
+			//销毁上下文bean工厂中所有缓存的单例bean。
 			destroyBeans();
 
 			// Close the state of this context itself.
+			//关闭上下文状态
 			closeBeanFactory();
 
 			// Let subclasses do some final clean-up if they wish...
+			//如果希望，可以让子类做一些其他清除工作。
 			onClose();
-
+            //更新上下文激活状态为false。
 			this.active.set(false);
 		}
 	}
@@ -1152,10 +1172,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Template method which can be overridden to add context-specific shutdown work.
 	 * The default implementation is empty.
+	 * 此方法为模板方法，可以重写添加上下文特殊的关闭工作，默认实现为空。
 	 * <p>Called at the end of {@link #doClose}'s shutdown procedure, after
 	 * this context's BeanFactory has been closed. If custom shutdown logic
 	 * needs to execute while the BeanFactory is still active, override
 	 * the {@link #destroyBeans()} method instead.
+	 * 在bean工厂上下文已经关闭，即{@link #doClose}关闭过程末端，调用此方法。当bean工厂处于激活状态，
+	 * 如果需要定制一些关闭逻辑，可以重写{@link #destroyBeans()} 方法。
 	 */
 	protected void onClose() {
 		// For subclasses: do nothing by default.
@@ -1169,11 +1192,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Assert that this context's BeanFactory is currently active,
 	 * throwing an {@link IllegalStateException} if it isn't.
+	 * 断言上下文bean工厂当前处于激活状态，如果处于非激活状态，则抛出非法状态异常{@link IllegalStateException}。
 	 * <p>Invoked by all {@link BeanFactory} delegation methods that depend
 	 * on an active context, i.e. in particular all bean accessor methods.
+	 * 所有依赖于激活上下文的bean工厂代理方法，将会调用此方法，比如所有bean的祖先方法。
 	 * <p>The default implementation checks the {@link #isActive() 'active'} status
 	 * of this context overall. May be overridden for more specific checks, or for a
 	 * no-op if {@link #getBeanFactory()} itself throws an exception in such a case.
+	 * 默认的实现为，检查上下文的激活状态。子类可以重写此方法，完成一些特殊的检查，比如在{@link #getBeanFactory()}抛出
+	 * 异常情况写的无操作行为。
 	 */
 	protected void assertBeanFactoryActive() {
 		if (!this.active.get()) {
@@ -1186,11 +1213,15 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		}
 	}
 
-
+	 /**
+	   * 下面是bean工厂接口BeanFactory的实现方法，首先断言bean工厂处于激活状态，然后再将实际的操作，委托给内部bean工厂。
+	   * 主要方法根据name或类型，或两者都有的对应的bean实例；判断bean是否存在，以及判断bean是否为单例或者原型模式bean操作。
+	   */    
 	//---------------------------------------------------------------------
 	// Implementation of BeanFactory interface
 	//---------------------------------------------------------------------
-
+ 
+	
 	@Override
 	public Object getBean(String name) throws BeansException {
 		assertBeanFactoryActive();
@@ -1261,7 +1292,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return getBeanFactory().getAliases(name);
 	}
 
-
+    /**
+     * 下面是List bean工厂接口ListableBeanFactory的具体实现，将实际操作委托给内部的bean工厂。
+     * 主要操作为判断给定name对应的bean定义是否存在，获取bean定义数量，获取所有bean定义的name集，
+     * 获取给定类型对应的bean name集或name与bean映射集，及获取待给定注解的bean name集或name与bean映射集
+     * 和获取给定name bean的注解。
+     */
 	//---------------------------------------------------------------------
 	// Implementation of ListableBeanFactory interface
 	//---------------------------------------------------------------------
@@ -1335,7 +1371,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return getBeanFactory().findAnnotationOnBean(beanName, annotationType);
 	}
 
-
+    /**
+     * 可继承bean工厂接口HierarchicalBeanFactory的实现。
+     * 主要操作获取父工厂，判断是否包含给定name对应的bean。
+     */
 	//---------------------------------------------------------------------
 	// Implementation of HierarchicalBeanFactory interface
 	//---------------------------------------------------------------------
@@ -1353,6 +1392,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 	/**
 	 * Return the internal bean factory of the parent context if it implements
 	 * ConfigurableApplicationContext; else, return the parent context itself.
+	 * 如果上下文实现了ConfigurableApplicationContext，返回上下文的内部bean工厂，否则返回父类上下文。
 	 * @see org.springframework.context.ConfigurableApplicationContext#getBeanFactory
 	 */
 	protected BeanFactory getInternalParentBeanFactory() {
@@ -1360,7 +1400,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				((ConfigurableApplicationContext) getParent()).getBeanFactory() : getParent();
 	}
 
-
+    /**
+     * 消息源接口MessageSource的实现。
+     * 主要操作为获取本地化的消息，具体委托给上下文内部的消息源。
+     */
 	//---------------------------------------------------------------------
 	// Implementation of MessageSource interface
 	//---------------------------------------------------------------------
@@ -1382,6 +1425,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Return the internal MessageSource used by the context.
+	 * 返回上下文内部使用的消息源。
 	 * @return the internal MessageSource (never {@code null})
 	 * @throws IllegalStateException if the context has not been initialized yet
 	 */
@@ -1403,7 +1447,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			((AbstractApplicationContext) getParent()).messageSource : getParent();
 	}
 
-
+    /**
+     * 资源匹配模式解决器接口ResourcePatternResolver的实现。
+     * 主要操作为获取给定位置模式的资源。具体委托给上下文内部的资源模式解决器PathMatchingResourcePatternResolver
+     */
 	//---------------------------------------------------------------------
 	// Implementation of ResourcePatternResolver interface
 	//---------------------------------------------------------------------
@@ -1413,7 +1460,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return this.resourcePatternResolver.getResources(locationPattern);
 	}
 
-
+    /**
+     * 生命周期接口的实现。
+     * 主要有启动和关闭操作，具体实现为调用上下文生命周期处理器的相应方法，并发布相关事件。
+     */
 	//---------------------------------------------------------------------
 	// Implementation of Lifecycle interface
 	//---------------------------------------------------------------------
@@ -1435,7 +1485,9 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		return (this.lifecycleProcessor != null && this.lifecycleProcessor.isRunning());
 	}
 
-
+    /**
+     * 抽象方法，子类必须实现
+     */
 	//---------------------------------------------------------------------
 	// Abstract methods that must be implemented by subclasses
 	//---------------------------------------------------------------------
@@ -1458,8 +1510,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Subclasses must implement this method to release their internal bean factory.
+	 * 子类必须实现此方法已释放工厂的内部bean。
 	 * This method gets invoked by {@link #close()} after all other shutdown work.
 	 * <p>Should never throw an exception but rather log shutdown failures.
+	 * 此方法在所有其他关闭工作后，通过{@link #close()}方法调用。应该不要抛出异常，而是日志输出关闭失败信息。
 	 */
 	protected abstract void closeBeanFactory();
 
@@ -1485,6 +1539,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Return information about this context.
+	 * 返回上下文信息。
 	 */
 	@Override
 	public String toString() {
