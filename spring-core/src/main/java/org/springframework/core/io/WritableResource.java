@@ -22,7 +22,7 @@ import java.io.OutputStream;
 /**
  * Extended interface for a resource that supports writing to it.
  * Provides an {@link #getOutputStream() OutputStream accessor}.
- *
+ *拓展资源接口，支持写操作，提供了输出流。
  * @author Juergen Hoeller
  * @since 3.1
  * @see java.io.OutputStream
@@ -32,8 +32,10 @@ public interface WritableResource extends Resource {
 	/**
 	 * Return whether the contents of this resource can be modified,
 	 * e.g. via {@link #getOutputStream()} or {@link #getFile()}.
+	 * 返回资源内容是否可以修改。
 	 * <p>Will be {@code true} for typical resource descriptors;
 	 * note that actual content writing may still fail when attempted.
+	 * 一些特殊的资源描述可能返回true，但实际的写尝试可能失败。
 	 * However, a value of {@code false} is a definitive indication
 	 * that the resource content cannot be modified.
 	 * @see #getOutputStream()
@@ -44,6 +46,7 @@ public interface WritableResource extends Resource {
 	/**
 	 * Return an {@link OutputStream} for the underlying resource,
 	 * allowing to (over-)write its content.
+	 * 返回底层资源的输出流，允许写操作
 	 * @throws IOException if the stream could not be opened
 	 * @see #getInputStream()
 	 */

@@ -209,6 +209,7 @@ public abstract class ReflectionUtils {
 	 * Invoke the specified {@link Method} against the supplied target object with the
 	 * supplied arguments. The target object can be {@code null} when invoking a
 	 * static {@link Method}.
+	 * 调用给定目标的给方法，参数为args，当调用静态方法时，目标可以为空。
 	 * <p>Thrown exceptions are handled via a call to {@link #handleReflectionException}.
 	 * @param method the method to invoke
 	 * @param target the target object to invoke the method on

@@ -80,11 +80,11 @@ public class AntPathMatcher implements PathMatcher {
 	private static final char[] WILDCARD_CHARS = { '*', '?', '{' };//通配符
 
 
-	private String pathSeparator;
+	private String pathSeparator;//路径分割符
 
-	private PathSeparatorPatternCache pathSeparatorPatternCache;
+	private PathSeparatorPatternCache pathSeparatorPatternCache;//路径分割符模式缓存
 
-	private boolean caseSensitive = true;
+	private boolean caseSensitive = true;//是否对大小写敏感，默认是
 
 	private boolean trimTokens = false;
 
@@ -185,6 +185,7 @@ public class AntPathMatcher implements PathMatcher {
 	 * @param path the path String to test
 	 * @param fullMatch whether a full pattern match is required (else a pattern match
 	 * as far as the given base path goes is sufficient)
+	 * 是否需要全路径完全匹配
 	 * @return {@code true} if the supplied {@code path} matched, {@code false} if it didn't
 	 */
 	protected boolean doMatch(String pattern, String path, boolean fullMatch, Map<String, String> uriTemplateVariables) {
