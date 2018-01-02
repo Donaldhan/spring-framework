@@ -70,14 +70,14 @@ import java.util.regex.Pattern;
  */
 public class AntPathMatcher implements PathMatcher {
 
-	/** Default path separator: "/" */
+	/** Default path separator: "/" 路径分割符*/
 	public static final String DEFAULT_PATH_SEPARATOR = "/";
 
 	private static final int CACHE_TURNOFF_THRESHOLD = 65536;
 
 	private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\{[^/]+?\\}");
 
-	private static final char[] WILDCARD_CHARS = { '*', '?', '{' };
+	private static final char[] WILDCARD_CHARS = { '*', '?', '{' };//通配符
 
 
 	private String pathSeparator;

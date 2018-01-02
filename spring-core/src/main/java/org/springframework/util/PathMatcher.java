@@ -39,9 +39,11 @@ public interface PathMatcher {
 	/**
 	 * Does the given {@code path} represent a pattern that can be matched
 	 * by an implementation of this interface?
+	 * 给定的路径表示的模式，是否可以匹配当前路径匹配器。
 	 * <p>If the return value is {@code false}, then the {@link #match}
 	 * method does not have to be used because direct equality comparisons
 	 * on the static path Strings will lead to the same result.
+	 * 如果返回false，因为直接路径相等比较会有相同的结果，{@link #match}方法不必使用。
 	 * @param path the path String to check
 	 * @return {@code true} if the given {@code path} represents a pattern
 	 */
@@ -50,6 +52,7 @@ public interface PathMatcher {
 	/**
 	 * Match the given {@code path} against the given {@code pattern},
 	 * according to this PathMatcher's matching strategy.
+	 * 根据当前路径匹配器的匹配策略，给定的路径是否，匹配给定的模式
 	 * @param pattern the pattern to match against
 	 * @param path the path String to test
 	 * @return {@code true} if the supplied {@code path} matched,
@@ -60,8 +63,10 @@ public interface PathMatcher {
 	/**
 	 * Match the given {@code path} against the corresponding part of the given
 	 * {@code pattern}, according to this PathMatcher's matching strategy.
+	 * 根据当前路径匹配器的匹配策略，给定的路径是否，匹配给定的模式的相关部分。
 	 * <p>Determines whether the pattern at least matches as far as the given base
 	 * path goes, assuming that a full path may then match as well.
+	 * 假设全路径可以匹配，判断模式是否至少匹配给定的路径。
 	 * @param pattern the pattern to match against
 	 * @param path the path String to test
 	 * @return {@code true} if the supplied {@code path} matched,
@@ -71,6 +76,7 @@ public interface PathMatcher {
 
 	/**
 	 * Given a pattern and a full path, determine the pattern-mapped part.
+	 * 根据给定的模式和全路径，决定模式映射匹配部分。
 	 * <p>This method is supposed to find out which part of the path is matched
 	 * dynamically through an actual pattern, that is, it strips off a statically
 	 * defined leading path from the given full path, returning only the actually

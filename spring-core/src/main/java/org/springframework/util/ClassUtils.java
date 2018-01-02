@@ -226,49 +226,56 @@ public abstract class ClassUtils {
 	 */
 	public static Class<?> forName(String name, ClassLoader classLoader) throws ClassNotFoundException, LinkageError {
 		Assert.notNull(name, "Name must not be null");
-
+        //根据类型name，从原始类型缓存中获取对应的原始类型
 		Class<?> clazz = resolvePrimitiveClassName(name);
 		if (clazz == null) {
+			//否则，从一般类型缓存中获取对应的类型
 			clazz = commonClassCache.get(name);
 		}
 		if (clazz != null) {
 			return clazz;
 		}
 
-		// "java.lang.String[]" style arrays
+		// "java.lang.String[]" style arrays，原始类型数组类型
 		if (name.endsWith(ARRAY_SUFFIX)) {
+			//获取数组元素类型
 			String elementClassName = name.substring(0, name.length() - ARRAY_SUFFIX.length());
+			//获取数组类型的元素类型名
 			Class<?> elementClass = forName(elementClassName, classLoader);
+			//构建数组
 			return Array.newInstance(elementClass, 0).getClass();
 		}
 
-		// "[Ljava.lang.String;" style arrays
+		// "[Ljava.lang.String;" style arrays，非原始类型数组类型
 		if (name.startsWith(NON_PRIMITIVE_ARRAY_PREFIX) && name.endsWith(";")) {
-			String elementName = name.substring(NON_PRIMITIVE_ARRAY_PREFIX.length(), name.length() - 1);
-			Class<?> elementClass = forName(elementName, classLoader);
+			String elementName = name.substring(NON_PRIMITIVE_ARRAY_PREFIX.length(), name.length() - 1);//获取数组元素类型名
+			Class<?> elementClass = forName(elementName, classLoader);//获取数组类型的元素类型
 			return Array.newInstance(elementClass, 0).getClass();
 		}
 
-		// "[[I" or "[[Ljava.lang.String;" style arrays
+		// "[[I" or "[[Ljava.lang.String;" style arrays,二维数组类型
 		if (name.startsWith(INTERNAL_ARRAY_PREFIX)) {
-			String elementName = name.substring(INTERNAL_ARRAY_PREFIX.length());
-			Class<?> elementClass = forName(elementName, classLoader);
+			String elementName = name.substring(INTERNAL_ARRAY_PREFIX.length());//获取数组元素类型名
+			Class<?> elementClass = forName(elementName, classLoader);//获取数组类型的元素类型
 			return Array.newInstance(elementClass, 0).getClass();
 		}
 
 		ClassLoader clToUse = classLoader;
-		if (clToUse == null) {
+		if (clToUse == null) {//如果类加载器为空，则获取默认类加载器
 			clToUse = getDefaultClassLoader();
 		}
 		try {
+			//加载类型
 			return (clToUse != null ? clToUse.loadClass(name) : Class.forName(name));
 		}
 		catch (ClassNotFoundException ex) {
 			int lastDotIndex = name.lastIndexOf(PACKAGE_SEPARATOR);
 			if (lastDotIndex != -1) {
+				//获取内部类型，类名
 				String innerClassName =
 						name.substring(0, lastDotIndex) + INNER_CLASS_SEPARATOR + name.substring(lastDotIndex + 1);
 				try {
+					//加载内部类
 					return (clToUse != null ? clToUse.loadClass(innerClassName) : Class.forName(innerClassName));
 				}
 				catch (ClassNotFoundException ex2) {
@@ -309,9 +316,12 @@ public abstract class ClassUtils {
 	/**
 	 * Resolve the given class name as primitive class, if appropriate,
 	 * according to the JVM's naming rules for primitive classes.
+	 * 如果根据虚拟机原始类型命令规则，给定的类名与原始类名相似，则根据给定的类名，返回对应的原始类型。
 	 * <p>Also supports the JVM's internal class names for primitive arrays.
+	 * 同时支持虚拟机内部的原始数组类型名。
 	 * Does <i>not</i> support the "[]" suffix notation for primitive arrays;
 	 * this is only supported by {@link #forName(String, ClassLoader)}.
+	 * 不支持"[]"为后缀标记的原始数组类型，仅支持{@link #forName(String, ClassLoader)}
 	 * @param name the name of the potentially primitive class
 	 * @return the primitive class, or {@code null} if the name does not denote
 	 * a primitive class or primitive array class

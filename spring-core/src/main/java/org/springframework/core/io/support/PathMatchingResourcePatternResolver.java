@@ -186,8 +186,10 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	static {
 		try {
 			// Detect Equinox OSGi (e.g. on WebSphere 6.1)
+			//加载文件类型org.eclipse.core.runtime.FileLocator
 			Class<?> fileLocatorClass = ClassUtils.forName("org.eclipse.core.runtime.FileLocator",
 					PathMatchingResourcePatternResolver.class.getClassLoader());
+			//获取org.eclipse.core.runtime.FileLocator的参数为URL的resolve方法。
 			equinoxResolveMethod = fileLocatorClass.getMethod("resolve", URL.class);
 			logger.debug("Found Equinox FileLocator for OSGi bundle URL resolution");
 		}
@@ -197,7 +199,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	}
 
 
-	private final ResourceLoader resourceLoader;
+	private final ResourceLoader resourceLoader;//内部资源加载器
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 
@@ -205,6 +207,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	/**
 	 * Create a new PathMatchingResourcePatternResolver with a DefaultResourceLoader.
 	 * <p>ClassLoader access will happen via the thread context class loader.
+	 * 根据默认的资源类型创建一个新的路径匹配资源模式解决器。
 	 * @see org.springframework.core.io.DefaultResourceLoader
 	 */
 	public PathMatchingResourcePatternResolver() {
@@ -214,6 +217,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	/**
 	 * Create a new PathMatchingResourcePatternResolver.
 	 * <p>ClassLoader access will happen via the thread context class loader.
+	 * 根据给定的资源加载器创建一个新的路径匹配资源模式解决器。
 	 * @param resourceLoader the ResourceLoader to load root directories and
 	 * actual resources with
 	 */
@@ -224,6 +228,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 
 	/**
 	 * Create a new PathMatchingResourcePatternResolver with a DefaultResourceLoader.
+	 * 根据给定的类加载器，创建一个新的路径匹配资源模式解决器。
 	 * @param classLoader the ClassLoader to load classpath resources with,
 	 * or {@code null} for using the thread context class loader
 	 * at the time of actual resource access
@@ -236,6 +241,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 
 	/**
 	 * Return the ResourceLoader that this pattern resolver works with.
+	 * 获取资源加载器
 	 */
 	public ResourceLoader getResourceLoader() {
 		return this.resourceLoader;
@@ -249,6 +255,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	/**
 	 * Set the PathMatcher implementation to use for this
 	 * resource pattern resolver. Default is AntPathMatcher.
+	 * 设置资源路径匹配器，默认为AntPathMatcher
 	 * @see org.springframework.util.AntPathMatcher
 	 */
 	public void setPathMatcher(PathMatcher pathMatcher) {
