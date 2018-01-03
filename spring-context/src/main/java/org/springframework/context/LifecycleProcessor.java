@@ -34,7 +34,7 @@ public interface LifecycleProcessor extends Lifecycle {
 
 	/**
 	 * Notification of context close phase, e.g. for auto-stopping components.
-	 * 同时上下文关闭阶段，比如自动停止组件
+	 * 通知上下文关闭阶段，比如自动停止组件
 	 */
 	void onClose();
 
