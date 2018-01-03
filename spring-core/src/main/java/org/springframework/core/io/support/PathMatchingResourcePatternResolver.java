@@ -309,12 +309,13 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	@Override
 	public Resource[] getResources(String locationPattern) throws IOException {
 		Assert.notNull(locationPattern, "Location pattern must not be null");
+		//"classpath*:"前缀路径位置模式
 		if (locationPattern.startsWith(CLASSPATH_ALL_URL_PREFIX)) {
 			// a class path resource (multiple resources for same name possible)
-			//类路径资源
+			//"classpath*:"前缀，Ant风格的类路径资源
 			if (getPathMatcher().isPattern(locationPattern.substring(CLASSPATH_ALL_URL_PREFIX.length()))) {
 				// a class path resource pattern
-				//加载位置模式下的类路径资源
+				//加载位置模式下的类路径资源"classpath*:"
 				return findPathMatchingResources(locationPattern);
 			}
 			else {
