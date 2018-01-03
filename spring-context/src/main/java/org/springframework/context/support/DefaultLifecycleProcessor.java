@@ -42,7 +42,7 @@ import org.springframework.context.SmartLifecycle;
 
 /**
  * Default implementation of the {@link LifecycleProcessor} strategy.
- *
+ *LifecycleProcessor策略的默认实现。
  * @author Mark Fisher
  * @author Juergen Hoeller
  * @since 3.0
@@ -51,11 +51,11 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 
 	private final Log logger = LogFactory.getLog(getClass());
 
-	private volatile long timeoutPerShutdownPhase = 30000;
+	private volatile long timeoutPerShutdownPhase = 30000;//每次关闭的超时时间
 
-	private volatile boolean running;
+	private volatile boolean running;//是否正在运行
 
-	private volatile ConfigurableListableBeanFactory beanFactory;
+	private volatile ConfigurableListableBeanFactory beanFactory;//所属bean工厂
 
 
 	/**
@@ -66,7 +66,9 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 	public void setTimeoutPerShutdownPhase(long timeoutPerShutdownPhase) {
 		this.timeoutPerShutdownPhase = timeoutPerShutdownPhase;
 	}
-
+    /**
+     * 设置bean工厂
+     */
 	@Override
 	public void setBeanFactory(BeanFactory beanFactory) {
 		if (!(beanFactory instanceof ConfigurableListableBeanFactory)) {
@@ -76,7 +78,9 @@ public class DefaultLifecycleProcessor implements LifecycleProcessor, BeanFactor
 		this.beanFactory = (ConfigurableListableBeanFactory) beanFactory;
 	}
 
-
+    /**
+     * Lifecycle接口实现
+     */
 	// Lifecycle implementation
 
 	/**
