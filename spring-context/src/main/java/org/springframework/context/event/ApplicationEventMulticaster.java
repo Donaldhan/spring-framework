@@ -23,11 +23,12 @@ import org.springframework.core.ResolvableType;
 /**
  * Interface to be implemented by objects that can manage a number of
  * {@link ApplicationListener} objects, and publish events to them.
- *
+ *应用事件多播器ApplicationEventMulticaster的实现可以管理多个应用监听器对象，
+ *并发布事件到相关监听器。
  * <p>An {@link org.springframework.context.ApplicationEventPublisher}, typically
  * a Spring {@link org.springframework.context.ApplicationContext}, can use an
  * ApplicationEventMulticaster as a delegate for actually publishing events.
- *
+ *应用事件多播器的使用典型场景，应用上下文可以使用应用事件多播器代理事件的发布事件操作。
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -36,39 +37,48 @@ public interface ApplicationEventMulticaster {
 
 	/**
 	 * Add a listener to be notified of all events.
+	 * 添加监听器
 	 * @param listener the listener to add
 	 */
 	void addApplicationListener(ApplicationListener<?> listener);
 
 	/**
 	 * Add a listener bean to be notified of all events.
+	 * 添加监听器bean
 	 * @param listenerBeanName the name of the listener bean to add
 	 */
 	void addApplicationListenerBean(String listenerBeanName);
 
 	/**
 	 * Remove a listener from the notification list.
+	 * 移除监听器
 	 * @param listener the listener to remove
 	 */
 	void removeApplicationListener(ApplicationListener<?> listener);
 
 	/**
 	 * Remove a listener bean from the notification list.
+	 * 移除监听器bean
 	 * @param listenerBeanName the name of the listener bean to add
 	 */
 	void removeApplicationListenerBean(String listenerBeanName);
 
 	/**
 	 * Remove all listeners registered with this multicaster.
+	 * 移除所有注册到多播器的监听器。
 	 * <p>After a remove call, the multicaster will perform no action
 	 * on event notification until new listeners are being registered.
+	 * 在移除所有监听器操作调用后，多播器对于发生的事件不做任何处理，直到有新的监听器注册
 	 */
 	void removeAllListeners();
 
 	/**
 	 * Multicast the given application event to appropriate listeners.
+	 * 多播给定的应用事件到相关监听器
 	 * <p>Consider using {@link #multicastEvent(ApplicationEvent, ResolvableType)}
 	 * if possible as it provides a better support for generics-based events.
+	 * 如果想要尽可能中的支持一般的事件，可以考虑使用{@link #multicastEvent(ApplicationEvent, ResolvableType)}
+	 * 方法。
 	 * @param event the event to multicast
 	 */
 	void multicastEvent(ApplicationEvent event);
