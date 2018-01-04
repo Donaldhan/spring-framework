@@ -64,9 +64,9 @@ public abstract class AbstractApplicationEventMulticaster
 	final Map<ListenerCacheKey, ListenerRetriever> retrieverCache =
 			new ConcurrentHashMap<ListenerCacheKey, ListenerRetriever>(64);
 
-	private ClassLoader beanClassLoader;
+	private ClassLoader beanClassLoader; //bean类加载器
 
-	private BeanFactory beanFactory;
+	private BeanFactory beanFactory;//所属bean工厂
 
 	private Object retrievalMutex = this.defaultRetriever;
 
@@ -345,11 +345,11 @@ public abstract class AbstractApplicationEventMulticaster
 	 */
 	private class ListenerRetriever {
 
-		public final Set<ApplicationListener<?>> applicationListeners;
+		public final Set<ApplicationListener<?>> applicationListeners;//监听器集
 
-		public final Set<String> applicationListenerBeans;
+		public final Set<String> applicationListenerBeans;//监听器bean name集
 
-		private final boolean preFiltered;
+		private final boolean preFiltered; //是否预先过滤
 
 		public ListenerRetriever(boolean preFiltered) {
 			this.applicationListeners = new LinkedHashSet<ApplicationListener<?>>();
@@ -357,17 +357,24 @@ public abstract class AbstractApplicationEventMulticaster
 			this.preFiltered = preFiltered;
 		}
 
+		/**
+		 * 合并监听器name集对应的监听器和监听器集
+		 * @return
+		 */
 		public Collection<ApplicationListener<?>> getApplicationListeners() {
 			LinkedList<ApplicationListener<?>> allListeners = new LinkedList<ApplicationListener<?>>();
 			for (ApplicationListener<?> listener : this.applicationListeners) {
 				allListeners.add(listener);
 			}
+			//遍历监听器name集，获取相应的监听器，如果需要添加到监听器集
 			if (!this.applicationListenerBeans.isEmpty()) {
 				BeanFactory beanFactory = getBeanFactory();
 				for (String listenerBeanName : this.applicationListenerBeans) {
 					try {
+						//获取name对应的监听器
 						ApplicationListener<?> listener = beanFactory.getBean(listenerBeanName, ApplicationListener.class);
 						if (this.preFiltered || !allListeners.contains(listener)) {
+							//如果需要预过滤或者监听器集不包括对应的监听器，则添加监听器到监听器集
 							allListeners.add(listener);
 						}
 					}
@@ -377,6 +384,7 @@ public abstract class AbstractApplicationEventMulticaster
 					}
 				}
 			}
+			//根据监听器注解Order的值进行排序，没有则为null
 			AnnotationAwareOrderComparator.sort(allListeners);
 			return allListeners;
 		}

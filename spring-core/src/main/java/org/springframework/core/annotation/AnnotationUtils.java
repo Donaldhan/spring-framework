@@ -113,7 +113,7 @@ public abstract class AnnotationUtils {
 	public static final String VALUE = "value";
 
 	private static final String REPEATABLE_CLASS_NAME = "java.lang.annotation.Repeatable";
-
+    //注解缓存key映射集
 	private static final Map<AnnotationCacheKey, Annotation> findAnnotationCache =
 			new ConcurrentReferenceHashMap<AnnotationCacheKey, Annotation>(256);
 
@@ -659,6 +659,7 @@ public abstract class AnnotationUtils {
 	 * <p>Note: in this context, the term <em>recursively</em> means that the search
 	 * process continues by returning to step #1 with the current interface,
 	 * annotation, or superclass as the class to look for annotations on.
+	 * 获取类型对应的注解元素信息
 	 * @param clazz the class to look for annotations on
 	 * @param annotationType the type of annotation to look for
 	 * @return the first matching annotation, or {@code null} if not found
@@ -670,6 +671,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Perform the actual work for {@link #findAnnotation(AnnotatedElement, Class)},
 	 * honoring the {@code synthesize} flag.
+	 * 执行实际的获取类型注解元素信息工作，
 	 * @param clazz the class to look for annotations on
 	 * @param annotationType the type of annotation to look for
 	 * @param synthesize {@code true} if the result should be
@@ -683,13 +685,16 @@ public abstract class AnnotationUtils {
 		if (annotationType == null) {
 			return null;
 		}
-
+        //构造类及注解类型缓存key
 		AnnotationCacheKey cacheKey = new AnnotationCacheKey(clazz, annotationType);
+		//从注解缓存中
 		A result = (A) findAnnotationCache.get(cacheKey);
 		if (result == null) {
+			//获取给定类的注解类型元素信息
 			result = findAnnotation(clazz, annotationType, new HashSet<Annotation>());
 			if (result != null && synthesize) {
 				result = synthesizeAnnotation(result, clazz);
+				//放入缓存中
 				findAnnotationCache.put(cacheKey, result);
 			}
 		}
@@ -700,14 +705,17 @@ public abstract class AnnotationUtils {
 	 * Perform the search algorithm for {@link #findAnnotation(Class, Class)},
 	 * avoiding endless recursion by tracking which annotations have already
 	 * been <em>visited</em>.
+	 * 配置获取类的注解类搜索算法，避免检索已经检查过的注解。
 	 * @param clazz the class to look for annotations on
 	 * @param annotationType the type of annotation to look for
 	 * @param visited the set of annotations that have already been visited
+	 * 已经查找的注解集
 	 * @return the first matching annotation, or {@code null} if not found
 	 */
 	@SuppressWarnings("unchecked")
 	private static <A extends Annotation> A findAnnotation(Class<?> clazz, Class<A> annotationType, Set<Annotation> visited) {
 		try {
+			//获取类的声明注解类
 			Annotation[] anns = clazz.getDeclaredAnnotations();
 			for (Annotation ann : anns) {
 				if (ann.annotationType() == annotationType) {
@@ -715,7 +723,9 @@ public abstract class AnnotationUtils {
 				}
 			}
 			for (Annotation ann : anns) {
+				//如果非JDK核心注解
 				if (!isInJavaLangAnnotationPackage(ann) && visited.add(ann)) {
+					//获取注解类的注解，寻找注解类的注解
 					A annotation = findAnnotation(ann.annotationType(), annotationType, visited);
 					if (annotation != null) {
 						return annotation;
@@ -727,14 +737,14 @@ public abstract class AnnotationUtils {
 			handleIntrospectionFailure(clazz, ex);
 			return null;
 		}
-
+        //获取父接口注解
 		for (Class<?> ifc : clazz.getInterfaces()) {
 			A annotation = findAnnotation(ifc, annotationType, visited);
 			if (annotation != null) {
 				return annotation;
 			}
 		}
-
+        //获取父类注解
 		Class<?> superclass = clazz.getSuperclass();
 		if (superclass == null || Object.class == superclass) {
 			return null;
@@ -903,6 +913,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine if the supplied {@link Annotation} is defined in the core JDK
 	 * {@code java.lang.annotation} package.
+	 * 判断给定注解类型是否为java.lang.annotation中的注解，即JDK核心注解
 	 * @param annotation the annotation to check
 	 * @return {@code true} if the annotation is in the {@code java.lang.annotation} package
 	 */
@@ -913,6 +924,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine if the {@link Annotation} with the supplied name is defined
 	 * in the core JDK {@code java.lang.annotation} package.
+	 * 判断给定注解类型是否为java.lang.annotation中的注解，即JDK核心注解
 	 * @param annotationType the annotation type to check
 	 * @return {@code true} if the annotation is in the {@code java.lang.annotation} package
 	 * @since 4.3.8
@@ -924,6 +936,7 @@ public abstract class AnnotationUtils {
 	/**
 	 * Determine if the {@link Annotation} with the supplied name is defined
 	 * in the core JDK {@code java.lang.annotation} package.
+	 * 判断给定注解类型是否为JDK核心注解
 	 * @param annotationType the name of the annotation type to check
 	 * @return {@code true} if the annotation is in the {@code java.lang.annotation} package
 	 * @since 4.2
@@ -1896,12 +1909,13 @@ public abstract class AnnotationUtils {
 
 	/**
 	 * Cache key for the AnnotatedElement cache.
+	 * 注解元素缓存key
 	 */
 	private static final class AnnotationCacheKey implements Comparable<AnnotationCacheKey> {
 
-		private final AnnotatedElement element;
+		private final AnnotatedElement element;//被注解类
 
-		private final Class<? extends Annotation> annotationType;
+		private final Class<? extends Annotation> annotationType;//注解类型
 
 		public AnnotationCacheKey(AnnotatedElement element, Class<? extends Annotation> annotationType) {
 			this.element = element;

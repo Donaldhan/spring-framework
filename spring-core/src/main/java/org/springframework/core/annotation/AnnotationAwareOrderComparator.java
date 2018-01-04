@@ -48,6 +48,7 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 
 	/**
 	 * Shared default instance of {@code AnnotationAwareOrderComparator}.
+	 * 共享的默认注解Order比较器
 	 */
 	public static final AnnotationAwareOrderComparator INSTANCE = new AnnotationAwareOrderComparator();
 
@@ -57,6 +58,8 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 	 * {@link javax.annotation.Priority @Priority} on various kinds of
 	 * elements, in addition to the {@link org.springframework.core.Ordered}
 	 * check in the superclass.
+	 * 检查类型的{@link Order @Order}或{@link javax.annotation.Priority @Priority}
+	 * 不同种类的注解元素，包括父类的注解检查
 	 */
 	protected Integer findOrder(Object obj) {
 		// Check for regular Ordered interface
@@ -66,10 +69,10 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 		}
 
 		// Check for @Order and @Priority on various kinds of elements
-		if (obj instanceof Class) {
+		if (obj instanceof Class) {//获取类的Order注解的值
 			return OrderUtils.getOrder((Class<?>) obj);
 		}
-		else if (obj instanceof Method) {
+		else if (obj instanceof Method) {//获取方法注解Order的值
 			Order ann = AnnotationUtils.findAnnotation((Method) obj, Order.class);
 			if (ann != null) {
 				return ann.value();
@@ -116,6 +119,8 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 	 * Sort the given List with a default AnnotationAwareOrderComparator.
 	 * <p>Optimized to skip sorting for lists with size 0 or 1,
 	 * in order to avoid unnecessary array extraction.
+	 * 使用默认的AnnotationAwareOrderComparator排序给定的数组。
+	 * 为了避免不必要的数组排序，跳过数组size为0到1的情况。
 	 * @param list the List to sort
 	 * @see java.util.Collections#sort(java.util.List, java.util.Comparator)
 	 */
@@ -129,6 +134,8 @@ public class AnnotationAwareOrderComparator extends OrderComparator {
 	 * Sort the given array with a default AnnotationAwareOrderComparator.
 	 * <p>Optimized to skip sorting for lists with size 0 or 1,
 	 * in order to avoid unnecessary array extraction.
+	 * 使用默认的AnnotationAwareOrderComparator排序给定的数组。
+	 * 为了避免不必要的数组排序，跳过数组size为0到1的情况。
 	 * @param array the array to sort
 	 * @see java.util.Arrays#sort(Object[], java.util.Comparator)
 	 */
