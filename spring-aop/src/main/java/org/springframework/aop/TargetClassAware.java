@@ -18,11 +18,12 @@ package org.springframework.aop;
 
 /**
  * Minimal interface for exposing the target class behind a proxy.
- *
+ *TargetClassAware为暴露代理目标类的最小接口
  * <p>Implemented by AOP proxy objects and proxy factories
  * (via {@link org.springframework.aop.framework.Advised})
  * as well as by {@link TargetSource TargetSources}.
- *
+ *AOP代理对象和代理工厂将会通过{@link org.springframework.aop.framework.Advised}
+ *或{@link TargetSource TargetSources}实现此接口
  * @author Juergen Hoeller
  * @since 2.0.3
  * @see org.springframework.aop.support.AopUtils#getTargetClass(Object)
@@ -32,6 +33,7 @@ public interface TargetClassAware {
 	/**
 	 * Return the target class behind the implementing object
 	 * (typically a proxy configuration or an actual proxy).
+	 * 返回实现对象的目标类(典型的代理配置，或是一个实际的代理)
 	 * @return the target Class, or {@code null} if not known
 	 */
 	Class<?> getTargetClass();

@@ -45,6 +45,7 @@ public abstract class AopProxyUtils {
 
 	/**
 	 * Obtain the singleton target object behind the given proxy, if any.
+	 * 获取给定代理的单例目标对象
 	 * @param candidate the (potential) proxy to check
 	 * @return the singleton target object managed in a {@link SingletonTargetSource},
 	 * or {@code null} in any other case (not a proxy, not an existing singleton target)
@@ -54,8 +55,10 @@ public abstract class AopProxyUtils {
 	 */
 	public static Object getSingletonTarget(Object candidate) {
 		if (candidate instanceof Advised) {
+			//获取AOP增强对象的目标源
 			TargetSource targetSource = ((Advised) candidate).getTargetSource();
 			if (targetSource instanceof SingletonTargetSource) {
+				//获取单例目标源的目标对象实例
 				return ((SingletonTargetSource) targetSource).getTarget();
 			}
 		}

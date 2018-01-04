@@ -69,6 +69,7 @@ public interface Advised extends TargetClassAware {
 
 	/**
 	 * Return the {@code TargetSource} used by this {@code Advised} object.
+	 * 返回AOP增强对象的目标源
 	 */
 	TargetSource getTargetSource();
 

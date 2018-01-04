@@ -23,11 +23,14 @@ import org.springframework.core.Ordered;
 /**
  * Extended variant of the standard {@link ApplicationListener} interface,
  * exposing further metadata such as the supported event type.
+ * SmartApplicationListener拓展了引用监听器接口，暴露更多的元数据，
+ * 比如事件类型。
  *
  * <p>Users are <bold>strongly advised</bold> to use the {@link GenericApplicationListener}
  * interface instead as it provides an improved detection of generics-based
  * event types.
- *
+ *强烈建议使用泛型监听器GenericApplicationListener接口替代SmartApplicationListener，
+ *提供基于事件类型的泛型探测。
  * @author Juergen Hoeller
  * @since 3.0
  * @see GenericApplicationListener
@@ -36,11 +39,13 @@ public interface SmartApplicationListener extends ApplicationListener<Applicatio
 
 	/**
 	 * Determine whether this listener actually supports the given event type.
+	 * 判断监听器是否支持给定的事件类型eventType
 	 */
 	boolean supportsEventType(Class<? extends ApplicationEvent> eventType);
 
 	/**
 	 * Determine whether this listener actually supports the given source type.
+	 * 判断监听器实际上是否支持给定的事件源类型
 	 */
 	boolean supportsSourceType(Class<?> sourceType);
 

@@ -279,8 +279,10 @@ public abstract class ObjectUtils {
 	/**
 	 * Determine if the given objects are equal, returning {@code true} if
 	 * both are {@code null} or {@code false} if only one is {@code null}.
+	 * 判断给定的对象是否弦更，如果有一个为null，或者两个都为null，则返回false。
 	 * <p>Compares arrays with {@code Arrays.equals}, performing an equality
 	 * check based on the array elements rather than the array reference.
+	 * 如果对象为数组，则基于数组元素判断是否相等，而不是数组引用。
 	 * @param o1 first Object to compare
 	 * @param o2 second Object to compare
 	 * @return whether the given objects are equal
@@ -306,6 +308,7 @@ public abstract class ObjectUtils {
 	/**
 	 * Compare the given arrays with {@code Arrays.equals}, performing an equality
 	 * check based on the array elements rather than the array reference.
+	 * 比较给定的数组是否相等，基于数组元素检查是否相等，而不是数组引用。
 	 * @param o1 first array to compare
 	 * @param o2 second array to compare
 	 * @return whether the given objects are equal
