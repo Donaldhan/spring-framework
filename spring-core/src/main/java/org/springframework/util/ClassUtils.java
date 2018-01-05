@@ -1261,6 +1261,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the given object is a CGLIB proxy.
+	 * 检查对象是否为CGLIB代理
 	 * @param object the object to check
 	 * @see #isCglibProxyClass(Class)
 	 * @see org.springframework.aop.support.AopUtils#isCglibProxy(Object)
@@ -1271,6 +1272,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the specified class is a CGLIB-generated class.
+	 * 检查对象是否为CGLIB生成的类
 	 * @param clazz the class to check
 	 * @see #isCglibProxyClassName(String)
 	 */
@@ -1280,6 +1282,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the specified class name is a CGLIB-generated class.
+	 * 检查给定类名是否为CGLIB生成的类
 	 * @param className the class name to check
 	 */
 	public static boolean isCglibProxyClassName(String className) {

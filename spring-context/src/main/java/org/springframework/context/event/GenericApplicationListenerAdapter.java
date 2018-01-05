@@ -49,6 +49,7 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 	public GenericApplicationListenerAdapter(ApplicationListener<?> delegate) {
 		Assert.notNull(delegate, "Delegate listener must not be null");
 		this.delegate = (ApplicationListener<ApplicationEvent>) delegate;
+		//解决监听器的泛型声明类
 		this.declaredEventType = resolveDeclaredEventType(this.delegate);
 	}
 
@@ -96,18 +97,32 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 	}
 
 
+	/**
+	 * 获取给定监听器类的泛型声明事件类ResolvableType
+	 * @param listenerType
+	 * @return
+	 */
 	static ResolvableType resolveDeclaredEventType(Class<?> listenerType) {
 		//获取监听器类型的ResolvableType
 		ResolvableType resolvableType = ResolvableType.forClass(listenerType).as(ApplicationListener.class);
 		//如果监听器类型中有泛型声明，则获取声明泛型类型
 		return (resolvableType.hasGenerics() ? resolvableType.getGeneric() : null);
 	}
-
+    
+	/**
+	 * 获取获取给定监听器类实例的泛型声明事件类ResolvableType
+	 * @param listener
+	 * @return
+	 */
 	private static ResolvableType resolveDeclaredEventType(ApplicationListener<ApplicationEvent> listener) {
+		//获取给定监听器类的泛型声明事件类ResolvableType
 		ResolvableType declaredEventType = resolveDeclaredEventType(listener.getClass());
+		//如果监听器泛型参数为null，或者泛型类型为应用事件类型
 		if (declaredEventType == null || declaredEventType.isAssignableFrom(
 				ResolvableType.forClass(ApplicationEvent.class))) {
+			//获取监听器实例的目标类
 			Class<?> targetClass = AopUtils.getTargetClass(listener);
+			//如果监听器目标类与监听器类型不相同，则获取目标类的声明泛型类型
 			if (targetClass != listener.getClass()) {
 				declaredEventType = resolveDeclaredEventType(targetClass);
 			}

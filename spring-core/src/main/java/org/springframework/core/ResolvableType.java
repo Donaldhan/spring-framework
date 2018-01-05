@@ -123,11 +123,11 @@ public class ResolvableType implements Serializable {
 
 	private final Integer hash;
 
-	private ResolvableType superType;
+	private ResolvableType superType;//父类
 
-	private ResolvableType[] interfaces;
+	private ResolvableType[] interfaces;//父类接口
 
-	private ResolvableType[] generics;
+	private ResolvableType[] generics;//泛型类型
 
 
 	/**
@@ -626,6 +626,10 @@ public class ResolvableType implements Serializable {
 	 * for example {@code getGeneric(1, 0)} will access the {@code String} from the nested
 	 * {@code List}. For convenience, if no indexes are specified the first generic is
 	 * returned.
+	 * 返回类型的泛型参数类的ResolvableType类型形式。索引从0开始；比如给定的类型为Map<Integer, List<String>>，
+	 * {@code getGeneric(0)}将会返回{@code Integer}。同时也可以通过多索引，访问类型的嵌入式泛型参数。比如
+	 *  {@code getGeneric(1, 0)}，从Map的参数类型List<String>中获取其泛型声明{@code String}。
+	 *  为了方便起见，如果没有索引，则第一个泛型参数类型将会返回。
 	 * <p>If no generic is available at the specified indexes {@link #NONE} is returned.
 	 * @param indexes the indexes that refer to the generic parameter (may be omitted to
 	 * return the first generic)
@@ -636,6 +640,7 @@ public class ResolvableType implements Serializable {
 	 * @see #resolveGenerics()
 	 */
 	public ResolvableType getGeneric(int... indexes) {
+		//获取类型泛型参数类型
 		ResolvableType[] generics = getGenerics();
 		if (indexes == null || indexes.length == 0) {
 			return (generics.length == 0 ? NONE : generics[0]);
@@ -657,6 +662,8 @@ public class ResolvableType implements Serializable {
 	 * access a specific generic consider using the {@link #getGeneric(int...)} method as
 	 * it allows access to nested generics and protects against
 	 * {@code IndexOutOfBoundsExceptions}.
+	 * 返回类型的泛型参数，使用ResolvableType表示。如果没有泛型参数可用，则返回空数组。如果访问特殊的泛型参数，可以
+	 * 使用 {@link #getGeneric(int...)}方法。
 	 * @return an array of {@link ResolvableType}s representing the generic parameters
 	 * (never {@code null})
 	 * @see #hasGenerics()
@@ -671,11 +678,14 @@ public class ResolvableType implements Serializable {
 		if (this.generics == null) {
 			if (this.type instanceof Class) {
 				Class<?> typeClass = (Class<?>) this.type;
+				//获取类型参数类型
 				this.generics = forTypes(SerializableTypeWrapper.forTypeParameters(typeClass), this.variableResolver);
 			}
 			else if (this.type instanceof ParameterizedType) {
+				//如果为参数化类型，则获取实际类型参数
 				Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();
 				ResolvableType[] generics = new ResolvableType[actualTypeArguments.length];
+				//获取类型参数的可解决类型ResolvableType
 				for (int i = 0; i < actualTypeArguments.length; i++) {
 					generics[i] = forType(actualTypeArguments[i], this.variableResolver);
 				}

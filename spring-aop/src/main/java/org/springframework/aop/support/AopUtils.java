@@ -83,9 +83,11 @@ public abstract class AopUtils {
 
 	/**
 	 * Check whether the given object is a CGLIB proxy.
+	 * 判断给定的对象是否为CGLIB代理。
 	 * <p>This method goes beyond the implementation of
 	 * {@link ClassUtils#isCglibProxy(Object)} by additionally checking if
 	 * the given object is an instance of {@link SpringProxy}.
+	 * 如果给定的对象为Spring生成的代理，将会做进一步的判断是否为CGLIB代理对象。
 	 * @param object the object to check
 	 * @see ClassUtils#isCglibProxy(Object)
 	 */
@@ -95,7 +97,9 @@ public abstract class AopUtils {
 
 	/**
 	 * Determine the target class of the given bean instance which might be an AOP proxy.
+	 * 判断给定的bean实例的目标类，实例可能为AOP代理类。
 	 * <p>Returns the target class for an AOP proxy or the plain class otherwise.
+	 * 返回AOP代理的的目标类
 	 * @param candidate the instance to check (might be an AOP proxy)
 	 * @return the target class (or the plain class of the given object as fallback;
 	 * never {@code null})
@@ -105,9 +109,11 @@ public abstract class AopUtils {
 	public static Class<?> getTargetClass(Object candidate) {
 		Assert.notNull(candidate, "Candidate object must not be null");
 		Class<?> result = null;
+		//如果候选类为TargetClassAware，获取目标类型
 		if (candidate instanceof TargetClassAware) {
 			result = ((TargetClassAware) candidate).getTargetClass();
 		}
+		//如果候选者为代理类，则获取器其父类
 		if (result == null) {
 			result = (isCglibProxy(candidate) ? candidate.getClass().getSuperclass() : candidate.getClass());
 		}

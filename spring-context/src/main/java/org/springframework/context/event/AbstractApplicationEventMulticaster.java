@@ -288,9 +288,12 @@ public abstract class AbstractApplicationEventMulticaster
 	/**
 	 * Filter a listener early through checking its generically declared event
 	 * type before trying to instantiate it.
+	 * 在尝试实例监听器之前，通过检查监听器的泛型声明事件类型，尽早地过滤监听器。
 	 * <p>If this method returns {@code true} for a given listener as a first pass,
 	 * the listener instance will get retrieved and fully evaluated through a
 	 * {@link #supportsEvent(ApplicationListener,ResolvableType, Class)}  call afterwards.
+	 * 如果此方法返回true，第一个通过的监听器实例将会被检索，然后，
+	 * 通supportsEvent(ApplicationListener,ResolvableType, Class)方法重新完全评估。
 	 * @param listenerType the listener's type as determined by the BeanFactory
 	 * @param eventType the event type to check
 	 * @return whether the given listener should be included in the candidates
@@ -302,16 +305,21 @@ public abstract class AbstractApplicationEventMulticaster
 				SmartApplicationListener.class.isAssignableFrom(listenerType)) {
 			return true;
 		}
+		//获取监听器类型的泛型参数类型
 		ResolvableType declaredEventType = GenericApplicationListenerAdapter.resolveDeclaredEventType(listenerType);
+		//如果泛型参数类型为null，或泛型参数为事件类型eventType，则监听器支持事件类型eventType
 		return (declaredEventType == null || declaredEventType.isAssignableFrom(eventType));
 	}
 
 	/**
 	 * Determine whether the given listener supports the given event.
+	 * 判断给定的监听器是否支持给定的事件
 	 * <p>The default implementation detects the {@link SmartApplicationListener}
 	 * and {@link GenericApplicationListener} interfaces. In case of a standard
 	 * {@link ApplicationListener}, a {@link GenericApplicationListenerAdapter}
 	 * will be used to introspect the generically declared type of the target listener.
+	 * 默认实现将会探测SmartApplicationListener和GenericApplicationListener接口。
+	 * 在标准应用监听器的情况下，GenericApplicationListenerAdapter将用于探测目标的泛型声明类型。
 	 * @param listener the target listener to check
 	 * @param eventType the event type to check against
 	 * @param sourceType the source type to check against
@@ -319,8 +327,10 @@ public abstract class AbstractApplicationEventMulticaster
 	 * for the given event type
 	 */
 	protected boolean supportsEvent(ApplicationListener<?> listener, ResolvableType eventType, Class<?> sourceType) {
+		//转换静听器实例为泛型应用监听器GenericApplicationListener
 		GenericApplicationListener smartListener = (listener instanceof GenericApplicationListener ?
 				(GenericApplicationListener) listener : new GenericApplicationListenerAdapter(listener));
+		//通过泛型应用监听器来进一步判断是否支持sourceType事件源发布的事件类型eventType
 		return (smartListener.supportsEventType(eventType) && smartListener.supportsSourceType(sourceType));
 	}
 

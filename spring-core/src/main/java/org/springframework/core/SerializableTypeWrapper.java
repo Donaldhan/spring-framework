@@ -112,6 +112,7 @@ abstract class SerializableTypeWrapper {
 
 	/**
 	 * Return a {@link Serializable} variant of {@link Class#getTypeParameters()}.
+	 * 返回类型参数
 	 */
 	@SuppressWarnings("serial")
 	public static Type[] forTypeParameters(final Class<?> type) {
