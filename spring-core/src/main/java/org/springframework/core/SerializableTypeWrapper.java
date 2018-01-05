@@ -55,10 +55,10 @@ import org.springframework.util.ReflectionUtils;
  * @since 4.0
  */
 abstract class SerializableTypeWrapper {
-
+    //直接序列化的类型，泛型数组类型，参数化类型，类型变量，统配符类型。
 	private static final Class<?>[] SUPPORTED_SERIALIZABLE_TYPES = {
 			GenericArrayType.class, ParameterizedType.class, TypeVariable.class, WildcardType.class};
-
+    //类型缓存
 	static final ConcurrentReferenceHashMap<Type, Type> cache = new ConcurrentReferenceHashMap<Type, Type>(256);
 
 
@@ -93,6 +93,7 @@ abstract class SerializableTypeWrapper {
 
 	/**
 	 * Return a {@link Serializable} variant of {@link Class#getGenericInterfaces()}.
+	 * 获取类型的声明接口
 	 */
 	@SuppressWarnings("serial")
 	public static Type[] forGenericInterfaces(final Class<?> type) {
@@ -143,22 +144,29 @@ abstract class SerializableTypeWrapper {
 
 	/**
 	 * Return a {@link Serializable} {@link Type} backed by a {@link TypeProvider} .
+	 * 根据类型提供者TypeProvider，返回一个可序列化的类型
 	 */
 	static Type forTypeProvider(final TypeProvider provider) {
 		Assert.notNull(provider, "Provider must not be null");
+		//如果类型提供者的类型是可序列化或类型为null，直接返回类型提供者的内部类型
 		if (provider.getType() instanceof Serializable || provider.getType() == null) {
 			return provider.getType();
 		}
+		//否则从类型缓存中获取类型
 		Type cached = cache.get(provider.getType());
 		if (cached != null) {
 			return cached;
 		}
+		//遍历可序列化的类型，判断类型是否可以被序列化
 		for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
 			if (type.isAssignableFrom(provider.getType().getClass())) {
-				ClassLoader classLoader = provider.getClass().getClassLoader();
+				ClassLoader classLoader = provider.getClass().getClassLoader();//获取类型提供者类加载器
 				Class<?>[] interfaces = new Class<?>[] {type, SerializableTypeProxy.class, Serializable.class};
+				//创建类型提供者代理
 				InvocationHandler handler = new TypeProxyInvocationHandler(provider);
+				//根据类加载器，类型代理，及代理类实现接口创建代理实例
 				cached = (Type) Proxy.newProxyInstance(classLoader, interfaces, handler);
+				//将类型与类型代理实例的映射添加到缓存
 				cache.put(provider.getType(), cached);
 				return cached;
 			}
@@ -181,16 +189,19 @@ abstract class SerializableTypeWrapper {
 
 	/**
 	 * A {@link Serializable} interface providing access to a {@link Type}.
+	 * 访问类型的序列化接口
 	 */
 	interface TypeProvider extends Serializable {
 
 		/**
 		 * Return the (possibly non {@link Serializable}) {@link Type}.
+		 * 返回类型
 		 */
 		Type getType();
 
 		/**
 		 * Return the source of the type or {@code null}.
+		 * 返回类型源
 		 */
 		Object getSource();
 	}
@@ -198,6 +209,7 @@ abstract class SerializableTypeWrapper {
 
 	/**
 	 * Base implementation of {@link TypeProvider} with a {@code null} source.
+	 * 简单的类型提供者实现。
 	 */
 	@SuppressWarnings("serial")
 	private static abstract class SimpleTypeProvider implements TypeProvider {
@@ -212,12 +224,14 @@ abstract class SerializableTypeWrapper {
 	/**
 	 * {@link Serializable} {@link InvocationHandler} used by the proxied {@link Type}.
 	 * Provides serialization support and enhances any methods that return {@code Type}
+	 * {@link Type}使用的{@link Serializable} {@link InvocationHandler代理。
+	 * 提供了序列化支持，并加强了返回type的任何方法。
 	 * or {@code Type[]}.
 	 */
 	@SuppressWarnings("serial")
 	private static class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
 
-		private final TypeProvider provider;
+		private final TypeProvider provider;//类型提供者
 
 		public TypeProxyInvocationHandler(TypeProvider provider) {
 			this.provider = provider;

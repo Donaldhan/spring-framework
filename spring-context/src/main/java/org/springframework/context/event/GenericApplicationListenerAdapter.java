@@ -97,7 +97,9 @@ public class GenericApplicationListenerAdapter implements GenericApplicationList
 
 
 	static ResolvableType resolveDeclaredEventType(Class<?> listenerType) {
+		//获取监听器类型的ResolvableType
 		ResolvableType resolvableType = ResolvableType.forClass(listenerType).as(ApplicationListener.class);
+		//如果监听器类型中有泛型声明，则获取声明泛型类型
 		return (resolvableType.hasGenerics() ? resolvableType.getGeneric() : null);
 	}
 
