@@ -1064,6 +1064,8 @@ public class ResolvableType implements Serializable {
 	 * convey generic information but if it implements {@link ResolvableTypeProvider} a
 	 * more precise {@link ResolvableType} can be used than the simple one based on
 	 * the {@link #forClass(Class) Class instance}.
+	 * 返回给定实例的ResolvableType。实例不会传达泛型信息，但是如果实例是实现了ResolvableTypeProvider，
+	 * 可以提供更精确的ResolvableType信息，而不是基于实例类型的ResolvableType。
 	 * @param instance the instance
 	 * @return a {@link ResolvableType} for the specified instance
 	 * @since 4.2

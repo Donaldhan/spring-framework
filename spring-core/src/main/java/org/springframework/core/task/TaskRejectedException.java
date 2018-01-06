@@ -21,7 +21,7 @@ import java.util.concurrent.RejectedExecutionException;
 /**
  * Exception thrown when a {@link TaskExecutor} rejects to accept
  * a given task for execution.
- *
+ *当任务执行器拒绝接受给定任务的执行时，抛出TaskRejectedException。
  * @author Juergen Hoeller
  * @since 2.0.1
  * @see TaskExecutor#execute(Runnable)
@@ -33,6 +33,7 @@ public class TaskRejectedException extends RejectedExecutionException {
 	/**
 	 * Create a new {@code TaskRejectedException}
 	 * with the specified detail message and no root cause.
+	 * 根据给定的消息创建TaskRejectedException
 	 * @param msg the detail message
 	 */
 	public TaskRejectedException(String msg) {
@@ -42,6 +43,7 @@ public class TaskRejectedException extends RejectedExecutionException {
 	/**
 	 * Create a new {@code TaskRejectedException}
 	 * with the specified detail message and the given root cause.
+	 * 根据给定的详细消息和异常根缘由创建TaskRejectedException。
 	 * @param msg the detail message
 	 * @param cause the root cause (usually from using an underlying
 	 * API such as the {@code java.util.concurrent} package)

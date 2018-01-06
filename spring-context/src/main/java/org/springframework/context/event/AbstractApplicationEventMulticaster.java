@@ -39,17 +39,20 @@ import org.springframework.util.ObjectUtils;
 /**
  * Abstract implementation of the {@link ApplicationEventMulticaster} interface,
  * providing the basic listener registration facility.
- *
+ *AbstractApplicationEventMulticaster为应用事件多播器的抽象实现接口，为基本的
+ *监听器注册提供了便利。
  * <p>Doesn't permit multiple instances of the same listener by default,
  * as it keeps listeners in a linked Set. The collection class used to hold
  * ApplicationListener objects can be overridden through the "collectionClass"
  * bean property.
- *
+ *默认情况下，因为多播器保存监听器在链表Set中，不允许相同监听器的多实例存在。如果需要，可以重写
+ *此管理监听器的功能。
  * <p>Implementing ApplicationEventMulticaster's actual {@link #multicastEvent} method
  * is left to subclasses. {@link SimpleApplicationEventMulticaster} simply multicasts
  * all events to all registered listeners, invoking them in the calling thread.
  * Alternative implementations could be more sophisticated in those respects.
- *
+ *应用事件多播器的多播事件方法留给子类实现。SimpleApplicationEventMulticaster仅仅多播所有事件到
+ *所有监听器。其他的实现可以相对复杂。
  * @author Juergen Hoeller
  * @author Stephane Nicoll
  * @since 1.2.3
