@@ -55,11 +55,16 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	/**
 	 * System property that instructs Spring to ignore system environment variables,
 	 * i.e. to never attempt to retrieve such a variable via {@link System#getenv()}.
+	 * 系统属性，用于通知spring忽略系统环境变量，比如坚决不会尝试使用{@link System#getenv()}
+	 * 检索一个变量。
 	 * <p>The default is "false", falling back to system environment variable checks if a
 	 * Spring environment property (e.g. a placeholder in a configuration String) isn't
 	 * resolvable otherwise. Consider switching this flag to "true" if you experience
 	 * log warnings from {@code getenv} calls coming from Spring, e.g. on WebSphere
 	 * with strict SecurityManager settings and AccessControlExceptions warnings.
+	 * 默认为false，如果spring的环境属性不能解决一个属性，将会降级到系统环境变量。如果你想
+	 * 体验来之spring的{@code getenv} 的方法调用输出警告，可以考虑切换此标志为true。
+	 * 比如在WebSphere的安全管理器设置和访问控制异常。
 	 * @see #suppressGetenvAccess()
 	 */
 	public static final String IGNORE_GETENV_PROPERTY_NAME = "spring.getenv.ignore";
@@ -67,10 +72,13 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	/**
 	 * Name of property to set to specify active profiles: {@value}. Value may be comma
 	 * delimited.
+	 * 当前激活配置的属性的name。具体name可以逗号分开。
 	 * <p>Note that certain shell environments such as Bash disallow the use of the period
 	 * character in variable names. Assuming that Spring's {@link SystemEnvironmentPropertySource}
 	 * is in use, this property may be specified as an environment variable as
 	 * {@code SPRING_PROFILES_ACTIVE}.
+	 * 注意：确定的shell环境，比如bash是不允许在变量名中使用分割符的。假设使用的是spring的系统环境属性源
+	 * {@link SystemEnvironmentPropertySource}，此属性可以通过{@code SPRING_PROFILES_ACTIVE}来指定。
 	 * @see ConfigurableEnvironment#setActiveProfiles
 	 */
 	public static final String ACTIVE_PROFILES_PROPERTY_NAME = "spring.profiles.active";
@@ -82,6 +90,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * character in variable names. Assuming that Spring's {@link SystemEnvironmentPropertySource}
 	 * is in use, this property may be specified as an environment variable as
 	 * {@code SPRING_PROFILES_DEFAULT}.
+	 * Spring环境配置，默认的激活配置名
 	 * @see ConfigurableEnvironment#setDefaultProfiles
 	 */
 	public static final String DEFAULT_PROFILES_PROPERTY_NAME = "spring.profiles.default";
@@ -90,6 +99,8 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * Name of reserved default profile name: {@value}. If no default profile names are
 	 * explicitly and no active profile names are explicitly set, this profile will
 	 * automatically be activated by default.
+	 * 默认配置预留名的值。如果没有显示指定默认的配置名，或没有显示设置激活的配置名，默认的配置
+	 * 将会被自动激活。
 	 * @see #getReservedDefaultProfiles
 	 * @see ConfigurableEnvironment#setDefaultProfiles
 	 * @see ConfigurableEnvironment#setActiveProfiles
@@ -100,13 +111,25 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 
 
 	protected final Log logger = LogFactory.getLog(getClass());
-
+    
+	/**
+	 * 激活配置解
+	 */
 	private final Set<String> activeProfiles = new LinkedHashSet<String>();
 
+	/**
+	 * 默认的配置集
+	 */
 	private final Set<String> defaultProfiles = new LinkedHashSet<String>(getReservedDefaultProfiles());
 
+	/**
+	 * 属性源管理器
+	 */
 	private final MutablePropertySources propertySources = new MutablePropertySources(this.logger);
 
+	/**
+	 * 属性源解决器
+	 */
 	private final ConfigurablePropertyResolver propertyResolver =
 			new PropertySourcesPropertyResolver(this.propertySources);
 
@@ -208,6 +231,8 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * Return the set of reserved default profile names. This implementation returns
 	 * {@value #RESERVED_DEFAULT_PROFILE_NAME}. Subclasses may override in order to
 	 * customize the set of reserved names.
+	 * 返回预留的默认配置名集。此处实现返回{@value #RESERVED_DEFAULT_PROFILE_NAME}。
+	 * 子类为了定制预留的name，可以重写此方法。
 	 * @see #RESERVED_DEFAULT_PROFILE_NAME
 	 * @see #doGetDefaultProfiles()
 	 */
