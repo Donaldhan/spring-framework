@@ -1076,8 +1076,8 @@ public abstract class StringUtils {
 	 * but it will still be considered as a single delimiter string, rather
 	 * than as bunch of potential delimiter characters, in contrast to
 	 * {@link #tokenizeToStringArray}.
-	 * 分割符可以有多个字符组成，但是被认为一个单独的分割字符串，而不是潜在字符串的捆绑，这个与{@link #tokenizeToStringArray}
-	 * 方法相反。
+	 * 分割符可以有多个字符组成，但是被认为一个单独的分割字符串，而不是潜在字符串的捆绑，
+	 * 这个与{@link #tokenizeToStringArray}方法相反。
 	 * @param str the input {@code String}
 	 * @param delimiter the delimiter between elements (this is a single delimiter,
 	 * rather than a bunch individual delimiter characters)
@@ -1136,6 +1136,7 @@ public abstract class StringUtils {
 	/**
 	 * Convert a comma delimited list (e.g., a row from a CSV file) into an
 	 * array of strings.
+	 * 转换一个逗号分隔的list为字符数组。
 	 * @param str the input {@code String}
 	 * @return an array of strings, or the empty array in case of empty input
 	 */

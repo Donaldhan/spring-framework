@@ -36,13 +36,17 @@ import org.springframework.util.StringUtils;
  * reserved default profile names and enables specifying active and default profiles
  * through the {@link #ACTIVE_PROFILES_PROPERTY_NAME} and
  * {@link #DEFAULT_PROFILES_PROPERTY_NAME} properties.
- *
+ *AbstractEnvironment为环境接口的抽象实现类。支持预留默认配置名，通过系统属性{@link #ACTIVE_PROFILES_PROPERTY_NAME} and
+ * {@link #DEFAULT_PROFILES_PROPERTY_NAME}开启指定的激活或默认配置。
  * <p>Concrete subclasses differ primarily on which {@link PropertySource} objects they
  * add by default. {@code AbstractEnvironment} adds none. Subclasses should contribute
  * property sources through the protected {@link #customizePropertySources(MutablePropertySources)}
  * hook, while clients should customize using {@link ConfigurableEnvironment#getPropertySources()}
  * and working against the {@link MutablePropertySources} API.
  * See {@link ConfigurableEnvironment} javadoc for usage examples.
+ * 具体子类主要的不同点在默认添加属性源这一点。抽象环境默认不添加。子类可以通过{@link #customizePropertySources(MutablePropertySources)}
+ * hook，添加属性源，然而客户端应该使用 {@link ConfigurableEnvironment#getPropertySources()}定制，或依赖于{@link MutablePropertySources}
+ * 的API。
  *
  * @author Chris Beams
  * @author Juergen Hoeller
@@ -379,6 +383,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.core.env.Environment#acceptsProfiles(java.lang.String[])
+	 */
 	@Override
 	public boolean acceptsProfiles(String... profiles) {
 		Assert.notEmpty(profiles, "Must specify at least one profile");
@@ -398,6 +405,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	/**
 	 * Return whether the given profile is active, or if active profiles are empty
 	 * whether the profile should be active by default.
+	 * 判断给定配置是否激活，如果激活配置为空，则使用默认的配置进行判断
 	 * @throws IllegalArgumentException per {@link #validateProfile(String)}
 	 */
 	protected boolean isProfileActive(String profile) {
@@ -439,10 +447,11 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public Map<String, Object> getSystemEnvironment() {
-		if (suppressGetenvAccess()) {
+		if (suppressGetenvAccess()) {//如果不可以访问系统属性，则返回空Map
 			return Collections.emptyMap();
 		}
 		try {
+			//否则获取系统属性
 			return (Map) System.getenv();
 		}
 		catch (AccessControlException ex) {
@@ -467,11 +476,14 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	/**
 	 * Determine whether to suppress {@link System#getenv()}/{@link System#getenv(String)}
 	 * access for the purposes of {@link #getSystemEnvironment()}.
+	 * 判断是否可以通过{@link System#getenv()}/{@link System#getenv(String)}方法，访问系统属性。
 	 * <p>If this method returns {@code true}, an empty dummy Map will be used instead
 	 * of the regular system environment Map, never even trying to call {@code getenv}
 	 * and therefore avoiding security manager warnings (if any).
+	 * 如果返回true，则一个空的伪Map集将作为系统环境Map，设置不能调用{@code getenv}方法，进一步避免安全管理器警告。
 	 * <p>The default implementation checks for the "spring.getenv.ignore" system property,
 	 * returning {@code true} if its value equals "true" in any case.
+	 * 默认实现检查系统属性spring.getenv.ignore，如果属性值为true，则返回true。
 	 * @see #IGNORE_GETENV_PROPERTY_NAME
 	 * @see SpringProperties#getFlag
 	 */
@@ -506,11 +518,13 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 
 	@Override
 	public void merge(ConfigurableEnvironment parent) {
+		//添加父环境配置中的属性源，到本环境配置属性源集的链尾
 		for (PropertySource<?> ps : parent.getPropertySources()) {
 			if (!this.propertySources.contains(ps.getName())) {
 				this.propertySources.addLast(ps);
 			}
 		}
+		//添加父环境的激活配置到当前激活配置集
 		String[] parentActiveProfiles = parent.getActiveProfiles();
 		if (!ObjectUtils.isEmpty(parentActiveProfiles)) {
 			synchronized (this.activeProfiles) {
@@ -519,6 +533,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 				}
 			}
 		}
+		//添加父环境的默认配置到当前默认配置集
 		String[] parentDefaultProfiles = parent.getDefaultProfiles();
 		if (!ObjectUtils.isEmpty(parentDefaultProfiles)) {
 			synchronized (this.defaultProfiles) {
@@ -534,6 +549,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	//---------------------------------------------------------------------
 	// Implementation of ConfigurablePropertyResolver interface
 	//---------------------------------------------------------------------
+	/**
+	 * 可配置属性配置接口ConfigurablePropertyResolver的实现
+	 */
 
 	@Override
 	public ConfigurableConversionService getConversionService() {
@@ -579,7 +597,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	//---------------------------------------------------------------------
 	// Implementation of PropertyResolver interface
 	//---------------------------------------------------------------------
-
+	/**
+	 * 属性解决器接口PropertyResolver的实现
+	 */
 	@Override
 	public boolean containsProperty(String key) {
 		return this.propertyResolver.containsProperty(key);

@@ -24,13 +24,15 @@ import java.util.Set;
 /**
  * Read-only {@code Map<String, String>} implementation that is backed by system
  * properties or environment variables.
- *
+ *系统属性或环境变量的只读Map集。
  * <p>Used by {@link AbstractApplicationContext} when a {@link SecurityManager} prohibits
  * access to {@link System#getProperties()} or {@link System#getenv()}. It is for this
  * reason that the implementations of {@link #keySet()}, {@link #entrySet()}, and
  * {@link #values()} always return empty even though {@link #get(Object)} may in fact
  * return non-null if the current security manager allows access to individual keys.
- *
+ * 当安全管理器机制访问{@link System#getProperties()} or {@link System#getenv()}方法时，抽象应用上下文，
+ * 使用此Map。{@link #keySet()}, {@link #entrySet()}, and{@link #values()}总是返回空。如果安全管理器允许访问
+ * 单个键值，可以调用{@link #get(Object)}方法，获取系统属性。
  * @author Arjen Poutsma
  * @author Chris Beams
  * @since 3.0
@@ -62,7 +64,9 @@ abstract class ReadOnlySystemAttributesMap implements Map<String, String> {
 
 	/**
 	 * Template method that returns the underlying system attribute.
+	 * 返回底层系统属性
 	 * <p>Implementations typically call {@link System#getProperty(String)} or {@link System#getenv(String)} here.
+	 * 典型的实现为调用 {@link System#getProperty(String)} or {@link System#getenv(String)}属性
 	 */
 	protected abstract String getSystemAttribute(String attributeName);
 

@@ -98,6 +98,7 @@ public abstract class ObjectUtils {
 	/**
 	 * Determine whether the given array is empty:
 	 * i.e. {@code null} or of zero length.
+	 * 判断给定数组是否为空
 	 * @param array the array to check
 	 * @see #isEmpty(Object)
 	 */
