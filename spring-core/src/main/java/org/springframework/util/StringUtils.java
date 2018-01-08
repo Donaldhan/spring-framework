@@ -144,6 +144,8 @@ public abstract class StringUtils {
 	 * <p>More specifically, this method returns {@code true} if the
 	 * {@code String} is not {@code null}, its length is greater than 0,
 	 * and it contains at least one non-whitespace character.
+	 * 检查给定的字符串包含实际的内容。更准确地说，如果String不为null，长度大于0，至少包含一个非空字符，
+	 * -则返回true。
 	 * @param str the {@code String} to check (may be {@code null})
 	 * @return {@code true} if the {@code String} is not {@code null}, its
 	 * length is greater than 0, and it does not contain whitespace only
@@ -153,6 +155,11 @@ public abstract class StringUtils {
 		return (hasLength(str) && containsText(str));
 	}
 
+	/**
+	 * 是否包含一个非空字符
+	 * @param str
+	 * @return
+	 */
 	private static boolean containsText(CharSequence str) {
 		int strLen = str.length();
 		for (int i = 0; i < strLen; i++) {
@@ -219,6 +226,7 @@ public abstract class StringUtils {
 	/**
 	 * Trim <i>all</i> whitespace from the given {@code String}:
 	 * leading, trailing, and in between characters.
+	 * 从给定的字符中剔除空白字符。
 	 * @param str the {@code String} to check
 	 * @return the trimmed {@code String}
 	 * @see java.lang.Character#isWhitespace
@@ -861,7 +869,9 @@ public abstract class StringUtils {
 
 	/**
 	 * Copy the given {@code Collection} into a {@code String} array.
+	 * 复制给定的集合到String数组。
 	 * <p>The {@code Collection} must contain {@code String} elements only.
+	 * 集合的元素必须是String类型
 	 * @param collection the {@code Collection} to copy
 	 * @return the {@code String} array
 	 */

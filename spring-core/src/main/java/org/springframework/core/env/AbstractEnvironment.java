@@ -139,6 +139,7 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * {@link #customizePropertySources(MutablePropertySources)} during construction to
 	 * allow subclasses to contribute or manipulate {@link PropertySource} instances as
 	 * appropriate.
+	 * 创建一个新的环境实例，在构造期间，回调customizePropertySources方法，允许子类操作数据源实例。
 	 * @see #customizePropertySources(MutablePropertySources)
 	 */
 	public AbstractEnvironment() {
@@ -153,11 +154,13 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * Customize the set of {@link PropertySource} objects to be searched by this
 	 * {@code Environment} during calls to {@link #getProperty(String)} and related
 	 * methods.
-	 *
+	 *定制属性源对象集，以便在获取属性等相关方法时，通过环境来搜索。
 	 * <p>Subclasses that override this method are encouraged to add property
 	 * sources using {@link MutablePropertySources#addLast(PropertySource)} such that
 	 * further subclasses may call {@code super.customizePropertySources()} with
 	 * predictable results. For example:
+	 * 子类重写此方法时，鼓励使用{@link MutablePropertySources#addLast(PropertySource)}方法
+	 * 添加属性源，也可以调用父类的方法。
 	 * <pre class="code">
 	 * public class Level1Environment extends AbstractEnvironment {
 	 *     &#064;Override
@@ -182,6 +185,8 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * "D". If the {@code Level2Environment} subclass wished to give property sources C
 	 * and D higher precedence than A and B, it could simply call
 	 * {@code super.customizePropertySources} after, rather than before adding its own:
+	 * 在上面的实现中，属性将会根据属性源的顺序A, B, C, D去解决。也就是说，属性源A优先于属性源D。如果Level2Environment
+	 * 希望给定的属性源C、D先用A和B，可以调用在添加自己属性源的后面，调用{@code super.customizePropertySources}。
 	 * <pre class="code">
 	 * public class Level2Environment extends Level1Environment {
 	 *     &#064;Override
@@ -193,23 +198,26 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * }
 	 * </pre>
 	 * The search order is now C, D, A, B as desired.
-	 *
+	 *现在的搜索属性为C, D, A, B。
 	 * <p>Beyond these recommendations, subclasses may use any of the {@code add&#42;},
 	 * {@code remove}, or {@code replace} methods exposed by {@link MutablePropertySources}
 	 * in order to create the exact arrangement of property sources desired.
-	 *
+	 *除了这些建议之外，子类可以使用{@link MutablePropertySources}的任务添加，移除，替换定制自己需要的属性源的顺序。
 	 * <p>The base implementation registers no property sources.
-	 *
+	 * 基本的实现，没有属性注册。
 	 * <p>Note that clients of any {@link ConfigurableEnvironment} may further customize
 	 * property sources via the {@link #getPropertySources()} accessor, typically within
 	 * an {@link org.springframework.context.ApplicationContextInitializer
 	 * ApplicationContextInitializer}. For example:
+	 * 注意：{@link ConfigurableEnvironment}的客户端，可以通过{@link #getPropertySources()}
+	 * 方法进一步地定制属性源，典型的为在应用上下文初始化中ApplicationContextInitializer。比如：
 	 * <pre class="code">
 	 * ConfigurableEnvironment env = new StandardEnvironment();
 	 * env.getPropertySources().addLast(new PropertySourceX(...));
 	 * </pre>
 	 *
 	 * <h2>A warning about instance variable access</h2>
+	 * 实例变量访问警告
 	 * Instance variables declared in subclasses and having default initial values should
 	 * <em>not</em> be accessed from within this method. Due to Java object creation
 	 * lifecycle constraints, any initial value will not yet be assigned when this
@@ -219,7 +227,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * property source manipulation and instance variable access directly within the
 	 * subclass constructor. Note that <em>assigning</em> values to instance variables is
 	 * not problematic; it is only attempting to read default values that must be avoided.
-	 *
+	 *在子类中声明的实例变量，拥有一个默认的初始化值，不应该通过此方法访问。由于java对象创建声明周期的限制，当通过
+	 * {@link #AbstractEnvironment()}构造方法，回调自方法前，还没有初始化，可能导致一个空指针异常。如果需要
+	 * 访问默认的初始化值，则直接在子类中执行属性源的初始化。注意：初始化实例的值时，不要出现任何问题，仅仅尝试访问默认值。
 	 * @see MutablePropertySources
 	 * @see PropertySourcesPropertyResolver
 	 * @see org.springframework.context.ApplicationContextInitializer
@@ -244,7 +254,11 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	//---------------------------------------------------------------------
 	// Implementation of ConfigurableEnvironment interface
 	//---------------------------------------------------------------------
-
+    /**
+     * ConfigurableEnvironment接口的实现
+     */
+	
+	
 	@Override
 	public String[] getActiveProfiles() {
 		return StringUtils.toStringArray(doGetActiveProfiles());
@@ -255,11 +269,17 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * {@link #setActiveProfiles} or if the current set of active profiles
 	 * is empty, check for the presence of the {@value #ACTIVE_PROFILES_PROPERTY_NAME}
 	 * property and assign its value to the set of active profiles.
+	 * 返回通过{@link #setActiveProfiles}方法，显示地设置激活配置集，如果当前激活配置集为空，则检查
+	 * {@value #ACTIVE_PROFILES_PROPERTY_NAME}属性对应的激活配置。
 	 * @see #getActiveProfiles()
 	 * @see #ACTIVE_PROFILES_PROPERTY_NAME
 	 */
 	protected Set<String> doGetActiveProfiles() {
 		synchronized (this.activeProfiles) {
+			/*
+			 * 如果当前激活配置为空，则获取ACTIVE_PROFILES_PROPERTY_NAME的属性对应的配置，
+			 * 并将属性值以逗号为分隔转换为激活配置。
+			 */
 			if (this.activeProfiles.isEmpty()) {
 				String profiles = getProperty(ACTIVE_PROFILES_PROPERTY_NAME);
 				if (StringUtils.hasText(profiles)) {
@@ -271,6 +291,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.core.env.ConfigurableEnvironment#setActiveProfiles(java.lang.String[])
+	 */
 	@Override
 	public void setActiveProfiles(String... profiles) {
 		Assert.notNull(profiles, "Profile array must not be null");
@@ -283,6 +306,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.springframework.core.env.ConfigurableEnvironment#addActiveProfile(java.lang.String)
+	 */
 	@Override
 	public void addActiveProfile(String profile) {
 		if (logger.isDebugEnabled()) {
@@ -296,6 +322,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	}
 
 
+	/* (non-Javadoc)
+	 * @see org.springframework.core.env.Environment#getDefaultProfiles()
+	 */
 	@Override
 	public String[] getDefaultProfiles() {
 		return StringUtils.toStringArray(doGetDefaultProfiles());
@@ -308,6 +337,8 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	 * profiles}, then check for the presence of the
 	 * {@value #DEFAULT_PROFILES_PROPERTY_NAME} property and assign its value (if any)
 	 * to the set of default profiles.
+	 * 返回通过{@link #setDefaultProfiles(String...)}显示设置的默认配置，如果当前默认配置集，仅包含
+	 * 预留配置，则进一步检查DEFAULT_PROFILES_PROPERTY_NAME属性对应的配置
 	 * @see #AbstractEnvironment()
 	 * @see #getDefaultProfiles()
 	 * @see #DEFAULT_PROFILES_PROPERTY_NAME
@@ -329,8 +360,10 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	/**
 	 * Specify the set of profiles to be made active by default if no other profiles
 	 * are explicitly made active through {@link #setActiveProfiles}.
+	 * 如果没有其他的配置显示地设置，则设置默认的配置。
 	 * <p>Calling this method removes overrides any reserved default profiles
 	 * that may have been added during construction of the environment.
+	 * 调用此方法，将会移除在环境构造的过程中已经添加的默认配置。
 	 * @see #AbstractEnvironment()
 	 * @see #getReservedDefaultProfiles()
 	 */
@@ -377,9 +410,12 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 	/**
 	 * Validate the given profile, called internally prior to adding to the set of
 	 * active or default profiles.
+	 * 校验给定的环境配置，内部使用，在添加激活和默认配置前调用。
 	 * <p>Subclasses may override to impose further restrictions on profile syntax.
 	 * @throws IllegalArgumentException if the profile is null, empty, whitespace-only or
 	 * begins with the profile NOT operator (!).
+	 * 子类可以重此方法，以便进一步的限制配置语义。如果配置为null, empty, whitespace-only或以非操作符开头，
+	 * 则抛出非法参数异常。
 	 * @see #acceptsProfiles
 	 * @see #addActiveProfile
 	 * @see #setDefaultProfiles
@@ -392,7 +428,9 @@ public abstract class AbstractEnvironment implements ConfigurableEnvironment {
 			throw new IllegalArgumentException("Invalid profile [" + profile + "]: must not begin with ! operator");
 		}
 	}
-
+	/**
+	 * 属性源集
+	 */
 	@Override
 	public MutablePropertySources getPropertySources() {
 		return this.propertySources;
