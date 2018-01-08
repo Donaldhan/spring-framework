@@ -940,6 +940,7 @@ public abstract class ClassUtils {
 	 * Check if the right-hand side type may be assigned to the left-hand side
 	 * type, assuming setting by reflection. Considers primitive wrapper
 	 * classes as assignable to the corresponding primitive types.
+	 * 检查给定的类型rhsType是否为给定的类型lhsType。并考虑到原始包装类是相关的原始类型。 
 	 * @param lhsType the target type
 	 * @param rhsType the value type that should be assigned to the target type
 	 * @return if the target type is assignable from the value type
@@ -970,6 +971,7 @@ public abstract class ClassUtils {
 	 * Determine if the given type is assignable from the given value,
 	 * assuming setting by reflection. Considers primitive wrapper classes
 	 * as assignable to the corresponding primitive types.
+	 * 判断给定值的类型是否为给定的TYPE。考虑到原始包装类是相关原始类型。
 	 * @param type the target type
 	 * @param value the value that should be assigned to the type
 	 * @return if the type is assignable from the value

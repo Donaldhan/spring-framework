@@ -21,7 +21,7 @@ import java.util.Set;
 
 /**
  * Exception thrown when required properties are not found.
- *
+ *当需要的属性不存在时，抛出MissingRequiredPropertiesException异常
  * @author Chris Beams
  * @since 3.1
  * @see ConfigurablePropertyResolver#setRequiredProperties(String...)
@@ -31,6 +31,9 @@ import java.util.Set;
 @SuppressWarnings("serial")
 public class MissingRequiredPropertiesException extends IllegalStateException {
 
+	/**
+	 * 存放不存在的必须属性
+	 */
 	private final Set<String> missingRequiredProperties = new LinkedHashSet<String>();
 
 

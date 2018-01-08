@@ -22,7 +22,7 @@ import org.springframework.util.ClassUtils;
 /**
  * {@link PropertyResolver} implementation that resolves property values against
  * an underlying set of {@link PropertySources}.
- *
+ * 依赖于底层的属性源集，解决属性值。
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
@@ -32,7 +32,7 @@ import org.springframework.util.ClassUtils;
  */
 public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 
-	private final PropertySources propertySources;
+	private final PropertySources propertySources;//属性源集
 
 
 	/**
@@ -71,6 +71,12 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 		return getProperty(key, String.class, false);
 	}
 
+	/**
+	 * @param key
+	 * @param targetValueType
+	 * @param resolveNestedPlaceholders 是否解决嵌入式的值
+	 * @return
+	 */
 	protected <T> T getProperty(String key, Class<T> targetValueType, boolean resolveNestedPlaceholders) {
 		if (this.propertySources != null) {
 			for (PropertySource<?> propertySource : this.propertySources) {
@@ -78,12 +84,16 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 					logger.trace("Searching for key '" + key + "' in PropertySource '" +
 							propertySource.getName() + "'");
 				}
+				//获取属性值
 				Object value = propertySource.getProperty(key);
 				if (value != null) {
 					if (resolveNestedPlaceholders && value instanceof String) {
+						//解决值的的占位符
 						value = resolveNestedPlaceholders((String) value);
 					}
+					//输出key发现日志
 					logKeyFound(key, propertySource, value);
+					//转换给定的值，为目标类型值
 					return convertValueIfNecessary(value, targetValueType);
 				}
 			}
@@ -138,10 +148,13 @@ public class PropertySourcesPropertyResolver extends AbstractPropertyResolver {
 	/**
 	 * Log the given key as found in the given {@link PropertySource}, resulting in
 	 * the given value.
+	 * 如果在给定的属性源中发现了给定key的给定值，则输出日志。
 	 * <p>The default implementation writes a debug log message with key and source.
 	 * As of 4.3.3, this does not log the value anymore in order to avoid accidental
 	 * logging of sensitive settings. Subclasses may override this method to change
 	 * the log level and/or log message, including the property's value if desired.
+	 * 默认的实现，仅仅输出debug日志。从4.3.x开始，为了避免敏感信息的泄漏，不在输出日志。
+	 * 如果需要，子类可以扩展此方法。
 	 * @param key the key found
 	 * @param propertySource the {@code PropertySource} that the key has been found in
 	 * @param value the corresponding value
