@@ -29,7 +29,10 @@ import org.springframework.util.ObjectUtils;
  * {@link #getProperty(String)} which may be more expensive. Implementations may
  * consider caching the result of {@link #getPropertyNames()} to fully exploit this
  * performance opportunity.
- *
+ * EnumerablePropertySource为属性源的一种实现，可以检索底层数据源，并枚举属性值对。
+ * {@link #getPropertyNames()}暴露方法，允许调用者在不访问底层属性源的情况下，检查给定的属性是否存在。
+ * 提供了是否包含属性源的有效实现，调用{@link #getPropertyNames()返回name集，迭代检查，而不是尝试调用
+ * 代价昂贵的{@link #getProperty(String)}方法。具体的实现可以考虑缓存属性源name集，进一步优化性能。
  * <p>Most framework-provided {@code PropertySource} implementations are enumerable;
  * a counter-example would be {@code JndiPropertySource} where, due to the
  * nature of JNDI it is not possible to determine all possible property names at
@@ -56,6 +59,7 @@ public abstract class EnumerablePropertySource<T> extends PropertySource<T> {
 	 * Return whether this {@code PropertySource} contains a property with the given name.
 	 * <p>This implementation checks for the presence of the given name within the
 	 * {@link #getPropertyNames()} array.
+	 * 判断当前属性源是否包含跟定name对应的属性。当前实现仅仅检查属性name是否在属性源的name集中。
 	 * @param name the name of the property to find
 	 */
 	@Override
@@ -66,6 +70,7 @@ public abstract class EnumerablePropertySource<T> extends PropertySource<T> {
 	/**
 	 * Return the names of all properties contained by the
 	 * {@linkplain #getSource() source} object (never {@code null}).
+	 * 返回属性源中的所有属性name
 	 */
 	public abstract String[] getPropertyNames();
 

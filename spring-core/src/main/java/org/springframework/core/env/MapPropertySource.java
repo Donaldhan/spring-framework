@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * {@link PropertySource} that reads keys and values from a {@code Map} object.
- *
+ *MapPropertySource可以从Map集合对象中读取key和value的属性源实现。
  * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
