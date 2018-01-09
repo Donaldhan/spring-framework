@@ -509,12 +509,15 @@ public class ResolvableType implements Serializable {
 	 * or through implementing a generic interface in a raw fashion,
 	 * i.e. without substituting that interface's type variables.
 	 * The result will be {@code true} only in those two scenarios.
+	 * 判断底层类型是否有没解决的泛型类型：类型为不可解决的类型，以原始形式实现
+	 * 一个泛型接口，接口的类型变量没有替代。
 	 */
 	public boolean hasUnresolvableGenerics() {
 		if (this == NONE) {
 			return false;
 		}
 		ResolvableType[] generics = getGenerics();
+		//判断类型的泛型是否可解决
 		for (ResolvableType generic : generics) {
 			if (generic.isUnresolvableTypeVariable() || generic.isWildcardWithoutBounds()) {
 				return true;
@@ -537,12 +540,14 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Determine whether the underlying type is a type variable that
 	 * cannot be resolved through the associated variable resolver.
+	 * 通过关联的变量解决器，判断底层的类型变量类型是否为不可解决类型
 	 */
 	private boolean isUnresolvableTypeVariable() {
-		if (this.type instanceof TypeVariable) {
+		if (this.type instanceof TypeVariable) {//类型变量，且类型变量解决器为null
 			if (this.variableResolver == null) {
 				return true;
 			}
+			//判断此类型变量是否可解决
 			TypeVariable<?> variable = (TypeVariable<?>) this.type;
 			ResolvableType resolved = this.variableResolver.resolveVariable(variable);
 			if (resolved == null || resolved.isUnresolvableTypeVariable()) {
@@ -555,12 +560,14 @@ public class ResolvableType implements Serializable {
 	/**
 	 * Determine whether the underlying type represents a wildcard
 	 * without specific bounds (i.e., equal to {@code ? extends Object}).
+	 * 判断底层类型是否为没有界的通配符
 	 */
 	private boolean isWildcardWithoutBounds() {
 		if (this.type instanceof WildcardType) {
 			WildcardType wt = (WildcardType) this.type;
-			if (wt.getLowerBounds().length == 0) {
-				Type[] upperBounds = wt.getUpperBounds();
+			if (wt.getLowerBounds().length == 0) {//没有下边界
+				Type[] upperBounds = wt.getUpperBounds();//获取通配符类型的上边界
+				//如果没有上边界，或上边界只有一个且为Object，则为没有边界的通配符
 				if (upperBounds.length == 0 || (upperBounds.length == 1 && Object.class == upperBounds[0])) {
 					return true;
 				}

@@ -30,6 +30,14 @@ import org.springframework.core.convert.converter.GenericConverter;
  */
 abstract class ConversionUtils {
 
+	/**
+	 * 使用转换器，转化源类型实例为目标类型
+	 * @param converter
+	 * @param source
+	 * @param sourceType
+	 * @param targetType
+	 * @return
+	 */
 	public static Object invokeConverter(GenericConverter converter, Object source, TypeDescriptor sourceType,
 			TypeDescriptor targetType) {
 
