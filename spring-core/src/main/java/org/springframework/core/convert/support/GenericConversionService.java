@@ -63,12 +63,14 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 	/**
 	 * General NO-OP converter used when conversion is not required.
+	 * 当不需要转换时，使用NO-OP转换器
 	 */
 	private static final GenericConverter NO_OP_CONVERTER = new NoOpConverter("NO_OP");
 
 	/**
 	 * Used as a cache entry when no converter is available.
 	 * This converter is never returned.
+	 * 当没有转换器可以用，使用NoOpConverter作为一个缓存Entry
 	 */
 	private static final GenericConverter NO_MATCH = new NoOpConverter("NO_MATCH");
 
@@ -78,6 +80,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 	static {
 		try {
+			//加载Optional，获取空对象
 			Class<?> clazz = ClassUtils.forName("java.util.Optional", GenericConversionService.class.getClassLoader());
 			javaUtilOptionalEmpty = ClassUtils.getMethod(clazz, "empty").invoke(null);
 		}
@@ -86,9 +89,10 @@ public class GenericConversionService implements ConfigurableConversionService {
 		}
 	}
 
-
+   //转化器
 	private final Converters converters = new Converters();
 
+	//转换器缓存
 	private final Map<ConverterCacheKey, GenericConverter> converterCache =
 			new ConcurrentReferenceHashMap<ConverterCacheKey, GenericConverter>(64);
 
@@ -497,11 +501,12 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 	/**
 	 * Manages all converters registered with the service.
+	 * 管理当前注册到服务的所有转换器
 	 */
 	private static class Converters {
-
+        //全局转换器
 		private final Set<GenericConverter> globalConverters = new LinkedHashSet<GenericConverter>();
-
+      
 		private final Map<ConvertiblePair, ConvertersForPair> converters =
 				new LinkedHashMap<ConvertiblePair, ConvertersForPair>(36);
 
@@ -653,17 +658,29 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 	/**
 	 * Manages converters registered with a specific {@link ConvertiblePair}.
+	 *管理注册到转换器给定{@link ConvertiblePair}的所有转换器
 	 */
 	private static class ConvertersForPair {
-
+        //ConvertiblePair 转化器
 		private final LinkedList<GenericConverter> converters = new LinkedList<GenericConverter>();
-
+     
+		/**
+		 * 添加转换器
+		 * @param converter
+		 */
 		public void add(GenericConverter converter) {
 			this.converters.addFirst(converter);
 		}
 
+		/**
+		 * 获取源类型到目标类型的转换器
+		 * @param sourceType
+		 * @param targetType
+		 * @return
+		 */
 		public GenericConverter getConverter(TypeDescriptor sourceType, TypeDescriptor targetType) {
 			for (GenericConverter converter : this.converters) {
+				//如果类型为非ConditionalGenericConverter，或条件ConditionalGenericConverter可以转换，则返回
 				if (!(converter instanceof ConditionalGenericConverter) ||
 						((ConditionalGenericConverter) converter).matches(sourceType, targetType)) {
 					return converter;
@@ -681,6 +698,7 @@ public class GenericConversionService implements ConfigurableConversionService {
 
 	/**
 	 * Internal converter that performs no operation.
+	 * 内部无操作转换器
 	 */
 	private static class NoOpConverter implements GenericConverter {
 

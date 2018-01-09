@@ -21,7 +21,7 @@ import org.springframework.core.convert.TypeDescriptor;
 /**
  * A {@link GenericConverter} that may conditionally execute based on attributes
  * of the {@code source} and {@code target} {@link TypeDescriptor}.
- *
+ *ConditionalGenericConverter可以源类型和目标类型的类型描述属性值决定是否执行类型转换
  * <p>See {@link ConditionalConverter} for details.
  *
  * @author Keith Donald

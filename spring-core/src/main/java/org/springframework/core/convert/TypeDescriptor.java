@@ -37,7 +37,7 @@ import org.springframework.util.ObjectUtils;
 
 /**
  * Context about a type to convert from or to.
- *
+ *类型上下文，用于转换器类型转换
  * @author Keith Donald
  * @author Andy Clement
  * @author Juergen Hoeller
@@ -53,9 +53,9 @@ public class TypeDescriptor implements Serializable {
 
 	private static final boolean streamAvailable = ClassUtils.isPresent(
 			"java.util.stream.Stream", TypeDescriptor.class.getClassLoader());
-
+    //类型描述缓存
 	private static final Map<Class<?>, TypeDescriptor> commonTypesCache = new HashMap<Class<?>, TypeDescriptor>(18);
-
+   //原始类型缓存类型集合
 	private static final Class<?>[] CACHED_COMMON_TYPES = {
 			boolean.class, Boolean.class, byte.class, Byte.class, char.class, Character.class,
 			double.class, Double.class, int.class, Integer.class, long.class, Long.class,
@@ -68,11 +68,11 @@ public class TypeDescriptor implements Serializable {
 	}
 
 
-	private final Class<?> type;
+	private final Class<?> type;//类型描述对应的类型
 
-	private final ResolvableType resolvableType;
+	private final ResolvableType resolvableType;//类型描述对应的可解决类型
 
-	private final AnnotatedElementAdapter annotatedElement;
+	private final AnnotatedElementAdapter annotatedElement;//类型注解元素适配器
 
 
 	/**
@@ -116,6 +116,7 @@ public class TypeDescriptor implements Serializable {
 	 * Create a new type descriptor from a {@link ResolvableType}. This protected
 	 * constructor is used internally and may also be used by subclasses that support
 	 * non-Java languages with extended type systems.
+	 * 根据可解决类型，创建一个类型描述。此方法时内部使用的构造函数，也可以用于子类支持非java语言的类型系统
 	 * @param resolvableType the resolvable type
 	 * @param type the backing type (or {@code null} if it should get resolved)
 	 * @param annotations the type annotations
@@ -514,10 +515,13 @@ public class TypeDescriptor implements Serializable {
 
 	/**
 	 * Create a new type descriptor for an object.
+	 * 根据给定的对象创建一个类型描述TypeDescriptor
 	 * <p>Use this factory method to introspect a source object before asking the
 	 * conversion system to convert it to some another type.
+	 * 在使用转换系统将一个类型转换为另一类型之前，此方法可用于检查源对象。
 	 * <p>If the provided object is {@code null}, returns {@code null}, else calls
 	 * {@link #valueOf(Class)} to build a TypeDescriptor from the object's class.
+	 * 如果提供的对象为null，则返回为null，否则调用{@link #valueOf(Class)}创建一个类型描述
 	 * @param source the source object
 	 * @return the type descriptor
 	 */
@@ -527,11 +531,15 @@ public class TypeDescriptor implements Serializable {
 
 	/**
 	 * Create a new type descriptor from the given type.
+	 * 根据给定的类型创建一个新的类型描述TypeDescriptor
 	 * <p>Use this to instruct the conversion system to convert an object to a
 	 * specific target type, when no type location such as a method parameter or
 	 * field is available to provide additional conversion context.
+	 * 类型描述符在没有类型的元数据（方法参数，field）情况，为转换系统，提供了转换一个对象到一个目标类型的
+	 * 转换上下文
 	 * <p>Generally prefer use of {@link #forObject(Object)} for constructing type
 	 * descriptors from source objects, as it handles the {@code null} object case.
+	 * 一般使用{@link #forObject(Object)}方法，从一个源对象创建一个类型描述，同样可以处理null对象
 	 * @param type the class (may be {@code null} to indicate {@code Object.class})
 	 * @return the corresponding type descriptor
 	 */
@@ -713,17 +721,17 @@ public class TypeDescriptor implements Serializable {
 	/**
 	 * Adapter class for exposing a {@code TypeDescriptor}'s annotations as an
 	 * {@link AnnotatedElement}, in particular to {@link AnnotatedElementUtils}.
+	 * AnnotatedElementAdapter用于暴露类型描述的注解元素，类似于AnnotatedElementUtils
 	 * @see AnnotatedElementUtils#isAnnotated(AnnotatedElement, Class)
 	 * @see AnnotatedElementUtils#getMergedAnnotation(AnnotatedElement, Class)
 	 */
 	private class AnnotatedElementAdapter implements AnnotatedElement, Serializable {
 
-		private final Annotation[] annotations;
+		private final Annotation[] annotations;//类型描述的注解元素
 
 		public AnnotatedElementAdapter(Annotation[] annotations) {
 			this.annotations = annotations;
 		}
-
 		@Override
 		public boolean isAnnotationPresent(Class<? extends Annotation> annotationClass) {
 			for (Annotation annotation : getAnnotations()) {
@@ -733,7 +741,6 @@ public class TypeDescriptor implements Serializable {
 			}
 			return false;
 		}
-
 		@Override
 		@SuppressWarnings("unchecked")
 		public <T extends Annotation> T getAnnotation(Class<T> annotationClass) {
@@ -744,7 +751,6 @@ public class TypeDescriptor implements Serializable {
 			}
 			return null;
 		}
-
 		@Override
 		public Annotation[] getAnnotations() {
 			return (this.annotations != null ? this.annotations : EMPTY_ANNOTATION_ARRAY);
