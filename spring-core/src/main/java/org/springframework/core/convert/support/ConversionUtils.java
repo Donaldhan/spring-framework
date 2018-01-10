@@ -52,6 +52,13 @@ abstract class ConversionUtils {
 		}
 	}
 
+	/**
+	 * 转换器服务是否可以转换源类型为目标类型
+	 * @param sourceElementType
+	 * @param targetElementType
+	 * @param conversionService
+	 * @return
+	 */
 	public static boolean canConvertElements(TypeDescriptor sourceElementType, TypeDescriptor targetElementType,
 			ConversionService conversionService) {
 
@@ -77,6 +84,11 @@ abstract class ConversionUtils {
 		}
 	}
 
+	/**
+	 * 获取目标类的枚举类型
+	 * @param targetType
+	 * @return
+	 */
 	public static Class<?> getEnumType(Class<?> targetType) {
 		Class<?> enumType = targetType;
 		while (enumType != null && !enumType.isEnum()) {

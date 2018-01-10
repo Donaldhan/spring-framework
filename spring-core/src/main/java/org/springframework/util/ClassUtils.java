@@ -214,8 +214,11 @@ public abstract class ClassUtils {
 	/**
 	 * Replacement for {@code Class.forName()} that also returns Class instances
 	 * for primitives (e.g. "int") and array class names (e.g. "String[]").
+	 * 替代 {@code Class.forName()}方法，为原始类型和数组类型返回实例。
 	 * Furthermore, it is also capable of resolving inner class names in Java source
 	 * style (e.g. "java.lang.Thread.State" instead of "java.lang.Thread$State").
+	 * 进一步讲，亦可以用于解决以java source风格的内部类，比如（"java.lang.Thread.State"，替代
+	 *  "java.lang.Thread$State"。
 	 * @param name the name of the Class
 	 * @param classLoader the class loader to use
 	 * (may be {@code null}, which indicates the default class loader)
@@ -341,6 +344,7 @@ public abstract class ClassUtils {
 	 * Determine whether the {@link Class} identified by the supplied name is present
 	 * and can be loaded. Will return {@code false} if either the class or
 	 * one of its dependencies is not present or cannot be loaded.
+	 * 判断给定class是否可以使用给定类加载器加载。如果类或其中一个依赖不能加载则返回false
 	 * @param className the name of the class to check
 	 * @param classLoader the class loader to use
 	 * (may be {@code null}, which indicates the default class loader)

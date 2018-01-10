@@ -715,6 +715,7 @@ public abstract class StringUtils {
 
 	/**
 	 * Parse the given {@code localeString} value into a {@link Locale}.
+	 * 解析给定的本地字符串为本地化
 	 * <p>This is the inverse operation of {@link Locale#toString Locale's toString}.
 	 * @param localeString the locale {@code String}, following {@code Locale's}
 	 * {@code toString()} format ("en", "en_UK", etc);

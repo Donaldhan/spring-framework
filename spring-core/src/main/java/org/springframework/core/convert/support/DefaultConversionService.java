@@ -28,11 +28,11 @@ import org.springframework.util.ClassUtils;
 /**
  * A specialization of {@link GenericConversionService} configured by default
  * with converters appropriate for most environments.
- *
+ *DefaultConversionService为转换器的默认是实现，提供了大多数环境使用的转换器。
  * <p>Designed for direct instantiation but also exposes the static
  * {@link #addDefaultConverters(ConverterRegistry)} utility method for ad-hoc
  * use against any {@code ConverterRegistry} instance.
- *
+ *直接实例化设置模式，但是提供了添加默认转换器的静态便利方法。
  * @author Chris Beams
  * @author Juergen Hoeller
  * @author Stephane Nicoll
@@ -40,24 +40,25 @@ import org.springframework.util.ClassUtils;
  */
 public class DefaultConversionService extends GenericConversionService {
 
-	/** Java 8's java.util.Optional class available? */
+	/** Java 8's java.util.Optional class available? Optional是否可使用*/
 	private static final boolean javaUtilOptionalClassAvailable =
 			ClassUtils.isPresent("java.util.Optional", DefaultConversionService.class.getClassLoader());
 
-	/** Java 8's java.time package available? */
+	/** Java 8's java.time package available? 事件包是否可利用*/
 	private static final boolean jsr310Available =
 			ClassUtils.isPresent("java.time.ZoneId", DefaultConversionService.class.getClassLoader());
 
-	/** Java 8's java.util.stream.Stream class available? */
+	/** Java 8's java.util.stream.Stream class available? Stream是否可用 */
 	private static final boolean streamAvailable = ClassUtils.isPresent(
 			"java.util.stream.Stream", DefaultConversionService.class.getClassLoader());
 
-	private static volatile DefaultConversionService sharedInstance;
+	private static volatile DefaultConversionService sharedInstance;//共享转换器实例
 
 
 	/**
 	 * Create a new {@code DefaultConversionService} with the set of
 	 * {@linkplain DefaultConversionService#addDefaultConverters(ConverterRegistry) default converters}.
+	 * 根据默认的转换器集，创建一个默认转换器实例
 	 */
 	public DefaultConversionService() {
 		addDefaultConverters(this);
@@ -67,11 +68,14 @@ public class DefaultConversionService extends GenericConversionService {
 	/**
 	 * Return a shared default {@code ConversionService} instance,
 	 * lazily building it once needed.
+	 * 返回默认转换器服务的默认实例，懒加载方法创建实例。
 	 * <p><b>NOTE:</b> We highly recommend constructing individual
 	 * {@code ConversionService} instances for customization purposes.
+	 * 注意：我们将强烈建议为特殊的用途构造单独的转化器服务
 	 * This accessor is only meant as a fallback for code paths which
 	 * need simple type coercion but cannot access a longer-lived
 	 * {@code ConversionService} instance any other way.
+	 * 
 	 * @return the shared {@code ConversionService} instance (never {@code null})
 	 * @since 4.3.5
 	 */
@@ -88,6 +92,7 @@ public class DefaultConversionService extends GenericConversionService {
 
 	/**
 	 * Add converters appropriate for most environments.
+	 * 添加大多数环境使用的转化器
 	 * @param converterRegistry the registry of converters to add to
 	 * (must also be castable to ConversionService, e.g. being a {@link ConfigurableConversionService})
 	 * @throws ClassCastException if the given ConverterRegistry could not be cast to a ConversionService
@@ -111,6 +116,7 @@ public class DefaultConversionService extends GenericConversionService {
 
 	/**
 	 * Add common collection converters.
+	 * 添加一般的集合转换器
 	 * @param converterRegistry the registry of converters to add to
 	 * (must also be castable to ConversionService, e.g. being a {@link ConfigurableConversionService})
 	 * @throws ClassCastException if the given ConverterRegistry could not be cast to a ConversionService
@@ -143,6 +149,10 @@ public class DefaultConversionService extends GenericConversionService {
 		}
 	}
 
+	/**
+	 * 添加平级转换器
+	 * @param converterRegistry
+	 */
 	private static void addScalarConverters(ConverterRegistry converterRegistry) {
 		converterRegistry.addConverterFactory(new NumberToNumberConverterFactory());
 
@@ -183,6 +193,7 @@ public class DefaultConversionService extends GenericConversionService {
 
 	/**
 	 * Inner class to avoid a hard-coded dependency on Java 8's {@code java.time} package.
+	 * 时间转换器
 	 */
 	private static final class Jsr310ConverterRegistrar {
 

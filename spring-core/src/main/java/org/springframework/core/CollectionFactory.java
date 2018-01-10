@@ -151,13 +151,17 @@ public abstract class CollectionFactory {
 
 	/**
 	 * Create the most appropriate collection for the given collection type.
+	 * 创建给定集合类型的集合。
 	 * <p><strong>Warning</strong>: Since the parameterized type {@code E} is
 	 * not bound to the supplied {@code elementType}, type safety cannot be
 	 * guaranteed if the desired {@code collectionType} is {@link EnumSet}.
+	 * 注意:由于集合类的类型参数是无界的，如果集合类型为{@link EnumSet}，不能包装类型安全。
 	 * In such scenarios, the caller is responsible for ensuring that the
 	 * supplied {@code elementType} is an enum type matching type {@code E}.
+	 * 在这种情况下，调用者负责提供的元素类型为匹配类型变量的枚举类型。
 	 * As an alternative, the caller may wish to treat the return value as a
 	 * raw collection or collection of {@link Object}.
+	 * 最为另外一种选择，调用者可以对待值为原始类型集合类，或object集合类。
 	 * @param collectionType the desired type of the target collection; never {@code null}
 	 * @param elementType the collection's element type, or {@code null} if unknown
 	 * (note: only relevant for {@link EnumSet} creation)

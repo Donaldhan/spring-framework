@@ -62,6 +62,7 @@ public abstract class NumberUtils {
 
 	/**
 	 * Convert the given number into an instance of the given target class.
+	 * 转换给定的数值，为目标类型的实例
 	 * @param number the number to convert
 	 * @param targetClass the target class to convert to
 	 * @return the converted number
