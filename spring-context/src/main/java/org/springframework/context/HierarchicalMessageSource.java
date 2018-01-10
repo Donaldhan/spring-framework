@@ -19,7 +19,7 @@ package org.springframework.context;
 /**
  * Sub-interface of MessageSource to be implemented by objects that
  * can resolve messages hierarchically.
- *
+ *HierarchicalMessageSource为消息源的子接口，实现的对象可以层级解决消息。
  * @author Rod Johnson
  * @author Juergen Hoeller
  */
@@ -28,6 +28,8 @@ public interface HierarchicalMessageSource extends MessageSource {
 	/**
 	 * Set the parent that will be used to try to resolve messages
 	 * that this object can't resolve.
+	 * 设置当前消息源的父消息源，当此消息源不能解决给定消息时，尝试使用父消息源
+	 * 解决消息。
 	 * @param parent the parent MessageSource that will be used to
 	 * resolve messages that this object can't resolve.
 	 * May be {@code null}, in which case no further resolution is possible.
@@ -36,6 +38,7 @@ public interface HierarchicalMessageSource extends MessageSource {
 
 	/**
 	 * Return the parent of this MessageSource, or {@code null} if none.
+	 * 返回消息源的父消息源，没有则为null
 	 */
 	MessageSource getParentMessageSource();
 
