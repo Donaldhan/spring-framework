@@ -303,10 +303,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	/**
 	 * Set the {@code Environment} for this application context.
+	 * 设置应用上下文的环境。
 	 * <p>Default value is determined by {@link #createEnvironment()}. Replacing the
 	 * default with this method is one option but configuration through {@link
 	 * #getEnvironment()} should also be considered. In either case, such modifications
 	 * should be performed <em>before</em> {@link #refresh()}.
+	 * 默认为{@link #createEnvironment()}返回的环境实例。使用此方法可以替换默认的环境配置，
+	 * 可以通过{@link#getEnvironment()}获取环境配置。修改环境应该在{@link #refresh()}操作之前
 	 * @see org.springframework.context.support.AbstractApplicationContext#createEnvironment
 	 */
 	@Override
