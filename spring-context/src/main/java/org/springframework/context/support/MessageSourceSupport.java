@@ -30,11 +30,13 @@ import org.springframework.util.ObjectUtils;
  * Base class for message source implementations, providing support infrastructure
  * such as {@link java.text.MessageFormat} handling but not implementing concrete
  * methods defined in the {@link org.springframework.context.MessageSource}.
- *
+ * MessageSourceSupport为消息源的基础实现类，提供了消除格式化处理的基础支撑。但是没有实现spring上下文中
+ * 消息源的具体方法。
  * <p>{@link AbstractMessageSource} derives from this class, providing concrete
  * {@code getMessage} implementations that delegate to a central template
  * method for message code resolution.
- *
+ *{@link AbstractMessageSource}继承了基类，并提供了{@code getMessage}的具体实现，可以代理
+ *消息编码解决的中心模板方法。
  * @author Juergen Hoeller
  * @since 2.5.5
  */

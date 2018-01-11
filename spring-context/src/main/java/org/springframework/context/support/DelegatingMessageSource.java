@@ -26,10 +26,11 @@ import org.springframework.context.NoSuchMessageException;
 /**
  * Empty {@link MessageSource} that delegates all calls to the parent MessageSource.
  * If no parent is available, it simply won't resolve any message.
- *
+ *父消息源的代理类。如果没有父消息可用，不会解决任何消息。
  * <p>Used as placeholder by AbstractApplicationContext, if the context doesn't
  * define its own MessageSource. Not intended for direct use in applications.
- *
+ *如果上下文没有定义消息源，AbstractApplicationContext使用此代理类作为消息源的占位符。不能直接被应用
+ *使用。
  * @author Juergen Hoeller
  * @since 1.1.5
  * @see AbstractApplicationContext
