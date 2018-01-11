@@ -45,10 +45,11 @@ public abstract class MessageSourceSupport {
 	/** Logger available to subclasses */
 	protected final Log logger = LogFactory.getLog(getClass());
 
-	private boolean alwaysUseMessageFormat = false;
+	private boolean alwaysUseMessageFormat = false;//是否应用消息格式规则，解析没有参数的消息
 
 	/**
 	 * Cache to hold already generated MessageFormats per message.
+	 * 缓存已经产生消息的消息格式
 	 * Used for passed-in default messages. MessageFormats for resolved
 	 * codes are cached on a specific basis in subclasses.
 	 */
@@ -59,10 +60,13 @@ public abstract class MessageSourceSupport {
 	/**
 	 * Set whether to always apply the {@code MessageFormat} rules,
 	 * parsing even messages without arguments.
+	 * 设置是否应用消息格式规则，解析没有参数的消息
 	 * <p>Default is "false": Messages without arguments are by default
 	 * returned as-is, without parsing them through MessageFormat.
+	 * 默认为false：没有参数的消息，默认返回消息本身，不会使用消息格式解析。
 	 * Set this to "true" to enforce MessageFormat for all messages,
 	 * expecting all message texts to be written with MessageFormat escaping.
+	 * 当设置为true时，将会使用消息格式解决所有消息。
 	 * <p>For example, MessageFormat expects a single quote to be escaped
 	 * as "''". If your message texts are all written with such escaping,
 	 * even when not defining argument placeholders, you need to set this
@@ -87,9 +91,11 @@ public abstract class MessageSourceSupport {
 	 * Render the given default message String. The default message is
 	 * passed in as specified by the caller and can be rendered into
 	 * a fully formatted default message shown to the user.
+	 * 渲染给定的默认消息。
 	 * <p>The default implementation passes the String to {@code formatMessage},
 	 * resolving any argument placeholders found in them. Subclasses may override
 	 * this method to plug in custom processing of default messages.
+	 * 默认的实现，将会使用传入的参数，解决消息中的占位符。子类可以重写此方法，用于定制消息的处理过程
 	 * @param defaultMessage the passed-in default message String
 	 * @param args array of arguments that will be filled in for params within
 	 * the message, or {@code null} if none.
@@ -103,12 +109,15 @@ public abstract class MessageSourceSupport {
 
 	/**
 	 * Format the given message String, using cached MessageFormats.
+	 * 使用缓存的消息格式，格式化给定消息字符串。
 	 * By default invoked for passed-in default messages, to resolve
 	 * any argument placeholders found in them.
-	 * @param msg the message to format
+	 * 默认使用参数解决消息中的占位符
+	 * @param msg the message to format 需要格式化的消息
 	 * @param args array of arguments that will be filled in for params within
 	 * the message, or {@code null} if none
-	 * @param locale the Locale used for formatting
+	 * 将会填充到消息中占位符的参数数组
+	 * @param locale the Locale used for formatting 格式本地化
 	 * @return the formatted message (with resolved arguments)
 	 */
 	protected String formatMessage(String msg, Object[] args, Locale locale) {
@@ -117,6 +126,7 @@ public abstract class MessageSourceSupport {
 		}
 		MessageFormat messageFormat = null;
 		synchronized (this.messageFormatsPerMessage) {
+		    //获取消息本地化消息格式映射
 			Map<Locale, MessageFormat> messageFormatsPerLocale = this.messageFormatsPerMessage.get(msg);
 			if (messageFormatsPerLocale != null) {
 				messageFormat = messageFormatsPerLocale.get(locale);
@@ -127,6 +137,7 @@ public abstract class MessageSourceSupport {
 			}
 			if (messageFormat == null) {
 				try {
+					//根据消息与本地化创建消息格式
 					messageFormat = createMessageFormat(msg, locale);
 				}
 				catch (IllegalArgumentException ex) {
@@ -145,12 +156,14 @@ public abstract class MessageSourceSupport {
 			return msg;
 		}
 		synchronized (messageFormat) {
+			//根据参数的本地化信息，格式化消息
 			return messageFormat.format(resolveArguments(args, locale));
 		}
 	}
 
 	/**
 	 * Create a MessageFormat for the given message and Locale.
+	 * 根基给定的消息和本地化创建消息格式
 	 * @param msg the message to create a MessageFormat for
 	 * @param locale the Locale to create a MessageFormat for
 	 * @return the MessageFormat instance
@@ -161,7 +174,9 @@ public abstract class MessageSourceSupport {
 
 	/**
 	 * Template method for resolving argument objects.
+	 * 将参数解析为本地化参数
 	 * <p>The default implementation simply returns the given argument array as-is.
+	 * 默认实现，简单返回给定的参数数组，为了解决特殊的参数类型，子类可以重写此方。
 	 * Can be overridden in subclasses in order to resolve special argument types.
 	 * @param args the original argument array
 	 * @param locale the Locale to resolve against
