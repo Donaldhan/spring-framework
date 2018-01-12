@@ -64,6 +64,7 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 
 	static {
 		try {
+			//加载文件路径类Path
 			pathClass = ClassUtils.forName("java.nio.file.Path", ResourceEditorRegistrar.class.getClassLoader());
 		}
 		catch (ClassNotFoundException ex) {
@@ -73,14 +74,15 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 	}
 
 
-	private final PropertyResolver propertyResolver;
+	private final PropertyResolver propertyResolver;//属性解决器
 
-	private final ResourceLoader resourceLoader;
+	private final ResourceLoader resourceLoader;//资源加载器
 
 
 	/**
 	 * Create a new ResourceEditorRegistrar for the given {@link ResourceLoader}
 	 * and {@link PropertyResolver}.
+	 * 根据给定的属性解决器和资源加载器创建资源编辑注册器。
 	 * @param resourceLoader the ResourceLoader (or ResourcePatternResolver)
 	 * to create editors for (usually an ApplicationContext)
 	 * @param propertyResolver the PropertyResolver (usually an Environment)
@@ -96,10 +98,13 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 
 	/**
 	 * Populate the given {@code registry} with the following resource editors:
+	 * 注册以下资源编辑器到给定的注册器
 	 * ResourceEditor, InputStreamEditor, InputSourceEditor, FileEditor, URLEditor,
 	 * URIEditor, ClassEditor, ClassArrayEditor.
+	 * 资源编辑器，输入流编辑器，输入源编辑器，文件编辑器，URL编辑器，URI编辑器，类编辑器，类数组编辑器。
 	 * <p>If this registrar has been configured with a {@link ResourcePatternResolver},
 	 * a ResourceArrayPropertyEditor will be registered as well.
+	 * 如果注册器已经配置资源模式解决器，则一个资源数组属性编辑器将会被注册。
 	 * @see org.springframework.core.io.ResourceEditor
 	 * @see org.springframework.beans.propertyeditors.InputStreamEditor
 	 * @see org.springframework.beans.propertyeditors.InputSourceEditor
