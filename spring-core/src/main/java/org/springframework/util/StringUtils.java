@@ -903,6 +903,7 @@ public abstract class StringUtils {
 	/**
 	 * Trim the elements of the given {@code String} array,
 	 * calling {@code String.trim()} on each of them.
+	 * 剔除给定字符串数组中元素，即调用{@code String.trim()}作用于数组中的每个元素
 	 * @param array the original {@code String} array
 	 * @return the resulting array (of the same size) with trimmed elements
 	 */
@@ -1217,6 +1218,7 @@ public abstract class StringUtils {
 	/**
 	 * Convert a {@code String} array into a delimited {@code String} (e.g. CSV).
 	 * <p>Useful for {@code toString()} implementations.
+	 * 转换字符串数组为给定分隔符的字符串。
 	 * @param arr the array to display
 	 * @param delim the delimiter to use (typically a ",")
 	 * @return the delimited {@code String}

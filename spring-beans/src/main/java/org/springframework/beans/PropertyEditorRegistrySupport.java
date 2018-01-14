@@ -88,9 +88,9 @@ import org.springframework.util.ClassUtils;
  */
 public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
-	private static Class<?> pathClass;
+	private static Class<?> pathClass;//文件路径类java.nio.file.Path
 
-	private static Class<?> zoneIdClass;
+	private static Class<?> zoneIdClass;//时区id类java.time.ZoneId
 
 	static {
 		ClassLoader cl = PropertyEditorRegistrySupport.class.getClassLoader();
@@ -111,26 +111,30 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	}
 
 
-	private ConversionService conversionService;
+	private ConversionService conversionService;//类型转换服务
 
 	private boolean defaultEditorsActive = false;
 
 	private boolean configValueEditorsActive = false;
 
-	private Map<Class<?>, PropertyEditor> defaultEditors;
+	private Map<Class<?>, PropertyEditor> defaultEditors;//默认属性类型编辑器映射器
 
-	private Map<Class<?>, PropertyEditor> overriddenDefaultEditors;
+	private Map<Class<?>, PropertyEditor> overriddenDefaultEditors;//重写默认编辑器
 
-	private Map<Class<?>, PropertyEditor> customEditors;
+	private Map<Class<?>, PropertyEditor> customEditors;//定制的属性编辑器
 
-	private Map<String, CustomEditorHolder> customEditorsForPath;
+	/**
+	 * CustomEditorHolder为属性类型与属性编辑器的关系Holder
+	 */
+	private Map<String, CustomEditorHolder> customEditorsForPath;//属性编辑器映射集
 
-	private Map<Class<?>, PropertyEditor> customEditorCache;
+	private Map<Class<?>, PropertyEditor> customEditorCache;//定制属性编辑器缓存
 
 
 	/**
 	 * Specify a Spring 3.0 ConversionService to use for converting
 	 * property values, as an alternative to JavaBeans PropertyEditors.
+	 * 设置spring3.0的转换服务，用于转换属性值，为Java beans属性编辑器的一种补充。
 	 */
 	public void setConversionService(ConversionService conversionService) {
 		this.conversionService = conversionService;
@@ -151,6 +155,7 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	/**
 	 * Activate the default editors for this registry instance,
 	 * allowing for lazily registering default editors when needed.
+	 * 激活注册器实例的默认编辑器，当需要时，运行懒加载注册的默认编辑器。
 	 */
 	protected void registerDefaultEditors() {
 		this.defaultEditorsActive = true;
@@ -159,9 +164,12 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	/**
 	 * Activate config value editors which are only intended for configuration purposes,
 	 * such as {@link org.springframework.beans.propertyeditors.StringArrayPropertyEditor}.
+	 * 激活配置的属性编辑器，比如StringArrayPropertyEditor。
 	 * <p>Those editors are not registered by default simply because they are in
 	 * general inappropriate for data binding purposes. Of course, you may register
 	 * them individually in any case, through {@link #registerCustomEditor}.
+	 * 这些不是默认注册的简单编辑器，应为这些与model属性绑定的属性编辑器作用不同。
+	 * 当然，你可通过{@link #registerCustomEditor}方法独立地注册这些属性编辑器。
 	 */
 	public void useConfigValueEditors() {
 		this.configValueEditorsActive = true;
@@ -169,9 +177,12 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	/**
 	 * Override the default editor for the specified type with the given property editor.
+	 * 重新给定类型的给定属性编辑器的默认编辑器。
 	 * <p>Note that this is different from registering a custom editor in that the editor
 	 * semantically still is a default editor. A ConversionService will override such a
 	 * default editor, whereas custom editors usually override the ConversionService.
+	 * 注意，此编辑器集不同于定制编辑器器中的编辑器，因为定制编辑器中可能为默认的编辑器。
+	 * 转换服务将会重写默认编辑器，然而定制编辑器将会重写转化服务编辑器。
 	 * @param requiredType the type of the property
 	 * @param propertyEditor the editor to register
 	 * @see #registerCustomEditor(Class, PropertyEditor)
@@ -186,28 +197,33 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	/**
 	 * Retrieve the default editor for the given property type, if any.
 	 * <p>Lazily registers the default editors, if they are active.
+	 * 获取给定类型的默认编辑器。如果默认编辑器激活，则懒加载默认编辑器。
 	 * @param requiredType type of the property
 	 * @return the default editor, or {@code null} if none found
 	 * @see #registerDefaultEditors
 	 */
 	public PropertyEditor getDefaultEditor(Class<?> requiredType) {
-		if (!this.defaultEditorsActive) {
+		if (!this.defaultEditorsActive) {//如果默认编辑器没有激活，则返回返回null
 			return null;
 		}
 		if (this.overriddenDefaultEditors != null) {
+			//如果重写默认编辑器不为null，则从重写默认编辑器获取给定类型的编辑器
 			PropertyEditor editor = this.overriddenDefaultEditors.get(requiredType);
 			if (editor != null) {
 				return editor;
 			}
 		}
 		if (this.defaultEditors == null) {
+			//创建默认编辑器
 			createDefaultEditors();
 		}
+		//从默认编辑器集获取给定的类型的属性编辑器
 		return this.defaultEditors.get(requiredType);
 	}
 
 	/**
 	 * Actually register the default editors for this registry instance.
+	 * 注册默认的属性编辑器到当前注册器实例。
 	 */
 	private void createDefaultEditors() {
 		this.defaultEditors = new HashMap<Class<?>, PropertyEditor>(64);
@@ -530,13 +546,15 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	/**
 	 * Holder for a registered custom editor with property name.
+	 * 属性编辑器Holder。
 	 * Keeps the PropertyEditor itself plus the type it was registered for.
+	 * 保存属性编辑器与类型的关系。
 	 */
 	private static class CustomEditorHolder {
 
-		private final PropertyEditor propertyEditor;
+		private final PropertyEditor propertyEditor;//属性编辑器
 
-		private final Class<?> registeredType;
+		private final Class<?> registeredType;//注册的属性类型
 
 		private CustomEditorHolder(PropertyEditor propertyEditor, Class<?> registeredType) {
 			this.propertyEditor = propertyEditor;
@@ -551,6 +569,11 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 			return this.registeredType;
 		}
 
+		/**
+		 * 获取给定类型的属性编辑器
+		 * @param requiredType
+		 * @return
+		 */
 		private PropertyEditor getPropertyEditor(Class<?> requiredType) {
 			// Special case: If no required type specified, which usually only happens for
 			// Collection elements, or required type is not assignable to registered type,
@@ -558,6 +581,12 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 			// then return PropertyEditor if not registered for Collection or array type.
 			// (If not registered for Collection or array, it is assumed to be intended
 			// for elements.)
+		    /*
+		     * 特殊情况：如果没有需要的指定类型，通常在集合类元素类型情况下，可能存在，或者需要的类型不是，
+		     * 注册的类型，这通常的发生在类型变量对象的泛型属性，如果没有注册集合和数组类型的相关属性编辑器，
+		     * 则将会返回当前属性编辑器。（如果没有注册集合或数组类型，将会返回元素的属性的编辑器。
+		     * 
+		     */
 			if (this.registeredType == null ||
 					(requiredType != null &&
 					(ClassUtils.isAssignable(this.registeredType, requiredType) ||
