@@ -29,20 +29,24 @@ import org.springframework.util.StringUtils;
 /**
  * Editor for {@code java.io.File}, to directly populate a File property
  * from a Spring resource location.
- *
+ *{@code java.io.File}属性编辑器，直接从Spirng资源位置填充一个文件属性。
  * <p>Supports Spring-style URL notation: any fully qualified standard URL
  * ("file:", "http:", etc) and Spring's special "classpath:" pseudo-URL.
- *
+ *支持Spring风格的URL：任何全限定的标准URL和("file:", "http:", etc)，和Spring
+ *的特殊为URL:"classpath:"。
  * <p><b>NOTE:</b> The behavior of this editor has changed in Spring 2.0.
  * Previously, it created a File instance directly from a filename.
  * As of Spring 2.0, it takes a standard Spring resource location as input;
  * this is consistent with URLEditor and InputStreamEditor now.
- *
+ *注意：从spring2.0开始，此编辑器的行为已经改变。先前，直接从文件名创建一个文件实例。
+ *从spring2.0以后，使用Spring的资源加载器，加载给定位置描述的资源。
  * <p><b>NOTE:</b> In Spring 2.5 the following modification was made.
  * If a file name is specified without a URL prefix or without an absolute path
  * then we try to locate the file using standard ResourceLoader semantics.
  * If the file was not found, then a File instance is created assuming the file
  * name refers to a relative file location.
+ * 注意：在Spring2.5中，做了一下修改。如果一个文件名没有指定URL前缀，或绝对路径，我们将尝试
+ * 使用标准的资源加载器语义加载文件资源。如果文件不存在，则将创建一个相对文件位置引用的文件资源。
  *
  * @author Juergen Hoeller
  * @author Thomas Risberg
@@ -55,7 +59,7 @@ import org.springframework.util.StringUtils;
  */
 public class FileEditor extends PropertyEditorSupport {
 
-	private final ResourceEditor resourceEditor;
+	private final ResourceEditor resourceEditor;//资源编辑器
 
 
 	/**

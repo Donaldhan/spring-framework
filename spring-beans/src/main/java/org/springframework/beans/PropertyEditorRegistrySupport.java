@@ -230,6 +230,9 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 		// Simple editors, without parameterization capabilities.
 		// The JDK does not contain a default editor for any of these target types.
+		/*
+		 * 简单属性编辑器，没有参数化的能力。JDK不包括任何目标类型的默认编辑器。
+		 */
 		this.defaultEditors.put(Charset.class, new CharsetEditor());
 		this.defaultEditors.put(Class.class, new ClassEditor());
 		this.defaultEditors.put(Class[].class, new ClassArrayEditor());
@@ -302,6 +305,7 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	/**
 	 * Copy the default editors registered in this instance to the given target registry.
+	 * 拷贝注册到当前实例的默认属性编辑器，到给定目标注册器
 	 * @param target the target registry to copy to
 	 */
 	protected void copyDefaultEditorsTo(PropertyEditorRegistrySupport target) {

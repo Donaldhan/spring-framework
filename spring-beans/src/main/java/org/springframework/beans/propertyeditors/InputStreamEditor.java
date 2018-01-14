@@ -27,10 +27,11 @@ import org.springframework.util.Assert;
  * One-way PropertyEditor which can convert from a text String to a
  * {@code java.io.InputStream}, interpreting the given String as a
  * Spring resource location (e.g. a URL String).
- *
+ *{@code java.io.InputStream}属性编辑器
  * <p>Supports Spring-style URL notation: any fully qualified standard URL
  * ("file:", "http:", etc.) and Spring's special "classpath:" pseudo-URL.
- *
+ * 支持Spring风格的URL：任何全限定的标准URL和("file:", "http:", etc)，和Spring
+ *的特殊为URL:"classpath:"。
  * <p>Note that such streams usually do not get closed by Spring itself!
  *
  * @author Juergen Hoeller
@@ -43,7 +44,7 @@ import org.springframework.util.Assert;
  */
 public class InputStreamEditor extends PropertyEditorSupport {
 
-	private final ResourceEditor resourceEditor;
+	private final ResourceEditor resourceEditor;//资源编辑器
 
 
 	/**

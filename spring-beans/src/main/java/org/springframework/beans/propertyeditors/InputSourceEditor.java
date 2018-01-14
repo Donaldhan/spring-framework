@@ -28,10 +28,11 @@ import org.springframework.util.Assert;
 /**
  * Editor for {@code org.xml.sax.InputSource}, converting from a
  * Spring resource location String to a SAX InputSource object.
- *
+ *{@code org.xml.sax.InputSource}属性编辑器，转换Spring资源位置字符串为SAX输入源对象。
  * <p>Supports Spring-style URL notation: any fully qualified standard URL
  * ("file:", "http:", etc) and Spring's special "classpath:" pseudo-URL.
- *
+ * 支持Spring风格的URL：任何全限定的标准URL和("file:", "http:", etc)，和Spring
+ *的特殊为URL:"classpath:"。
  * @author Juergen Hoeller
  * @since 3.0.3
  * @see org.xml.sax.InputSource
@@ -42,7 +43,7 @@ import org.springframework.util.Assert;
  */
 public class InputSourceEditor extends PropertyEditorSupport {
 
-	private final ResourceEditor resourceEditor;
+	private final ResourceEditor resourceEditor;//
 
 
 	/**

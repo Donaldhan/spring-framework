@@ -292,9 +292,12 @@ public abstract class ClassUtils {
 	/**
 	 * Resolve the given class name into a Class instance. Supports
 	 * primitives (like "int") and array class names (like "String[]").
+	 * 解决给定name类型的类实例。支持原始类型 (like "int")和数组类name(like "String[]")。
 	 * <p>This is effectively equivalent to the {@code forName}
 	 * method with the same arguments, with the only difference being
 	 * the exceptions thrown in case of class loading failure.
+	 * 此方法等效于相同参数的{@code forName}方法，不同的是在类加载器加载失败时，
+	 * 抛出类加载异常。
 	 * @param className the name of the Class
 	 * @param classLoader the class loader to use
 	 * (may be {@code null}, which indicates the default class loader)
@@ -505,6 +508,7 @@ public abstract class ClassUtils {
 	/**
 	 * Return the qualified name of the given class: usually simply
 	 * the class name, but component type class name + "[]" for arrays.
+	 * 返回给定类的全限定name：通常为类型的简单名称，组件类型的类name加上"[]"。
 	 * @param clazz the class
 	 * @return the qualified name of the class
 	 */
@@ -521,6 +525,8 @@ public abstract class ClassUtils {
 	/**
 	 * Build a nice qualified name for an array:
 	 * component type class name + "[]".
+	 * 构建数组的全限定类型名：
+	 * 组件类型class的name+"[]"
 	 * @param clazz the array class
 	 * @return a qualified name for the array class
 	 */

@@ -29,14 +29,17 @@ import org.springframework.util.StringUtils;
  * descriptors, to automatically convert {@code String} locations
  * e.g. {@code file:C:/myfile.txt} or {@code classpath:myfile.txt} to
  * {@code Resource} properties instead of using a {@code String} location property.
- *
+ *资源描述符的属性编辑器，自动转换String类型的位置为一个资源。
+ *比如 使用{@code Resource} 替代{@code file:C:/myfile.txt} or {@code classpath:myfile.txt}
+ *表示的资源属性。
  * <p>The path may contain {@code ${...}} placeholders, to be
  * resolved as {@link org.springframework.core.env.Environment} properties:
  * e.g. {@code ${user.dir}}. Unresolvable placeholders are ignored by default.
- *
+ * 如果路径中包含{@code ${...}}占位符，将是用环境{@link org.springframework.core.env.Environment}
+ * 去解决,比如{@code ${user.dir}}。默认不可解决的占位符将会被忽略。
  * <p>Delegates to a {@link ResourceLoader} to do the heavy lifting,
  * by default using a {@link DefaultResourceLoader}.
- *
+ * 代理资源加载器，使用默认的资源加载器 {@link DefaultResourceLoader}，做一些资源的加载任务。
  * @author Juergen Hoeller
  * @author Dave Syer
  * @author Chris Beams
@@ -48,11 +51,11 @@ import org.springframework.util.StringUtils;
  */
 public class ResourceEditor extends PropertyEditorSupport {
 
-	private final ResourceLoader resourceLoader;
+	private final ResourceLoader resourceLoader;//资源加载器
 
-	private PropertyResolver propertyResolver;
+	private PropertyResolver propertyResolver;//属性解决器
 
-	private final boolean ignoreUnresolvablePlaceholders;
+	private final boolean ignoreUnresolvablePlaceholders;//是否忽略不可解决的占位符
 
 
 	/**

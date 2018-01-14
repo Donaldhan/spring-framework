@@ -26,7 +26,7 @@ import org.springframework.util.StringUtils;
  * Property editor for an array of {@link Class Classes}, to enable
  * the direct population of a {@code Class[]} property without having to
  * use a {@code String} class name property as bridge.
- *
+ * 数组类型属性编辑器
  * <p>Also supports "java.lang.String[]"-style array class names, in contrast
  * to the standard {@link Class#forName(String)} method.
  *
@@ -36,7 +36,7 @@ import org.springframework.util.StringUtils;
  */
 public class ClassArrayEditor extends PropertyEditorSupport {
 
-	private final ClassLoader classLoader;
+	private final ClassLoader classLoader;//类加载器
 
 
 	/**
