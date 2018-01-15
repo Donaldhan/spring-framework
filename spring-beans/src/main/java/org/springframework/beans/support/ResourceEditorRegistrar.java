@@ -53,6 +53,8 @@ import org.springframework.util.ClassUtils;
  * creation within an {@link org.springframework.context.ApplicationContext})
  * with resource editors. Used by
  * {@link org.springframework.context.support.AbstractApplicationContext}.
+ *ResourceEditorRegistrar为PropertyEditorRegistrar的实现类。属性编辑器管理依赖PropertyEditorRegistry，
+ *所有资源属性编辑器，使用应用上下文资源编辑器解决相关属性（典型应用上下文中的bean的创建）。被抽象应用上下文使用。
  *
  * @author Juergen Hoeller
  * @author Chris Beams
@@ -117,6 +119,7 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 	 */
 	@Override
 	public void registerCustomEditors(PropertyEditorRegistry registry) {
+		//根据资源加载器和属性解决器，构造资源编辑器器
 		ResourceEditor baseEditor = new ResourceEditor(this.resourceLoader, this.propertyResolver);
 		doRegisterEditor(registry, Resource.class, baseEditor);
 		doRegisterEditor(registry, ContextResource.class, baseEditor);
@@ -129,7 +132,7 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 		doRegisterEditor(registry, Reader.class, new ReaderEditor(baseEditor));
 		doRegisterEditor(registry, URL.class, new URLEditor(baseEditor));
 
-		ClassLoader classLoader = this.resourceLoader.getClassLoader();
+		ClassLoader classLoader = this.resourceLoader.getClassLoader();//获取资源加载器的类加载器
 		doRegisterEditor(registry, URI.class, new URIEditor(classLoader));
 		doRegisterEditor(registry, Class.class, new ClassEditor(classLoader));
 		doRegisterEditor(registry, Class[].class, new ClassArrayEditor(classLoader));
@@ -143,9 +146,11 @@ public class ResourceEditorRegistrar implements PropertyEditorRegistrar {
 	/**
 	 * Override default editor, if possible (since that's what we really mean to do here);
 	 * otherwise register as a custom editor.
+	 * 重写默认的编辑器，否则注册为一个定制属性编辑器
 	 */
 	private void doRegisterEditor(PropertyEditorRegistry registry, Class<?> requiredType, PropertyEditor editor) {
 		if (registry instanceof PropertyEditorRegistrySupport) {
+			//如果属性编辑注册器为PropertyEditorRegistrySupport，为重写默认的属性编辑器
 			((PropertyEditorRegistrySupport) registry).overrideDefaultEditor(requiredType, editor);
 		}
 		else {

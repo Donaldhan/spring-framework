@@ -78,7 +78,8 @@ import org.springframework.util.ClassUtils;
  * Base implementation of the {@link PropertyEditorRegistry} interface.
  * Provides management of default editors and custom editors.
  * Mainly serves as base class for {@link BeanWrapperImpl}.
- *
+ *PropertyEditorRegistrySupport为PropertyEditorRegistry接口的基础实现类，
+ *用于管理默认属性编辑器和定制的属性编辑器。主要作为{@link BeanWrapperImpl}的基础服务类。
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @since 1.2.6
@@ -478,13 +479,15 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 	/**
 	 * Guess the property type of the specified property from the registered
 	 * custom editors (provided that they were registered for a specific type).
+	 * 从注册器中获取给定属性的属性类型。
 	 * @param propertyName the name of the property
 	 * @return the property type, or {@code null} if not determinable
 	 */
 	protected Class<?> guessPropertyTypeFromEditors(String propertyName) {
 		if (this.customEditorsForPath != null) {
+			//从属性路径，CustomEditorHolder（属性类型->属性编辑器）缓存中获取对应的属性类
 			CustomEditorHolder editorHolder = this.customEditorsForPath.get(propertyName);
-			if (editorHolder == null) {
+			if (editorHolder == null) {//如何属性类型为空，则获取嵌入属性名的属性类型
 				List<String> strippedPaths = new LinkedList<String>();
 				addStrippedPropertyPaths(strippedPaths, "", propertyName);
 				for (Iterator<String> it = strippedPaths.iterator(); it.hasNext() && editorHolder == null;) {
@@ -501,12 +504,14 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 
 	/**
 	 * Copy the custom editors registered in this instance to the given target registry.
+	 * 拷贝当前注册器实例内部的定制属性编辑器到给定的目标属性编辑注册器。
 	 * @param target the target registry to copy to
 	 * @param nestedProperty the nested property path of the target registry, if any.
 	 * If this is non-null, only editors registered for a path below this nested property
 	 * will be copied. If this is null, all editors will be copied.
 	 */
 	protected void copyCustomEditorsTo(PropertyEditorRegistry target, String nestedProperty) {
+		//获取实际属性名
 		String actualPropertyName =
 				(nestedProperty != null ? PropertyAccessorUtils.getPropertyName(nestedProperty) : null);
 		if (this.customEditors != null) {
@@ -521,8 +526,8 @@ public class PropertyEditorRegistrySupport implements PropertyEditorRegistry {
 				if (nestedProperty != null) {
 					int pos = PropertyAccessorUtils.getFirstNestedPropertySeparatorIndex(editorPath);
 					if (pos != -1) {
-						String editorNestedProperty = editorPath.substring(0, pos);
-						String editorNestedPath = editorPath.substring(pos + 1);
+						String editorNestedProperty = editorPath.substring(0, pos);//获取嵌入式属性名
+						String editorNestedPath = editorPath.substring(pos + 1);//嵌入式属性路径
 						if (editorNestedProperty.equals(nestedProperty) || editorNestedProperty.equals(actualPropertyName)) {
 							target.registerCustomEditor(
 									editorHolder.getRegisteredType(), editorNestedPath, editorHolder.getPropertyEditor());

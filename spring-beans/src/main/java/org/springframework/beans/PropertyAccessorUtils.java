@@ -27,6 +27,7 @@ public abstract class PropertyAccessorUtils {
 
 	/**
 	 * Return the actual property name for the given property path.
+	 * 获取给定属性路径的实际属性名
 	 * @param propertyPath the property path to determine the property name
 	 * for (can include property keys, for example for specifying a map entry)
 	 * @return the actual property name, without any key elements
@@ -59,6 +60,7 @@ public abstract class PropertyAccessorUtils {
 	/**
 	 * Determine the first nested property separator in the
 	 * given property path, ignoring dots in keys (like "map[my.key]").
+	 * 判断给定属性路径中第一个嵌入式输入分割符
 	 * @param propertyPath the property path to check
 	 * @return the index of the nested property separator, or -1 if none
 	 */
@@ -79,8 +81,10 @@ public abstract class PropertyAccessorUtils {
 	/**
 	 * Determine the first (or last) nested property separator in the
 	 * given property path, ignoring dots in keys (like "map[my.key]").
+	 * 判断给定属性路径中第一个或最后一个嵌入式输入分割符
 	 * @param propertyPath the property path to check
 	 * @param last whether to return the last separator rather than the first
+	 * 是第一个分割符位置，还是最后一个
 	 * @return the index of the nested property separator, or -1 if none
 	 */
 	private static int getNestedPropertySeparatorIndex(String propertyPath, boolean last) {
