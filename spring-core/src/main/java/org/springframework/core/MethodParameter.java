@@ -33,7 +33,7 @@ import org.springframework.util.ClassUtils;
  * Helper class that encapsulates the specification of a method parameter, i.e. a {@link Method}
  * or {@link Constructor} plus a parameter index and a nested type index for a declared generic
  * type. Useful as a specification object to pass along.
- *
+ * 封装方法{@link Method}或构造{@link Constructor}的参数，包括参数索引
  * <p>As of 4.2, there is a {@link org.springframework.core.annotation.SynthesizingMethodParameter}
  * subclass available which synthesizes annotations with attribute aliases. That subclass is used
  * for web and message endpoint processing, in particular.
@@ -52,6 +52,7 @@ public class MethodParameter {
 	static {
 		Class<?> clazz;
 		try {
+			//加载java.util.Optional类
 			clazz = ClassUtils.forName("java.util.Optional", MethodParameter.class.getClassLoader());
 		}
 		catch (ClassNotFoundException ex) {
@@ -62,11 +63,11 @@ public class MethodParameter {
 	}
 
 
-	private final Method method;
+	private final Method method;//方法
 
-	private final Constructor<?> constructor;
+	private final Constructor<?> constructor;//构造方法
 
-	private final int parameterIndex;
+	private final int parameterIndex;//参数索引
 
 	private int nestingLevel = 1;
 
@@ -75,17 +76,17 @@ public class MethodParameter {
 
 	private volatile Class<?> containingClass;
 
-	private volatile Class<?> parameterType;
+	private volatile Class<?> parameterType;//参数类型
 
-	private volatile Type genericParameterType;
+	private volatile Type genericParameterType;//泛型参数类型
 
-	private volatile Annotation[] parameterAnnotations;
+	private volatile Annotation[] parameterAnnotations;//参数注解
 
 	private volatile ParameterNameDiscoverer parameterNameDiscoverer;
 
-	private volatile String parameterName;
+	private volatile String parameterName;//参数名
 
-	private volatile MethodParameter nestedMethodParameter;
+	private volatile MethodParameter nestedMethodParameter;//嵌入方法参数
 
 
 	/**
