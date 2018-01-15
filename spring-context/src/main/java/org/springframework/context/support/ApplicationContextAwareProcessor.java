@@ -85,6 +85,7 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 		}
 
 		if (acc != null) {
+			//如果访问控制上下文不为空，则在当前访问控制权限下，初始化Aware相关的接口
 			AccessController.doPrivileged(new PrivilegedAction<Object>() {
 				@Override
 				public Object run() {
@@ -101,6 +102,7 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 	}
 
 	/**
+	 * 设Aware接口bean实例的相关Aware类型，比如环境，资源加载器，应用事件发布器，消息源，应用上下文
 	 * @param bean
 	 */
 	private void invokeAwareInterfaces(Object bean) {

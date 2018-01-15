@@ -47,11 +47,20 @@ public class BeanExpressionContext {
 	}
 
 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public boolean containsObject(String key) {
 		return (this.beanFactory.containsBean(key) ||
 				(this.scope != null && this.scope.resolveContextualObject(key) != null));
 	}
 
+	/**
+	 * @param key
+	 * @return
+	 */
 	public Object getObject(String key) {
 		if (this.beanFactory.containsBean(key)) {
 			return this.beanFactory.getBean(key);
