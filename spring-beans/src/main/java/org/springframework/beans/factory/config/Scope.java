@@ -62,12 +62,16 @@ public interface Scope {
 	 * Return the object with the given name from the underlying scope,
 	 * {@link org.springframework.beans.factory.ObjectFactory#getObject() creating it}
 	 * if not found in the underlying storage mechanism.
+	 * 如果在底层存储机制的作用域scope中没有发现给定name对应的对象实例，则使用#getObject()
+	 * 方法创建一个对象实例。
 	 * <p>This is the central operation of a Scope, and the only operation
 	 * that is absolutely required.
+	 * 这是作用与的核心操作，这个操作时绝对必须的。
 	 * @param name the name of the object to retrieve
 	 * @param objectFactory the {@link ObjectFactory} to use to create the scoped
 	 * object if it is not present in the underlying storage mechanism
 	 * @return the desired object (never {@code null})
+	 * 绝对不会返回null
 	 * @throws IllegalStateException if the underlying scope is not currently active
 	 */
 	Object get(String name, ObjectFactory<?> objectFactory);
@@ -123,7 +127,9 @@ public interface Scope {
 
 	/**
 	 * Resolve the contextual object for the given key, if any.
+	 * 如果有，则解决给定key的上下文对象
 	 * E.g. the HttpServletRequest object for key "request".
+	 * 比如"request"的HttpServletRequest对象
 	 * @param key the contextual key
 	 * @return the corresponding object, or {@code null} if none found
 	 * @throws IllegalStateException if the underlying scope is not currently active
@@ -132,15 +138,20 @@ public interface Scope {
 
 	/**
 	 * Return the <em>conversation ID</em> for the current underlying scope, if any.
+	 * 如果有，则返回当前底层作用域的会话ID。
 	 * <p>The exact meaning of the conversation ID depends on the underlying
 	 * storage mechanism. In the case of session-scoped objects, the
 	 * conversation ID would typically be equal to (or derived from) the
 	 * {@link javax.servlet.http.HttpSession#getId() session ID}; in the
 	 * case of a custom conversation that sits within the overall session,
 	 * the specific ID for the current conversation would be appropriate.
+	 * 会话id的具体含义依赖于底层的存储机制。在会话作用域对象的场景下,会话id将会典型地
+	 * 等于{@link javax.servlet.http.HttpSession#getId() session ID}；在一般的
+	 * 全局会话场景下，将会是当前会话的特殊id。
 	 * <p><b>Note: This is an optional operation.</b> It is perfectly valid to
 	 * return {@code null} in an implementation of this method if the
 	 * underlying storage mechanism has no obvious candidate for such an ID.
+	 * 注意：此操作是一个可选操作。如果底层存储机制没有明确的id候选者，实现返回null也是有效的。
 	 * @return the conversation ID, or {@code null} if there is no
 	 * conversation ID for the current scope
 	 * @throws IllegalStateException if the underlying scope is not currently active

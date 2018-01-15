@@ -22,10 +22,10 @@ import org.springframework.util.StringValueResolver;
 /**
  * Interface to be implemented by any object that wishes to be notified of a
  * <b>StringValueResolver</b> for the <b> resolution of embedded definition values.
- *
+ * 任何希望使用StringValueResolver作为嵌入定义属性值解决方案的对象，需要实现的接口。
  * <p>This is an alternative to a full ConfigurableBeanFactory dependency via the
  * ApplicationContextAware/BeanFactoryAware interfaces.
- *
+ *是通过ApplicationContextAware/BeanFactoryAware接口获取可配置bean工厂依赖的另外一种替代方案。
  * @author Juergen Hoeller
  * @author Chris Beams
  * @since 3.0.3

@@ -59,9 +59,9 @@ import org.springframework.util.StringValueResolver;
  */
 class ApplicationContextAwareProcessor implements BeanPostProcessor {
 
-	private final ConfigurableApplicationContext applicationContext;
+	private final ConfigurableApplicationContext applicationContext;//可配置应用上下文
 
-	private final StringValueResolver embeddedValueResolver;
+	private final StringValueResolver embeddedValueResolver;//嵌入式字符串属性解决器
 
 
 	/**
@@ -76,7 +76,7 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 	@Override
 	public Object postProcessBeforeInitialization(final Object bean, String beanName) throws BeansException {
 		AccessControlContext acc = null;
-
+        //如果系统安全管理器不为空，且bean为Aware的子接口EnvironmentAware等类型，则获取上下文bean工厂访问控制上下文
 		if (System.getSecurityManager() != null &&
 				(bean instanceof EnvironmentAware || bean instanceof EmbeddedValueResolverAware ||
 						bean instanceof ResourceLoaderAware || bean instanceof ApplicationEventPublisherAware ||
@@ -100,6 +100,9 @@ class ApplicationContextAwareProcessor implements BeanPostProcessor {
 		return bean;
 	}
 
+	/**
+	 * @param bean
+	 */
 	private void invokeAwareInterfaces(Object bean) {
 		if (bean instanceof Aware) {
 			if (bean instanceof EnvironmentAware) {
