@@ -25,7 +25,7 @@ import java.util.TreeMap;
 /**
  * Property editor for Maps, converting any source Map
  * to a given target Map type.
- *
+ *Map属性编辑器，转换任何源Map为给定的类型Map
  * @author Juergen Hoeller
  * @since 2.0.1
  * @see java.util.Map
@@ -95,17 +95,18 @@ public class CustomMapEditor extends PropertyEditorSupport {
 
 	/**
 	 * Convert the given value to a Map of the target type.
+	 * 转换给定的值为给定的目标类型的Map
 	 */
 	@Override
 	public void setValue(Object value) {
-		if (value == null && this.nullAsEmptyMap) {
+		if (value == null && this.nullAsEmptyMap) {//为空，创建空Map
 			super.setValue(createMap(this.mapType, 0));
 		}
 		else if (value == null || (this.mapType.isInstance(value) && !alwaysCreateNewMap())) {
 			// Use the source value as-is, as it matches the target type.
 			super.setValue(value);
 		}
-		else if (value instanceof Map) {
+		else if (value instanceof Map) {//Map
 			// Convert Map elements.
 			Map<?, ?> source = (Map<?, ?>) value;
 			Map<Object, Object> target = createMap(this.mapType, source.size());
@@ -128,7 +129,7 @@ public class CustomMapEditor extends PropertyEditorSupport {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Map<Object, Object> createMap(Class<? extends Map> mapType, int initialCapacity) {
-		if (!mapType.isInterface()) {
+		if (!mapType.isInterface()) {//非接口，则创建Map
 			try {
 				return mapType.newInstance();
 			}
@@ -137,19 +138,21 @@ public class CustomMapEditor extends PropertyEditorSupport {
 						"Could not instantiate map class: " + mapType.getName(), ex);
 			}
 		}
-		else if (SortedMap.class == mapType) {
+		else if (SortedMap.class == mapType) {//TreeMap
 			return new TreeMap<Object, Object>();
 		}
 		else {
-			return new LinkedHashMap<Object, Object>(initialCapacity);
+			return new LinkedHashMap<Object, Object>(initialCapacity);//LinkedHashMap
 		}
 	}
 
 	/**
 	 * Return whether to always create a new Map,
 	 * even if the type of the passed-in Map already matches.
+	 * 即使目标Map类型已经匹配，是否总是创建一个新的Map
 	 * <p>Default is "false"; can be overridden to enforce creation of a
 	 * new Map, for example to convert elements in any case.
+	 * 默认为false：可以重写，强制创建一个新的Map，比如：转换Map中的元素。
 	 * @see #convertKey
 	 * @see #convertValue
 	 */
@@ -159,6 +162,7 @@ public class CustomMapEditor extends PropertyEditorSupport {
 
 	/**
 	 * Hook to convert each encountered Map key.
+	 * 转换Map键Hook。默认实现返回原始Key
 	 * The default implementation simply returns the passed-in key as-is.
 	 * <p>Can be overridden to perform conversion of certain keys,
 	 * for example from String to Integer.
@@ -176,6 +180,7 @@ public class CustomMapEditor extends PropertyEditorSupport {
 
 	/**
 	 * Hook to convert each encountered Map value.
+	 * 转换Map值Hook。默认实现返回原始值
 	 * The default implementation simply returns the passed-in value as-is.
 	 * <p>Can be overridden to perform conversion of certain values,
 	 * for example from String to Integer.

@@ -27,12 +27,14 @@ import org.springframework.util.StringUtils;
  * BigInteger, Float, Double, BigDecimal. Can use a given NumberFormat for
  * (locale-specific) parsing and rendering, or alternatively the default
  * {@code decode} / {@code valueOf} / {@code toString} methods.
- *
+ *数字类型的属性编辑器，比如Short, Integer, Long,
+ * BigInteger, Float, Double, BigDecimal。用给定的NumberFormat格式化或渲染或解析给定的属性值。
  * <p>This is not meant to be used as system PropertyEditor but rather
  * as locale-specific number editor within custom controller code,
  * parsing user-entered number strings into Number properties of beans
  * and rendering them in the UI form.
- *
+ * 此编辑器不意味着为属性编辑器，而用于解析控制层的代码中的bean属性中的数字属性，并渲染数字到表单UI中。
+ * 在Web MVC代码中，编辑器典型的是使用{@code binder.registerCustomEditor}注册编辑器
  * <p>In web MVC code, this editor will typically be registered with
  * {@code binder.registerCustomEditor} calls.
  *
@@ -46,7 +48,7 @@ public class CustomNumberEditor extends PropertyEditorSupport {
 
 	private final Class<? extends Number> numberClass;
 
-	private final NumberFormat numberFormat;
+	private final NumberFormat numberFormat;//数字格式
 
 	private final boolean allowEmpty;
 

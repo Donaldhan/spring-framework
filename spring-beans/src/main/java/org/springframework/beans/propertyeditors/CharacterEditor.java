@@ -43,11 +43,13 @@ public class CharacterEditor extends PropertyEditorSupport {
 
 	/**
 	 * The prefix that identifies a string as being a Unicode character sequence.
+	 * Unicode字符序列前缀
 	 */
 	private static final String UNICODE_PREFIX = "\\u";
 
 	/**
 	 * The length of a Unicode character sequence.
+	 * Unicode字符序列长度
 	 */
 	private static final int UNICODE_LENGTH = 6;
 

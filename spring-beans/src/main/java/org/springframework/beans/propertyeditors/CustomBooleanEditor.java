@@ -22,15 +22,16 @@ import org.springframework.util.StringUtils;
 
 /**
  * Property editor for Boolean/boolean properties.
- *
+ *Boolean/boolean属性编辑器
  * <p>This is not meant to be used as system PropertyEditor but rather as
  * locale-specific Boolean editor within custom controller code, to parse
  * UI-caused boolean strings into boolean properties of beans and check
  * them in the UI form.
- *
+ *此编辑器不是作为系统属性编辑器，而是controller代码层的布尔值编辑器，用于解析UI中的bool字符串为Bean的布尔值和
+ *表单UI中属性
  * <p>In web MVC code, this editor will typically be registered with
  * {@code binder.registerCustomEditor} calls.
- *
+ * 在Web MVC代码中，编辑器典型的是使用{@code binder.registerCustomEditor}注册编辑器
  * @author Juergen Hoeller
  * @since 10.06.2003
  * @see org.springframework.validation.DataBinder#registerCustomEditor

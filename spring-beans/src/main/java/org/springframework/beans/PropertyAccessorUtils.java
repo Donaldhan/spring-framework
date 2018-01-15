@@ -111,12 +111,13 @@ public abstract class PropertyAccessorUtils {
 	/**
 	 * Determine whether the given registered path matches the given property path,
 	 * either indicating the property itself or an indexed element of the property.
+	 * 判断给定属性路径是否匹配注册属性路径，预示者属性自身或其索引属性。
 	 * @param propertyPath the property path (typically without index)
 	 * @param registeredPath the registered path (potentially with index)
 	 * @return whether the paths match
 	 */
 	public static boolean matchesProperty(String registeredPath, String propertyPath) {
-		if (!registeredPath.startsWith(propertyPath)) {
+		if (!registeredPath.startsWith(propertyPath)) {//注册路径以属性路径开头，则匹配
 			return false;
 		}
 		if (registeredPath.length() == propertyPath.length()) {
