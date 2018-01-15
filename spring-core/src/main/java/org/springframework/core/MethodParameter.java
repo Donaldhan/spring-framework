@@ -33,11 +33,11 @@ import org.springframework.util.ClassUtils;
  * Helper class that encapsulates the specification of a method parameter, i.e. a {@link Method}
  * or {@link Constructor} plus a parameter index and a nested type index for a declared generic
  * type. Useful as a specification object to pass along.
- * 封装方法{@link Method}或构造{@link Constructor}的参数，包括参数索引
+ * 封装方法{@link Method}或构造{@link Constructor}的参数，包括参数索引,声明泛型类型的嵌入类型索引。
  * <p>As of 4.2, there is a {@link org.springframework.core.annotation.SynthesizingMethodParameter}
  * subclass available which synthesizes annotations with attribute aliases. That subclass is used
  * for web and message endpoint processing, in particular.
- *
+ * 从Spring4.2开始，子类SynthesizingMethodParameter可以综合属性别名的注解。一般用于web和消息终端的处理
  * @author Juergen Hoeller
  * @author Rob Harrop
  * @author Andy Clement
