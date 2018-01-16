@@ -19,7 +19,7 @@ package org.springframework.expression;
 /**
  * Instances of a type comparator should be able to compare pairs of objects for equality.
  * The specification of the return value is the same as for {@link java.lang.Comparable}.
- *
+ *类型比较器实例，应该可以比较对象pair的相等性。返回值与{@link java.lang.Comparable}相同。
  * @author Andy Clement
  * @since 3.0
  * @see java.lang.Comparable
@@ -28,6 +28,7 @@ public interface TypeComparator {
 
 	/**
 	 * Return {@code true} if the comparator can compare these two objects.
+	 * 如果两个对象可比较，则返回true
 	 * @param firstObject the first object
 	 * @param secondObject the second object
 	 * @return {@code true} if the comparator can compare these objects
@@ -36,6 +37,7 @@ public interface TypeComparator {
 
 	/**
 	 * Compare two given objects.
+	 * 比较两个对象。
 	 * @param firstObject the first object
 	 * @param secondObject the second object
 	 * @return 0 if they are equal, <0 if the first is smaller than the second,

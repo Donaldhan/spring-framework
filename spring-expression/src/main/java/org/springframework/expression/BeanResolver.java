@@ -21,7 +21,8 @@ package org.springframework.expression;
  * and will kick in for {@code @myBeanName} and {@code &myBeanName} expressions.
  * The <tt>&</tt> variant syntax allows access to the factory bean where
  * relevant.
- *
+ *BeanResolver用于解决评估上下文中的给定name对应的bean。将会区别{@code @myBeanName} and {@code &myBeanName}表达式
+ *对应的bean。&开头的name bean，允许访问工厂bean。
  * @author Andy Clement
  * @since 3.0.3
  */
@@ -30,6 +31,7 @@ public interface BeanResolver {
 	/**
 	 * Look up the named bean and return it. If attempting to access a factory
 	 * bean the name will have a <tt>&</tt> prefix.
+	 * 寻找name对应的bean，并返回。如果尝试访问一个工厂bean，则name有一个&前缀。
 	 * @param context the current evaluation context
 	 * @param beanName the name of the bean to lookup
 	 * @return an object representing the bean

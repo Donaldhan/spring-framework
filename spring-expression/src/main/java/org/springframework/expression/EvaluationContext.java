@@ -61,6 +61,7 @@ public interface EvaluationContext {
 	/**
 	 * Return a type locator that can be used to find types, either by short or
 	 * fully qualified name.
+	 * 获取类型定位器，可以通过短名或全限定名。
 	 */
 	TypeLocator getTypeLocator();
 
@@ -79,6 +80,7 @@ public interface EvaluationContext {
 	/**
 	 * Return an operator overloader that may support mathematical operations
 	 * between more than the standard set of types.
+	 * 获取支持双目数学运算的操作符处理器。
 	 */
 	OperatorOverloader getOperatorOverloader();
 
