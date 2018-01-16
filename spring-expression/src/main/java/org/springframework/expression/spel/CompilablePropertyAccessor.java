@@ -32,17 +32,20 @@ public interface CompilablePropertyAccessor extends PropertyAccessor, Opcodes {
 
 	/**
 	 * Return {@code true} if this property accessor is currently suitable for compilation.
+	 * 判断当前属性访问器是否适合编译
 	 */
 	boolean isCompilable();
 
 	/**
 	 * Return the type of the accessed property - may only be known once an access has occurred.
+	 * 返回访问的属性类型，一旦访问发生，就可以直到。
 	 */
 	Class<?> getPropertyType();
 
 	/**
 	 * Generate the bytecode the performs the access operation into the specified MethodVisitor
 	 * using context information from the codeflow where necessary.
+	 * 
 	 * @param propertyName the name of the property
 	 * @param mv the Asm method visitor into which code should be generated
 	 * @param cf the current state of the expression compiler

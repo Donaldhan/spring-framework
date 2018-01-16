@@ -28,7 +28,7 @@ import org.springframework.util.Assert;
 /**
  * Default implementation of the {@link TypeConverter} interface,
  * delegating to a core Spring {@link ConversionService}.
- *
+ *类型转化器的默认实现。代理Spring核心转换服务{@link ConversionService}.
  * @author Juergen Hoeller
  * @author Andy Clement
  * @since 3.0
@@ -36,7 +36,7 @@ import org.springframework.util.Assert;
  */
 public class StandardTypeConverter implements TypeConverter {
 
-	private final ConversionService conversionService;
+	private final ConversionService conversionService;//转换服务，默认为DefaultConversionService
 
 
 	/**

@@ -25,7 +25,8 @@ import org.springframework.expression.TypedValue;
 /**
  * EL property accessor that knows how to traverse the beans and contextual objects
  * of a Spring {@link org.springframework.beans.factory.config.BeanExpressionContext}.
- *
+ *可以检索Spring {@link org.springframework.beans.factory.config.BeanExpressionContext}中的
+ *bean和上下文对象的EL属性访问器。
  * @author Juergen Hoeller
  * @author Andy Clement
  * @since 3.0

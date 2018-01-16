@@ -25,7 +25,7 @@ import org.springframework.expression.TypedValue;
 /**
  * Read-only EL property accessor that knows how to retrieve keys
  * of a Spring {@link Environment} instance.
- *
+ *只读的EL属性访问器，可从Spring的{@link Environment}属性中检索属性值。
  * @author Chris Beams
  * @since 3.1
  */

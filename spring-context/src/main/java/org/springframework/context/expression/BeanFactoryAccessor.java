@@ -25,7 +25,7 @@ import org.springframework.expression.TypedValue;
 /**
  * EL property accessor that knows how to traverse the beans of a
  * Spring {@link org.springframework.beans.factory.BeanFactory}.
- *
+ *可以访问bean工厂内部bean的属性访问方法
  * @author Juergen Hoeller
  * @author Andy Clement
  * @since 3.0
