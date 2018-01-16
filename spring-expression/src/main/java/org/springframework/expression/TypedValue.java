@@ -23,7 +23,8 @@ import org.springframework.util.ObjectUtils;
  * Encapsulates an object and a {@link TypeDescriptor} that describes it.
  * The type descriptor can contain generic declarations that would not
  * be accessible through a simple {@code getClass()} call on the object.
- *
+ *封装了对象和其类型描述。类型描述可以包含泛型声明，但不能够通过{@code getClass()}方法调用
+ *访问。
  * @author Andy Clement
  * @author Juergen Hoeller
  * @since 3.0
@@ -41,6 +42,7 @@ public class TypedValue {
 	/**
 	 * Create a {@link TypedValue} for a simple object. The {@link TypeDescriptor}
 	 * is inferred from the object, so no generic declarations are preserved.
+	 * 创建一个简单对象的类型值{@link TypedValue}。类型描述为对象的类型描述，所以没有泛型声明被保留。
 	 * @param value the object value
 	 */
 	public TypedValue(Object value) {

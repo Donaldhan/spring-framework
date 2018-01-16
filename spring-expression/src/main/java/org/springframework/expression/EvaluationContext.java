@@ -36,21 +36,25 @@ public interface EvaluationContext {
 	 * Return the default root context object against which unqualified
 	 * properties/methods/etc should be resolved. This can be overridden
 	 * when evaluating an expression.
+	 * 返回解决非限制属性、方法等依赖的默认根上下文对象。当评估表达式时，可以被重写。
 	 */
 	TypedValue getRootObject();
 
 	/**
 	 * Return a list of resolvers that will be asked in turn to locate a constructor.
+	 * 返回定位构造解决器
 	 */
 	List<ConstructorResolver> getConstructorResolvers();
 
 	/**
 	 * Return a list of resolvers that will be asked in turn to locate a method.
+	 * 返回定位方法 解决器
 	 */
 	List<MethodResolver> getMethodResolvers();
 
 	/**
 	 * Return a list of accessors that will be asked in turn to read/write a property.
+	 * 返回读写属性的所有属性访问器
 	 */
 	List<PropertyAccessor> getPropertyAccessors();
 
@@ -62,11 +66,13 @@ public interface EvaluationContext {
 
 	/**
 	 * Return a type converter that can convert (or coerce) a value from one type to another.
+	 * 返回可以从一个类型转换为另一个类型值的类型转换器
 	 */
 	TypeConverter getTypeConverter();
 
 	/**
 	 * Return a type comparator for comparing pairs of objects for equality.
+	 * 返回类型比较器
 	 */
 	TypeComparator getTypeComparator();
 
@@ -78,11 +84,13 @@ public interface EvaluationContext {
 
 	/**
 	 * Return a bean resolver that can look up beans by name.
+	 * 返回依赖bean的name找到bean的解决器
 	 */
 	BeanResolver getBeanResolver();
 
 	/**
 	 * Set a named variable within this evaluation context to a specified value.
+	 * 设置评估上下文中name变量的值为value
 	 * @param name variable to set
 	 * @param value value to be placed in the variable
 	 */
@@ -90,6 +98,7 @@ public interface EvaluationContext {
 
 	/**
 	 * Look up a named variable within this evaluation context.
+	 * 查找评估上下文中的变量name对应的值
 	 * @param name variable to lookup
 	 * @return the value of the variable
 	 */
