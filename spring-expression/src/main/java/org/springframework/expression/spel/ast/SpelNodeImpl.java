@@ -37,7 +37,7 @@ import org.springframework.util.ObjectUtils;
 /**
  * The common supertype of all AST nodes in a parsed Spring Expression Language
  * format expression.
- *
+ *抽象语法树中的所有节点的超类，用于解析Spring表达式语言格式表达式。
  * @author Andy Clement
  * @since 3.0
  */
