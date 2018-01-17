@@ -27,7 +27,8 @@ import org.springframework.expression.TypedValue;
  * string literal. It is used with CompositeStringExpression when representing a template
  * expression which is made up of pieces - some being real expressions to be handled by
  * an EL implementation like SpEL, and some being just textual elements.
- *
+ *简单得写死的表达式接口实现，表示一个静态文本表达式。与CompositeStringExpression一起使用，用于表示有Spring表达式
+ *和文本元素组成的模板。
  * @author Andy Clement
  * @author Juergen Hoeller
  * @since 3.0

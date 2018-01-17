@@ -24,14 +24,14 @@ import org.springframework.util.Assert;
 
 /**
  * SpEL parser. Instances are reusable and thread-safe.
- *
+ *SpEL解析器，实例可以重用，且线程安全。
  * @author Andy Clement
  * @author Juergen Hoeller
  * @since 3.0
  */
 public class SpelExpressionParser extends TemplateAwareExpressionParser {
 
-	private final SpelParserConfiguration configuration;
+	private final SpelParserConfiguration configuration;//解析器配置
 
 
 	/**
@@ -51,6 +51,12 @@ public class SpelExpressionParser extends TemplateAwareExpressionParser {
 	}
 
 
+	/**
+	 * 解析原始表达式
+	 * @param expressionString
+	 * @return
+	 * @throws ParseException
+	 */
 	public SpelExpression parseRaw(String expressionString) throws ParseException {
 		return doParseExpression(expressionString, null);
 	}

@@ -20,7 +20,7 @@ import org.springframework.core.SpringProperties;
 
 /**
  * Configuration object for the SpEL expression parser.
- *
+ *Spring SpEL表达式解析器配置对象
  * @author Juergen Hoeller
  * @author Phillip Webb
  * @author Andy Clement
@@ -29,7 +29,7 @@ import org.springframework.core.SpringProperties;
  */
 public class SpelParserConfiguration {
 
-	private static final SpelCompilerMode defaultCompilerMode;
+	private static final SpelCompilerMode defaultCompilerMode;//表达式编译模式，默认为解释模式
 
 	static {
 		String compilerMode = SpringProperties.getProperty("spring.expression.compiler.mode");
@@ -38,15 +38,15 @@ public class SpelParserConfiguration {
 	}
 
 
-	private final SpelCompilerMode compilerMode;
+	private final SpelCompilerMode compilerMode;//表达式编译模式
 
-	private final ClassLoader compilerClassLoader;
+	private final ClassLoader compilerClassLoader;//编译器类加载器
 
-	private final boolean autoGrowNullReferences;
+	private final boolean autoGrowNullReferences;//是否允许空引用自动增长
 
-	private final boolean autoGrowCollections;
+	private final boolean autoGrowCollections;//是否允许集合自动增长
 
-	private final int maximumAutoGrowSize;
+	private final int maximumAutoGrowSize;//集合自动增长最大size
 
 
 	/**
@@ -88,10 +88,15 @@ public class SpelParserConfiguration {
 	/**
 	 * Create a new {@code SpelParserConfiguration} instance.
 	 * @param compilerMode the compiler mode that parsers using this configuration object should use
+	 * 解析器解析表达式使用的编译模式
 	 * @param compilerClassLoader the ClassLoader to use as the basis for expression compilation
+	 * 表达式编译的类加载器
 	 * @param autoGrowNullReferences if null references should automatically grow
+	 * null引用是否应该自动增长
 	 * @param autoGrowCollections if collections should automatically grow
+	 * 是否允许集合自动增长
 	 * @param maximumAutoGrowSize the maximum size that the collection can auto grow
+	 * 集合自动正常的最大size
 	 */
 	public SpelParserConfiguration(SpelCompilerMode compilerMode, ClassLoader compilerClassLoader,
 			boolean autoGrowNullReferences, boolean autoGrowCollections, int maximumAutoGrowSize) {

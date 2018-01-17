@@ -36,6 +36,7 @@ public abstract class ExpressionUtils {
 	 * Determines if there is a type converter available in the specified context and
 	 * attempts to use it to convert the supplied value to the specified type. Throws an
 	 * exception if conversion is not possible.
+	 * 如果上下文中的类型转换器可以使用，则尝试转化值为给定的类型。如果不能转换则抛出异常。
 	 * @param context the evaluation context that may define a type converter
 	 * @param typedValue the value to convert and a type descriptor describing it
 	 * @param targetType the type to attempt conversion to
