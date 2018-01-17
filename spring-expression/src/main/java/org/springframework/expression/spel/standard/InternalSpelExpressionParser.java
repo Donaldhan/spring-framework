@@ -77,7 +77,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * Hand-written SpEL parser. Instances are reusable but are not thread-safe.
- *
+ * 内部SpEL解析器，实例可以重用，但是非线程安全。
  * @author Andy Clement
  * @author Juergen Hoeller
  * @author Phillip Webb

@@ -37,6 +37,7 @@ package org.springframework.asm;
  * opcodes are therefore not defined in this interface. Likewise for LDC,
  * automatically replaced by LDC_W or LDC2_W when necessary, WIDE, GOTO_W and
  * JSR_W.
+ * 定义虚拟机操作码，访问标志，数组类型码。接口没有定义所有的虚拟机操作码，因为一些操作码自动处理。
  * 
  * @author Eric Bruneton
  * @author Eugene Kuleshov
@@ -48,7 +49,7 @@ public interface Opcodes {
     int ASM4 = 4 << 16 | 0 << 8 | 0;
     int ASM5 = 5 << 16 | 0 << 8 | 0;
 
-    // versions
+    // versions JDK虚拟机版本
 
     int V1_1 = 3 << 16 | 45;
     int V1_2 = 0 << 16 | 46;
@@ -59,7 +60,7 @@ public interface Opcodes {
     int V1_7 = 0 << 16 | 51;
     int V1_8 = 0 << 16 | 52;
 
-    // access flags
+    // access flags 访问标志
 
     int ACC_PUBLIC = 0x0001; // class, field, method
     int ACC_PRIVATE = 0x0002; // class, field, method
@@ -81,11 +82,11 @@ public interface Opcodes {
     int ACC_ENUM = 0x4000; // class(?) field inner
     int ACC_MANDATED = 0x8000; // parameter
 
-    // ASM specific pseudo access flags
+    // ASM specific pseudo access flags 为访问标志
 
     int ACC_DEPRECATED = 0x20000; // class, field, method
 
-    // types for NEWARRAY
+    // types for NEWARRAY 数组类型
 
     int T_BOOLEAN = 4;
     int T_CHAR = 5;
@@ -96,7 +97,7 @@ public interface Opcodes {
     int T_INT = 10;
     int T_LONG = 11;
 
-    // tags for Handle
+    // tags for Handle 操作标记
 
     int H_GETFIELD = 1;
     int H_GETSTATIC = 2;
@@ -158,7 +159,7 @@ public interface Opcodes {
     @SuppressWarnings("deprecation") Integer NULL = new Integer(5);
     @SuppressWarnings("deprecation") Integer UNINITIALIZED_THIS = new Integer(6);
 
-    // opcodes // visit method (- = idem)
+    // opcodes // visit method (- = idem)  操作码
 
     int NOP = 0; // visitInsn
     int ACONST_NULL = 1; // -
