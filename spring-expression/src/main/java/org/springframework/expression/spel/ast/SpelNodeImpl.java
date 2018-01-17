@@ -43,27 +43,38 @@ import org.springframework.util.ObjectUtils;
  */
 public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 
-	private static SpelNodeImpl[] NO_CHILDREN = new SpelNodeImpl[0];
+	private static SpelNodeImpl[] NO_CHILDREN = new SpelNodeImpl[0];//无孩子节点
 
 
-	protected int pos; // start = top 16bits, end = bottom 16bits
+	protected int pos; // start = top 16bits, end = bottom 16bits EL节点在语法树中的位置
 
-	protected SpelNodeImpl[] children = SpelNodeImpl.NO_CHILDREN;
+	protected SpelNodeImpl[] children = SpelNodeImpl.NO_CHILDREN;//还在节点
 
-	private SpelNodeImpl parent;
+	private SpelNodeImpl parent;//父节点
 
 	/**
 	 * Indicates the type descriptor for the result of this expression node.
+	 * 表示表达式节点的结果类型描述。
 	 * This is set as soon as it is known. For a literal node it is known immediately.
 	 * For a property access or method invocation it is known after one evaluation of
 	 * that node.
+	 * 在直到表达式节点类型的情况下，尽可能的设置结果类型描述。对于一个文字节点，可以立即知道。
+	 * 对于属性访问和方法调用，在节点评估后，就知道。
 	 * <p>The descriptor is like the bytecode form but is slightly easier to work with.
+	 * 此描述像字节码格式，但是容易使用。
 	 * It does not include the trailing semicolon (for non array reference types).
+	 * 不包括拖尾分号（非数组引用类型）
 	 * Some examples: Ljava/lang/String, I, [I
+	 * 比如：Ljava/lang/String, I, [I
      */
 	protected volatile String exitTypeDescriptor;
 
 
+	/**
+	 * 构造节点
+	 * @param pos 节点在抽象语法树中的位置
+	 * @param operands 孩子节点
+	 */
 	public SpelNodeImpl(int pos, SpelNodeImpl... operands) {
 		this.pos = pos;
 		// pos combines start and end so can never be zero because tokens cannot be zero length
@@ -92,6 +103,7 @@ public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 	}
 
 	/**
+	 * 如果兄弟节点的类型为给定的类型，则返回true
      * @return true if the next child is one of the specified classes
      */
 	protected boolean nextChildIs(Class<?>... clazzes) {
@@ -181,6 +193,11 @@ public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 		return (this.pos & 0xffff);
 	}
 
+	/**
+	 * @param state
+	 * @return
+	 * @throws EvaluationException
+	 */
 	protected ValueRef getValueRef(ExpressionState state) throws EvaluationException {
 		throw new SpelEvaluationException(this.pos, SpelMessage.NOT_ASSIGNABLE, toStringAST());
 	}
@@ -189,6 +206,8 @@ public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 	 * Check whether a node can be compiled to bytecode. The reasoning in each node may
 	 * be different but will typically involve checking whether the exit type descriptor
 	 * of the node is known and any relevant child nodes are compilable.
+	 * 检查一个节点是否可以编译为字节码。由于每个节点可能不同的缘故，但是可以检查节点的结果类型描述
+	 * 和任何相关的孩子节点是否可以编译。
 	 * @return {@code true} if this node can be compiled to bytecode
 	 */
 	public boolean isCompilable() {
@@ -200,6 +219,8 @@ public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 	 * the current expression being compiled is available in the codeflow object. For
 	 * example it will include information about the type of the object currently
 	 * on the stack.
+	 * 生成节点的字节码到提供的MethodVisitor。当前表达式上下文在codeflow对象中时使用。
+	 * 比如，包含当前对象的类型信息。
 	 * @param mv the ASM MethodVisitor into which code should be generated
 	 * @param cf a context object with info about what is on the stack
 	 */
@@ -211,6 +232,12 @@ public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 		return this.exitTypeDescriptor;
 	}
 
+	/**
+	 * 获取表达式内部的值
+	 * @param expressionState
+	 * @return
+	 * @throws EvaluationException
+	 */
 	public abstract TypedValue getValueInternal(ExpressionState expressionState) throws EvaluationException;
 
 	

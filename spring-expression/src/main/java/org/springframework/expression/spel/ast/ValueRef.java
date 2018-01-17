@@ -27,7 +27,7 @@ import org.springframework.expression.spel.SpelMessage;
  * value reference for 'list[index++]' it would be necessary to evaluate list[index++]
  * twice (once to get the value, once to determine where the value goes) and that would
  * double increment index.
- *
+ *表示一个值引用。可以set或get引用的值。
  * @author Andy Clement
  * @since 3.2
  */
@@ -36,6 +36,7 @@ public interface ValueRef {
 	/**
 	 * Returns the value this ValueRef points to, it should not require expression
 	 * component re-evaluation.
+	 * 值应用指向的类型值，表达式组件不需要重新评估
 	 * @return the value
 	 */
 	TypedValue getValue();
@@ -43,12 +44,14 @@ public interface ValueRef {
 	/**
 	 * Sets the value this ValueRef points to, it should not require expression component
 	 * re-evaluation.
+	 * 设置值，指向的值引用，表达式组件不需要重新评估
 	 * @param newValue the new value
 	 */
 	void setValue(Object newValue);
 
 	/**
 	 * Indicates whether calling setValue(Object) is supported.
+	 * 判断设置方法是否支持
 	 * @return true if setValue() is supported for this value reference.
 	 */
 	boolean isWritable();
@@ -56,6 +59,7 @@ public interface ValueRef {
 
 	/**
 	 * A ValueRef for the null value.
+	 * 空值引用
 	 */
 	static class NullValueRef implements ValueRef {
 
@@ -83,6 +87,7 @@ public interface ValueRef {
 
 	/**
 	 * A ValueRef holder for a single value, which cannot be set.
+	 * 单个值的值引用holder，不能设值
 	 */
 	static class TypedValueHolderValueRef implements ValueRef {
 
