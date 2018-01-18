@@ -180,7 +180,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	private ConstructorArgumentValues constructorArgumentValues;//构造参数值
 
-	private MutablePropertyValues propertyValues;//
+	private MutablePropertyValues propertyValues;//属性值集
 
 	private MethodOverrides methodOverrides = new MethodOverrides();//重写方法集
 
@@ -220,6 +220,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Create a new AbstractBeanDefinition as a deep copy of the given
 	 * bean definition.
+	 * 深度拷贝bean定义
 	 * @param original the original bean definition to copy from
 	 */
 	protected AbstractBeanDefinition(BeanDefinition original) {
@@ -394,6 +395,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Return whether this definition specifies a bean class.
+	 * 判断beanClass是否为类
 	 */
 	public boolean hasBeanClass() {
 		return (this.beanClass instanceof Class);
@@ -912,6 +914,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Set the resource that this bean definition came from
 	 * (for the purpose of showing context in case of errors).
+	 * 设置bean定义的来源资源（在出错的情况下，展示上下文）
 	 */
 	public void setResource(Resource resource) {
 		this.resource = resource;
@@ -943,6 +946,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Set the originating (e.g. decorated) BeanDefinition, if any.
+	 * 设置原始并定义
 	 */
 	public void setOriginatingBeanDefinition(BeanDefinition originatingBd) {
 		this.resource = new BeanDefinitionResource(originatingBd);
@@ -951,6 +955,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Return the originating BeanDefinition, or {@code null} if none.
 	 * Allows for retrieving the decorated bean definition, if any.
+	 * 获取原始bean定义，如果没有返回null。如果需要，从装饰bean定义中抽取。
 	 * <p>Note that this method returns the immediate originator. Iterate through the
 	 * originator chain to find the original BeanDefinition as defined by the user.
 	 */
@@ -978,6 +983,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Validate and prepare the method overrides defined for this bean.
+	 * 校验bean定义中的重写方法
 	 * Checks for existence of a method with the specified name.
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */
@@ -996,8 +1002,10 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 
 	/**
 	 * Validate and prepare the given method override.
+	 * 校验给定的重写方法
 	 * Checks for existence of a method with the specified name,
 	 * marking it as not overloaded if none found.
+	 * 检查给定重写的方法是否存在，如果没有标记为非重载
 	 * @param mo the MethodOverride object to validate
 	 * @throws BeanDefinitionValidationException in case of validation failure
 	 */

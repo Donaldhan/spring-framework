@@ -23,7 +23,7 @@ import java.io.InputStream;
 /**
  * Simple {@link Resource} implementation that holds a resource description
  * but does not point to an actually readable resource.
- *
+ *简单的资源描述实现，不需要指向实际可读的资源。
  * <p>To be used as placeholder if a {@code Resource} argument is
  * expected by an API but not necessarily used for actual reading.
  *

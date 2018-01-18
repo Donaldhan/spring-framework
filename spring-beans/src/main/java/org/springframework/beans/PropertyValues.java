@@ -19,7 +19,7 @@ package org.springframework.beans;
 /**
  * Holder containing one or more {@link PropertyValue} objects,
  * typically comprising one update for a specific target bean.
- *
+ *包含一个或多个属性值的Holder
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @since 13 May 2001
@@ -29,11 +29,13 @@ public interface PropertyValues {
 
 	/**
 	 * Return an array of the PropertyValue objects held in this object.
+	 * 返回对象的属性值
 	 */
 	PropertyValue[] getPropertyValues();
 
 	/**
 	 * Return the property value with the given name, if any.
+	 * 返回给定name对应的属性值
 	 * @param propertyName the name to search for
 	 * @return the property value, or {@code null}
 	 */
@@ -41,6 +43,7 @@ public interface PropertyValues {
 
 	/**
 	 * Return the changes since the previous PropertyValues.
+	 * 返回先前属性的变化
 	 * Subclasses should also override {@code equals}.
 	 * @param old old property values
 	 * @return PropertyValues updated or new properties.
@@ -51,6 +54,7 @@ public interface PropertyValues {
 
 	/**
 	 * Is there a property value (or other processing entry) for this property?
+	 * 是否包含给定的属性值
 	 * @param propertyName the name of the property we're interested in
 	 * @return whether there is a property value for this property
 	 */

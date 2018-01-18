@@ -27,14 +27,14 @@ import org.springframework.util.Assert;
 /**
  * Descriptive {@link org.springframework.core.io.Resource} wrapper for
  * a {@link org.springframework.beans.factory.config.BeanDefinition}.
- *
+ *bean定义资源描述，包装者一个bean定义。
  * @author Juergen Hoeller
  * @since 2.5.2
  * @see org.springframework.core.io.DescriptiveResource
  */
 class BeanDefinitionResource extends AbstractResource {
 
-	private final BeanDefinition beanDefinition;
+	private final BeanDefinition beanDefinition;//bean定义
 
 
 	/**

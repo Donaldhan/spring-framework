@@ -23,7 +23,8 @@ import org.springframework.util.Assert;
  * Qualifier for resolving autowire candidates. A bean definition that
  * includes one or more such qualifiers enables fine-grained matching
  * against annotations on a field or parameter to be autowired.
- *
+ *解决自动注入候选者的限定符。bean的定义可以包括一个或多个限定符，以便依赖于注解更好的解决
+ *属性和参数注入。
  * @author Mark Fisher
  * @author Juergen Hoeller
  * @since 2.5
@@ -34,12 +35,13 @@ public class AutowireCandidateQualifier extends BeanMetadataAttributeAccessor {
 
 	public static String VALUE_KEY = "value";
 
-	private final String typeName;
+	private final String typeName;//类型名
 
 
 	/**
 	 * Construct a qualifier to match against an annotation of the
 	 * given type.
+	 * 构造给定注解类型的限定符
 	 * @param type the annotation type
 	 */
 	public AutowireCandidateQualifier(Class<?> type) {

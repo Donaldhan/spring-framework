@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
  * Default implementation of the {@link PropertyValues} interface.
  * Allows simple manipulation of properties, and provides constructors
  * to support deep copy and construction from a Map.
- *
+ *属性值集PropertyValues的默认实现。允许简单的属性操作，通过从Map的深度复制与构造。
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -38,7 +38,7 @@ import org.springframework.util.StringUtils;
 @SuppressWarnings("serial")
 public class MutablePropertyValues implements PropertyValues, Serializable {
 
-	private final List<PropertyValue> propertyValueList;
+	private final List<PropertyValue> propertyValueList;//属性值集
 
 	private Set<String> processedProperties;
 
@@ -78,6 +78,7 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 
 	/**
 	 * Construct a new MutablePropertyValues object from a Map.
+	 * 从给定Map对象的kv对构造MutablePropertyValues
 	 * @param original Map with property values keyed by property name Strings
 	 * @see #addPropertyValues(Map)
 	 */
@@ -129,6 +130,8 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	 * Copy all given PropertyValues into this object. Guarantees PropertyValue
 	 * references are independent, although it can't deep copy objects currently
 	 * referenced by individual PropertyValue objects.
+	 * 拷贝给定属性集中的鄋属性到当前对象。尽管不能保证当前copy对象依赖于独立的属性值对象，
+	 * 但可以保证属性值引用时独立的。
 	 * @param other the PropertyValues to copy
 	 * @return this in order to allow for adding multiple property values in a chain
 	 */
@@ -212,6 +215,7 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	/**
 	 * Merges the value of the supplied 'new' {@link PropertyValue} with that of
 	 * the current {@link PropertyValue} if merging is supported and enabled.
+	 * 整合当前属性值到新的属性值中
 	 * @see Mergeable
 	 */
 	private PropertyValue mergeIfRequired(PropertyValue newPv, PropertyValue currentPv) {
@@ -310,6 +314,7 @@ public class MutablePropertyValues implements PropertyValues, Serializable {
 	 * Register the specified property as "processed" in the sense
 	 * of some processor calling the corresponding setter method
 	 * outside of the PropertyValue(s) mechanism.
+	 * 注册给定的属性到当前处理属性集，以便其他处理器调用相关的设置方法调用
 	 * <p>This will lead to {@code true} being returned from
 	 * a {@link #contains} call for the specified property.
 	 * @param propertyName the name of the property.

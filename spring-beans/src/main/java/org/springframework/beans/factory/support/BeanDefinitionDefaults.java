@@ -20,7 +20,7 @@ import org.springframework.util.StringUtils;
 
 /**
  * A simple holder for {@code BeanDefinition} property defaults.
- *
+ *bean定义的默认属性配置
  * @author Mark Fisher
  * @since 2.5
  */

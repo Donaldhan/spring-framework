@@ -26,11 +26,11 @@ import org.springframework.util.ObjectUtils;
  * Using an object here, rather than just storing all properties in
  * a map keyed by property name, allows for more flexibility, and the
  * ability to handle indexed properties etc in an optimized way.
- *
+ * bean属性值信息。使用对象表示bean的属性，而不是以属性名和值对存储在Map中，允许更多的灵活性，
+ * 以最优化的方式，处理索引属性。
  * <p>Note that the value doesn't need to be the final required type:
  * A {@link BeanWrapper} implementation should handle any necessary conversion,
  * as this object doesn't know anything about the objects it will be applied to.
- *
  * @author Rod Johnson
  * @author Rob Harrop
  * @author Juergen Hoeller
@@ -41,20 +41,24 @@ import org.springframework.util.ObjectUtils;
 @SuppressWarnings("serial")
 public class PropertyValue extends BeanMetadataAttributeAccessor implements Serializable {
 
-	private final String name;
+	private final String name;//属性名
 
-	private final Object value;
+	private final Object value;//属性值
 
-	private boolean optional = false;
+	private boolean optional = false;//值是是否可选
 
-	private boolean converted = false;
+	private boolean converted = false;//是否已转换
 
-	private Object convertedValue;
+	private Object convertedValue;//转化后的转换值
 
-	/** Package-visible field that indicates whether conversion is necessary */
+	/** Package-visible field that indicates whether conversion is necessary 
+	 * 包可见field，表示转换是否需要
+	 * */
 	volatile Boolean conversionNecessary;
 
-	/** Package-visible field for caching the resolved property path tokens */
+	/** Package-visible field for caching the resolved property path tokens 
+	 * 缓存解决路径token
+	 * */
 	transient volatile Object resolvedTokens;
 
 
