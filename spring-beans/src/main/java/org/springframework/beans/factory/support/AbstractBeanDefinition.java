@@ -59,29 +59,34 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Constant for the default scope name: {@code ""}, equivalent to singleton
 	 * status unless overridden from a parent bean definition (if applicable).
+	 * 默认作用域name，等于单例状态，除非从父bean定义中重写
 	 */
 	public static final String SCOPE_DEFAULT = "";
 
 	/**
 	 * Constant that indicates no autowiring at all.
+	 * 预示着不需要自动注入
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_NO = AutowireCapableBeanFactory.AUTOWIRE_NO;
 
 	/**
 	 * Constant that indicates autowiring bean properties by name.
+	 * 根据属性name自动注入
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_BY_NAME = AutowireCapableBeanFactory.AUTOWIRE_BY_NAME;
 
 	/**
 	 * Constant that indicates autowiring bean properties by type.
+	 * 根据类型自动注入bean属性
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_BY_TYPE = AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE;
 
 	/**
 	 * Constant that indicates autowiring a constructor.
+	 * 自动注入构造
 	 * @see #setAutowireMode
 	 */
 	public static final int AUTOWIRE_CONSTRUCTOR = AutowireCapableBeanFactory.AUTOWIRE_CONSTRUCTOR;
@@ -89,27 +94,32 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Constant that indicates determining an appropriate autowire strategy
 	 * through introspection of the bean class.
+	 * 通过bean类的内省机制，确定使用什么自动注入策略
 	 * @see #setAutowireMode
 	 * @deprecated as of Spring 3.0: If you are using mixed autowiring strategies,
 	 * use annotation-based autowiring for clearer demarcation of autowiring needs.
+	 * 从spring3.0k开始已经丢弃：如果需要混合自动注入策略，使用基于注解的自动注入，以与自动注入划分界限。
 	 */
 	@Deprecated
 	public static final int AUTOWIRE_AUTODETECT = AutowireCapableBeanFactory.AUTOWIRE_AUTODETECT;
 
 	/**
 	 * Constant that indicates no dependency check at all.
+	 * 不需要检查依赖
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_NONE = 0;
 
 	/**
 	 * Constant that indicates dependency checking for object references.
+	 * 检查兑现依赖引用
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_OBJECTS = 1;
 
 	/**
 	 * Constant that indicates dependency checking for "simple" properties.
+	 * 检查简单"simple"的属性依赖
 	 * @see #setDependencyCheck
 	 * @see org.springframework.beans.BeanUtils#isSimpleProperty
 	 */
@@ -118,6 +128,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	/**
 	 * Constant that indicates dependency checking for all properties
 	 * (object references as well as "simple" properties).
+	 * 检查所有属性的依赖（对象引用和简单属性）
 	 * @see #setDependencyCheck
 	 */
 	public static final int DEPENDENCY_CHECK_ALL = 3;
@@ -129,62 +140,65 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	 * designed to include characters otherwise illegal in a method name, ensuring
 	 * no possibility of collisions with legitimately named methods having the same
 	 * name.
+	 * 与显示指定方法名相反，容器应该尝试推断bean的{@link #setDestroyMethodName destroy method name}
+	 * 方法。 具体的值应该合理命名，避免冲突。
 	 * <p>Currently, the method names detected during destroy method inference
 	 * are "close" and "shutdown", if present on the specific bean class.
+	 * 当前只探测bean的销毁方法 "close" and "shutdown"。
 	 */
 	public static final String INFER_METHOD = "(inferred)";
 
 
-	private volatile Object beanClass;
+	private volatile Object beanClass;//bean类
 
-	private String scope = SCOPE_DEFAULT;
+	private String scope = SCOPE_DEFAULT;//作用域
 
-	private boolean abstractFlag = false;
+	private boolean abstractFlag = false;//是否为抽象
 
-	private boolean lazyInit = false;
+	private boolean lazyInit = false;//是否懒加载
 
-	private int autowireMode = AUTOWIRE_NO;
+	private int autowireMode = AUTOWIRE_NO;//自动注入模式
 
-	private int dependencyCheck = DEPENDENCY_CHECK_NONE;
+	private int dependencyCheck = DEPENDENCY_CHECK_NONE;//依赖检查
 
-	private String[] dependsOn;
+	private String[] dependsOn;//依赖对象
 
-	private boolean autowireCandidate = true;
+	private boolean autowireCandidate = true;//是否可以最为自动注入候选对象
 
-	private boolean primary = false;
+	private boolean primary = false;//是否为原始类型
 
 	private final Map<String, AutowireCandidateQualifier> qualifiers =
 			new LinkedHashMap<String, AutowireCandidateQualifier>(0);
 
-	private boolean nonPublicAccessAllowed = true;
+	private boolean nonPublicAccessAllowed = true;//不允许public访问
 
-	private boolean lenientConstructorResolution = true;
+	private boolean lenientConstructorResolution = true;//是否构造对象
 
-	private String factoryBeanName;
+	private String factoryBeanName;//工厂bean name
 
-	private String factoryMethodName;
+	private String factoryMethodName;//工厂方法名
 
-	private ConstructorArgumentValues constructorArgumentValues;
+	private ConstructorArgumentValues constructorArgumentValues;//构造参数值
 
-	private MutablePropertyValues propertyValues;
+	private MutablePropertyValues propertyValues;//
 
-	private MethodOverrides methodOverrides = new MethodOverrides();
+	private MethodOverrides methodOverrides = new MethodOverrides();//重写方法集
 
-	private String initMethodName;
+	private String initMethodName;//初始化方法
 
-	private String destroyMethodName;
+	private String destroyMethodName;//销毁方法
 
-	private boolean enforceInitMethod = true;
+	private boolean enforceInitMethod = true;//是否需要执行初始化方法
 
-	private boolean enforceDestroyMethod = true;
+	private boolean enforceDestroyMethod = true;//是否需要执行销毁方法
 
 	private boolean synthetic = false;
 
 	private int role = BeanDefinition.ROLE_APPLICATION;
 
-	private String description;
+	private String description;//bean定义描述
 
-	private Resource resource;
+	private Resource resource;//关联资源
 
 
 	/**

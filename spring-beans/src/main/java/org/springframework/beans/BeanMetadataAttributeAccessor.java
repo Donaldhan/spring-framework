@@ -22,18 +22,19 @@ import org.springframework.core.AttributeAccessorSupport;
  * Extension of {@link org.springframework.core.AttributeAccessorSupport},
  * holding attributes as {@link BeanMetadataAttribute} objects in order
  * to keep track of the definition source.
- *
+ *属性访问器的拓展，为了追踪bean的定义源，持有bean的属性元数据。
  * @author Juergen Hoeller
  * @since 2.5
  */
 @SuppressWarnings("serial")
 public class BeanMetadataAttributeAccessor extends AttributeAccessorSupport implements BeanMetadataElement {
 
-	private Object source;
+	private Object source;//bean
 
 
 	/**
 	 * Set the configuration source {@code Object} for this metadata element.
+	 * 设置元数据原始所属 的配置源对象
 	 * <p>The exact type of the object will depend on the configuration mechanism used.
 	 */
 	public void setSource(Object source) {
@@ -48,6 +49,7 @@ public class BeanMetadataAttributeAccessor extends AttributeAccessorSupport impl
 
 	/**
 	 * Add the given BeanMetadataAttribute to this accessor's set of attributes.
+	 * 添加给定bean属性元数据到当前访问器的属性集。
 	 * @param attribute the BeanMetadataAttribute object to register
 	 */
 	public void addMetadataAttribute(BeanMetadataAttribute attribute) {
@@ -56,6 +58,7 @@ public class BeanMetadataAttributeAccessor extends AttributeAccessorSupport impl
 
 	/**
 	 * Look up the given BeanMetadataAttribute in this accessor's set of attributes.
+	 * 查找当前访问器属性集中的给定bean属性元数据
 	 * @param name the name of the attribute
 	 * @return the corresponding BeanMetadataAttribute object,
 	 * or {@code null} if no such attribute defined

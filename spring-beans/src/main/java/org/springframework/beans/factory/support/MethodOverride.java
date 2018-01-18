@@ -25,10 +25,10 @@ import org.springframework.util.ObjectUtils;
 /**
  * Object representing the override of a method on a managed object by the IoC
  * container.
- *
+ *表示Spring IOC容器管理的重写方法。
  * <p>Note that the override mechanism is <em>not</em> intended as a generic
  * means of inserting crosscutting code: use AOP for that.
- *
+ *重写方法不以为者插入代码，如果想这样做可以使用AOP
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -36,11 +36,11 @@ import org.springframework.util.ObjectUtils;
  */
 public abstract class MethodOverride implements BeanMetadataElement {
 
-	private final String methodName;
+	private final String methodName;//方法名
 
-	private boolean overloaded = true;
+	private boolean overloaded = true;//是否重写
 
-	private Object source;
+	private Object source;//方法所属对象
 
 
 	/**
@@ -95,6 +95,7 @@ public abstract class MethodOverride implements BeanMetadataElement {
 	 * Subclasses must override this to indicate whether they <em>match</em> the
 	 * given method. This allows for argument list checking as well as method
 	 * name checking.
+	 * 子类必须重写，以判断重载方法是否匹配给定的方法。允许参数和方法名检查
 	 * @param method the method to check
 	 * @return whether this override matches the given method
 	 */

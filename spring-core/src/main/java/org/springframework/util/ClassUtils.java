@@ -598,6 +598,7 @@ public abstract class ClassUtils {
 
 	/**
 	 * Check whether the given class matches the user-specified type name.
+	 * 检查给定类是否匹配指定的类型名
 	 * @param clazz the class to check
 	 * @param typeName the type name to match
 	 */

@@ -24,7 +24,7 @@ import java.util.Set;
 /**
  * Set of method overrides, determining which, if any, methods on a
  * managed object the Spring IoC container will override at runtime.
- *
+ *重写方法集，如果有，在运行时环境下，Spring IOC 容器将会重写管理对象的方法。
  * <p>The currently supported {@link MethodOverride} variants are
  * {@link LookupOverride} and {@link ReplaceOverride}.
  *

@@ -22,23 +22,25 @@ import org.springframework.util.ObjectUtils;
 /**
  * Holder for a key-value style attribute that is part of a bean definition.
  * Keeps track of the definition source in addition to the key-value pair.
- *
+ *BeanMetadataAttribute为bean定的属性名与值对的Holder。除了KV对之外，保留者属性定义源。
  * @author Juergen Hoeller
  * @since 2.5
  */
 public class BeanMetadataAttribute implements BeanMetadataElement {
 
-	private final String name;
+	private final String name;//属性名
 
-	private final Object value;
+	private final Object value;//属性值
 
-	private Object source;
+	private Object source;//所属对象
 
 
 	/**
 	 * Create a new AttributeValue instance.
 	 * @param name the name of the attribute (never {@code null})
+	 * 属性名
 	 * @param value the value of the attribute (possibly before type conversion)
+	 * 属性值，可能为为在类型转换前的值
 	 */
 	public BeanMetadataAttribute(String name, Object value) {
 		Assert.notNull(name, "Name must not be null");

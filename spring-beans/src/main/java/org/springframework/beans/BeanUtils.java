@@ -493,7 +493,9 @@ public abstract class BeanUtils {
 	 * Check if the given type represents a "simple" property:
 	 * a primitive, a String or other CharSequence, a Number, a Date,
 	 * a URI, a URL, a Locale, a Class, or a corresponding array.
+	 * 检查给定的类型是否为原始类型。
 	 * <p>Used to determine properties to check for a "simple" dependency-check.
+	 * 用于检查的属性的简单依赖
 	 * @param clazz the type to check
 	 * @return whether the given type represents a "simple" property
 	 * @see org.springframework.beans.factory.support.RootBeanDefinition#DEPENDENCY_CHECK_SIMPLE

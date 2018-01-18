@@ -32,10 +32,10 @@ import org.springframework.util.ObjectUtils;
 
 /**
  * Holder for constructor argument values, typically as part of a bean definition.
- *
+ *构造参数值Holder，作为bean定义的一部分。
  * <p>Supports values for a specific index in the constructor argument list
  * as well as for generic argument matches by type.
- *
+ *支持依赖于索引的参数list和一般的类型匹配参数
  * @author Juergen Hoeller
  * @since 09.11.2003
  * @see BeanDefinition#getConstructorArgumentValues
@@ -85,6 +85,7 @@ public class ConstructorArgumentValues {
 
 	/**
 	 * Add an argument value for the given index in the constructor argument list.
+	 * 添加给定的参数值到构造参数集合
 	 * @param index the index in the constructor argument list
 	 * @param value the argument value
 	 */
@@ -125,6 +126,7 @@ public class ConstructorArgumentValues {
 		if (currentValue != null && newValue.getValue() instanceof Mergeable) {
 			Mergeable mergeable = (Mergeable) newValue.getValue();
 			if (mergeable.isMergeEnabled()) {
+				//如何需要整合，整合父对象到当前值
 				newValue.setValue(mergeable.merge(currentValue.getValue()));
 			}
 		}
@@ -232,6 +234,7 @@ public class ConstructorArgumentValues {
 					if (newValue.getValue() instanceof Mergeable) {
 						Mergeable mergeable = (Mergeable) newValue.getValue();
 						if (mergeable.isMergeEnabled()) {
+							//如果值需要整合，且整合功能开启，则整合父对象到当前值
 							newValue.setValue(mergeable.merge(currentValue.getValue()));
 						}
 					}
@@ -428,17 +431,17 @@ public class ConstructorArgumentValues {
 	 */
 	public static class ValueHolder implements BeanMetadataElement {
 
-		private Object value;
+		private Object value;//参数值
 
-		private String type;
+		private String type;//参数类型
 
-		private String name;
+		private String name;//参数名
 
-		private Object source;
+		private Object source;//参数所属对象
 
-		private boolean converted = false;
+		private boolean converted = false;//值是否已经转换
 
-		private Object convertedValue;
+		private Object convertedValue;//转换后的值
 
 		/**
 		 * Create a new ValueHolder for the given value.
@@ -529,6 +532,7 @@ public class ConstructorArgumentValues {
 		/**
 		 * Return whether this holder contains a converted value already ({@code true}),
 		 * or whether the value still needs to be converted ({@code false}).
+		 * 判断当前值holder的值是否已经转换，如果需要转换则为fanlse
 		 */
 		public synchronized boolean isConverted() {
 			return this.converted;

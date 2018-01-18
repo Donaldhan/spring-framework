@@ -25,9 +25,9 @@ import org.springframework.util.Assert;
 /**
  * Support class for {@link AttributeAccessor AttributeAccessors}, providing
  * a base implementation of all methods. To be extended by subclasses.
- *
+ *属性访问器AttributeAccessors的支持类，提供了所有方法的基础实现。
  * <p>{@link Serializable} if subclasses and all attribute values are {@link Serializable}.
- *
+ *如果子类需要序列化，所有的属性值必须是可序列化的。
  * @author Rob Harrop
  * @author Juergen Hoeller
  * @since 2.0
@@ -35,7 +35,9 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public abstract class AttributeAccessorSupport implements AttributeAccessor, Serializable {
 
-	/** Map with String keys and Object values */
+	/** Map with String keys and Object values
+	 * 对象属性集（name与值的映射） 
+	 * */
 	private final Map<String, Object> attributes = new LinkedHashMap<String, Object>(0);
 
 
