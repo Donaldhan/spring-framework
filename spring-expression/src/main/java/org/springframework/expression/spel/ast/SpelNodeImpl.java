@@ -248,6 +248,7 @@ public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 	 * @param mv the method visitor where code should be generated
 	 * @param cf the current codeflow
 	 * @param member the method or constructor for which arguments are being setup
+	 * 设置参数的方法method或构造constructor
 	 * @param arguments the expression nodes for the expression supplied argument values
 	 */
 	protected static void generateCodeForArguments(MethodVisitor mv, CodeFlow cf, Member member, SpelNodeImpl[] arguments) {
@@ -255,13 +256,15 @@ public abstract class SpelNodeImpl implements SpelNode, Opcodes {
 		boolean isVarargs = false;
 		if (member instanceof Constructor) {
 			Constructor<?> ctor = (Constructor<?>) member;
+			//获取构造参数类型描述
 			paramDescriptors = CodeFlow.toDescriptors(ctor.getParameterTypes());
-			isVarargs = ctor.isVarArgs();
+			isVarargs = ctor.isVarArgs();//是否就一个参数
 		}
 		else { // Method
 			Method method = (Method)member;
+			//获取方法参数类型描述
 			paramDescriptors = CodeFlow.toDescriptors(method.getParameterTypes());
-			isVarargs = method.isVarArgs();
+			isVarargs = method.isVarArgs();//是否就一个参数
 		}
 		if (isVarargs) {
 			// The final parameter may or may not need packaging into an array, or nothing may

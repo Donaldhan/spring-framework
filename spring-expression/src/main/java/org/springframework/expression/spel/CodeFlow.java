@@ -772,6 +772,8 @@ public class CodeFlow implements Opcodes {
 	 * Deduce the descriptor for a type. Descriptors are like JVM type names but missing
 	 * the trailing ';' so for Object the descriptor is "Ljava/lang/Object" for int it is
 	 * "I".
+	 * 精简类型的描述。描述如虚拟机类型名，但是会丢失trailing，比如对象描述："Ljava/lang/Object"。
+	 * int描述："I".
 	 * @param type the type (may be primitive) for which to determine the descriptor
 	 * @return the descriptor
 	 */
@@ -853,6 +855,7 @@ public class CodeFlow implements Opcodes {
 
 	/**
 	 * Create an array of descriptors from an array of classes.
+	 * 创建数组类元素类的描述信息
 	 * @param types the input array of classes
 	 * @return an array of descriptors
 	 */

@@ -38,9 +38,9 @@ import org.springframework.util.Assert;
 
 /**
  * Provides a default EvaluationContext implementation.
- *
+ *提供表达式求值的默认实现。
  * <p>To resolve properties/methods/fields this context uses a reflection mechanism.
- *
+ *使用反射机制解决上下文属性properties，方法methods和字段fields
  * @author Andy Clement
  * @author Juergen Hoeller
  * @author Sam Brannen
@@ -48,27 +48,27 @@ import org.springframework.util.Assert;
  */
 public class StandardEvaluationContext implements EvaluationContext {
 
-	private TypedValue rootObject;
+	private TypedValue rootObject;//根对象
 
-	private List<ConstructorResolver> constructorResolvers;
+	private List<ConstructorResolver> constructorResolvers;//构造解决器
 
-	private List<MethodResolver> methodResolvers;
+	private List<MethodResolver> methodResolvers;//方法解决器
 
-	private BeanResolver beanResolver;
+	private BeanResolver beanResolver;//bean解决器
 
-	private ReflectiveMethodResolver reflectiveMethodResolver;
+	private ReflectiveMethodResolver reflectiveMethodResolver;//反射方法解决器
 
-	private List<PropertyAccessor> propertyAccessors;
+	private List<PropertyAccessor> propertyAccessors;//属性访问器
 
-	private TypeLocator typeLocator;
+	private TypeLocator typeLocator;//类型定位器
 
-	private TypeConverter typeConverter;
+	private TypeConverter typeConverter;//类型转化器
 
-	private TypeComparator typeComparator = new StandardTypeComparator();
+	private TypeComparator typeComparator = new StandardTypeComparator();//类型比较器
 
-	private OperatorOverloader operatorOverloader = new StandardOperatorOverloader();
+	private OperatorOverloader operatorOverloader = new StandardOperatorOverloader();//计算操作器
 
-	private final Map<String, Object> variables = new HashMap<String, Object>();
+	private final Map<String, Object> variables = new HashMap<String, Object>();//求值表达式上下文变量
 
 
 	public StandardEvaluationContext() {
