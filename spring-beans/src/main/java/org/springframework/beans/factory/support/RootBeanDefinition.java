@@ -35,13 +35,16 @@ import org.springframework.util.Assert;
  * from multiple original bean definitions that inherit from each other,
  * typically registered as {@link GenericBeanDefinition GenericBeanDefinitions}.
  * A root bean definition is essentially the 'unified' bean definition view at runtime.
- *
+ *RootBeanDefinition表示一个可合并的bean定义，内部是一个运行时环境下，Spring bean工厂中的特殊bean。
+ *可能是从多个互相继承的原始bean定义创建的，典型的如GenericBeanDefinition。root bean定义在运行时环境下，
+ *本质为统一标准的bean定义。
  * <p>Root bean definitions may also be used for registering individual bean definitions
  * in the configuration phase. However, since Spring 2.5, the preferred way to register
  * bean definitions programmatically is the {@link GenericBeanDefinition} class.
  * GenericBeanDefinition has the advantage that it allows to dynamically define
  * parent dependencies, not 'hard-coding' the role as a root bean definition.
- *
+ *在配置阶段，root bean定义可以用于注册单个的bean定义。然而，从Spring2.5以后，编程模式下一般使用GenericBeanDefinition
+ *来注册bean的定义。GenericBeanDefinition有一个优势，可以动态地定义其的父依赖，但是不能硬编码root bean定义为父依赖角色。
  * @author Rod Johnson
  * @author Juergen Hoeller
  * @see GenericBeanDefinition
@@ -50,51 +53,67 @@ import org.springframework.util.Assert;
 @SuppressWarnings("serial")
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
-	private BeanDefinitionHolder decoratedDefinition;
+	private BeanDefinitionHolder decoratedDefinition;//holder
 
-	private AnnotatedElement qualifiedElement;
+	private AnnotatedElement qualifiedElement;//限定注解元素
 
-	boolean allowCaching = true;
+	boolean allowCaching = true;//是否允许缓存
 
-	boolean isFactoryMethodUnique = false;
+	boolean isFactoryMethodUnique = false;//工厂方法是否唯一
 
-	volatile ResolvableType targetType;
+	volatile ResolvableType targetType;//目标类型
 
-	/** Package-visible field for caching the determined Class of a given bean definition */
+	/** Package-visible field for caching the determined Class of a given bean definition 
+	 * 缓存给定bean定义的类
+	 * */
 	volatile Class<?> resolvedTargetType;
 
-	/** Package-visible field for caching the return type of a generically typed factory method */
+	/** Package-visible field for caching the return type of a generically typed factory method 
+	 * 缓存一般类型工厂方法返回的类型
+	 * */
 	volatile ResolvableType factoryMethodReturnType;
 
 	/** Common lock for the four constructor fields below */
 	final Object constructorArgumentLock = new Object();
 
-	/** Package-visible field for caching the resolved constructor or factory method */
+	/** Package-visible field for caching the resolved constructor or factory method 
+	 * 缓存构造或工厂方法
+	 * */
 	Object resolvedConstructorOrFactoryMethod;
 
-	/** Package-visible field that marks the constructor arguments as resolved */
+	/** Package-visible field that marks the constructor arguments as resolved 
+	 * 构造参数是否可解决
+	 * */
 	boolean constructorArgumentsResolved = false;
 
-	/** Package-visible field for caching fully resolved constructor arguments */
+	/** Package-visible field for caching fully resolved constructor arguments 
+	 * 缓存所有可解决的构造参数
+	 * */
 	Object[] resolvedConstructorArguments;
 
-	/** Package-visible field for caching partly prepared constructor arguments */
+	/** Package-visible field for caching partly prepared constructor arguments 
+	 * 缓存准备构造的参数
+	 * */
 	Object[] preparedConstructorArguments;
 
 	/** Common lock for the two post-processing fields below */
 	final Object postProcessingLock = new Object();
 
-	/** Package-visible field that indicates MergedBeanDefinitionPostProcessor having been applied */
+	/** Package-visible field that indicates MergedBeanDefinitionPostProcessor having been applied 
+	 * 合并bean定义后处理器是否已经处理字段
+	 * */
 	boolean postProcessed = false;
 
-	/** Package-visible field that indicates a before-instantiation post-processor having kicked in */
+	/** Package-visible field that indicates a before-instantiation post-processor having kicked in 
+	 * 表示在后处理器初始化之前，类型是否已经解决
+	 * */
 	volatile Boolean beforeInstantiationResolved;
 
-	private Set<Member> externallyManagedConfigMembers;
+	private Set<Member> externallyManagedConfigMembers;//外部管理的配置成员
 
-	private Set<String> externallyManagedInitMethods;
+	private Set<String> externallyManagedInitMethods;//外部初始化方法。
 
-	private Set<String> externallyManagedDestroyMethods;
+	private Set<String> externallyManagedDestroyMethods;//外部销毁方法
 
 
 	/**
@@ -296,6 +315,10 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 		}
 	}
 
+	/**
+	 * 注册配置方法
+	 * @param configMember
+	 */
 	public void registerExternallyManagedConfigMember(Member configMember) {
 		synchronized (this.postProcessingLock) {
 			if (this.externallyManagedConfigMembers == null) {
@@ -312,6 +335,10 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 		}
 	}
 
+	/**
+	 * 注册初始化方法
+	 * @param initMethod
+	 */
 	public void registerExternallyManagedInitMethod(String initMethod) {
 		synchronized (this.postProcessingLock) {
 			if (this.externallyManagedInitMethods == null) {
@@ -328,6 +355,10 @@ public class RootBeanDefinition extends AbstractBeanDefinition {
 		}
 	}
 
+	/**
+	 * 注册销毁方法
+	 * @param destroyMethod
+	 */
 	public void registerExternallyManagedDestroyMethod(String destroyMethod) {
 		synchronized (this.postProcessingLock) {
 			if (this.externallyManagedDestroyMethods == null) {
