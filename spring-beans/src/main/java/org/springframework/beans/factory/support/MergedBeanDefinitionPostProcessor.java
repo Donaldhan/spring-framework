@@ -23,13 +23,17 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * {@link BeanPostProcessor} implementations may implement this sub-interface in order
  * to post-process the merged bean definition (a processed copy of the original bean
  * definition) that the Spring {@code BeanFactory} uses to create a bean instance.
- *
+ *MergedBeanDefinitionPostProcessor为在运行时环境下，整合bean定义后处理器回调接口。
+ *{@link BeanPostProcessor}接口的实现，如果为了整合Sprng bean工厂内原始bean的定义，可以实现此接口。
  * <p>The {@link #postProcessMergedBeanDefinition} method may for example introspect
  * the bean definition in order to prepare some cached metadata before post-processing
  * actual instances of a bean. It is also allowed to modify the bean definition but
  * <i>only</i> for definition properties which are actually intended for concurrent
  * modification. Essentially, this only applies to operations defined on the
  * {@link RootBeanDefinition} itself but not to the properties of its base classes.
+ *{@link #postProcessMergedBeanDefinition}方法也许为了在后处理实际的bean实例之前，
+ *准备一些bean的缓存元数据，可以内省bean的定义。也可以修改bean的定义，但是只能为可以并发访问的bean属性。
+ *本质上，可以应用定义在{@link RootBeanDefinition}中的操作，而不是基类的属性。
  *
  * @author Juergen Hoeller
  * @since 2.5
@@ -39,9 +43,13 @@ public interface MergedBeanDefinitionPostProcessor extends BeanPostProcessor {
 
 	/**
 	 * Post-process the given merged bean definition for the specified bean.
+	 * 合并给定的可合并的bean定义到指定的bean
 	 * @param beanDefinition the merged bean definition for the bean
+	 * 合并的bean定义
 	 * @param beanType the actual type of the managed bean instance
+	 * 管理bean实例的实际类型
 	 * @param beanName the name of the bean
+	 * bean的name
 	 */
 	void postProcessMergedBeanDefinition(RootBeanDefinition beanDefinition, Class<?> beanType, String beanName);
 
