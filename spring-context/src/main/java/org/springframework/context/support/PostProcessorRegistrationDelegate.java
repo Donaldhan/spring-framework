@@ -56,7 +56,7 @@ class PostProcessorRegistrationDelegate {
 	 * bean工厂；如果bean工厂不是bean定义注册器实例，则使用上下文中的bean工厂后处理器，处理
 	 * bean工厂。从bean工厂内获取所有bean工厂处理器实例，按实现了PriorityOrdered，Ordered接口和剩余的
 	 * bean工厂后处理器顺序，处理bean工厂。
-	 * 最后情况bean工厂的元数据缓存。
+	 * 最后清空bean工厂的元数据缓存。
 	 * 
 	 * @param beanFactory 需要处理的工厂
 	 * @param beanFactoryPostProcessors 应用上下文的bean工厂后处理器
