@@ -461,6 +461,8 @@ public abstract class ReflectionUtils {
 	 * necessary. The {@code setAccessible(true)} method is only called
 	 * when actually necessary, to avoid unnecessary conflicts with a JVM
 	 * SecurityManager (if active).
+	 * 使给定的方法可访问，如果需要显示地设置。当实际需要时，{@code setAccessible(true)}
+	 * 方法将会被调用，以避免与启动的虚拟机安全管理器的冲突。
 	 * @param method the method to make accessible
 	 * @see java.lang.reflect.Method#setAccessible
 	 */

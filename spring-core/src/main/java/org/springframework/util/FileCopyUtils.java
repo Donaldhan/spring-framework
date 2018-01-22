@@ -152,6 +152,7 @@ public abstract class FileCopyUtils {
 	/**
 	 * Copy the contents of the given InputStream into a new byte array.
 	 * Closes the stream when done.
+	 * 拷贝给定输入流的内容到一个行的字节数据
 	 * @param in the stream to copy from (may be {@code null} or empty)
 	 * @return the new byte array that has been copied to (possibly empty)
 	 * @throws IOException in case of I/O errors

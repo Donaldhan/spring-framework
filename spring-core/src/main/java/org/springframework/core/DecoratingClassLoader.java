@@ -28,7 +28,9 @@ import org.springframework.util.ClassUtils;
  * Base class for decorating ClassLoaders such as {@link OverridingClassLoader}
  * and {@link org.springframework.instrument.classloading.ShadowingClassLoader},
  * providing common handling of excluded packages and classes.
- *
+ *装饰类加载器的基类，比如{@link OverridingClassLoader}和
+ *{@link org.springframework.instrument.classloading.ShadowingClassLoader}
+ *提供了一般的剔除包和类
  * @author Juergen Hoeller
  * @author Rod Johnson
  * @since 2.5.2
@@ -38,6 +40,7 @@ public abstract class DecoratingClassLoader extends ClassLoader {
 
 	/**
 	 * Java 7+ {@code ClassLoader.registerAsParallelCapable()} available?
+	 * 类加载器是否存在注册并行处理能力方法registerAsParallelCapable
 	 * @since 4.1.2
 	 */
 	protected static final boolean parallelCapableClassLoaderAvailable =
@@ -74,6 +77,7 @@ public abstract class DecoratingClassLoader extends ClassLoader {
 
 	/**
 	 * Add a package name to exclude from decoration (e.g. overriding).
+	 * 从装饰类加载器剔除给定的包
 	 * <p>Any class whose fully-qualified name starts with the name registered
 	 * here will be handled by the parent ClassLoader in the usual fashion.
 	 * @param packageName the package name to exclude
@@ -85,6 +89,7 @@ public abstract class DecoratingClassLoader extends ClassLoader {
 
 	/**
 	 * Add a class name to exclude from decoration (e.g. overriding).
+	 * 从装饰类加载器剔除给定的类
 	 * <p>Any class name registered here will be handled by the parent
 	 * ClassLoader in the usual fashion.
 	 * @param className the class name to exclude
@@ -97,6 +102,7 @@ public abstract class DecoratingClassLoader extends ClassLoader {
 	/**
 	 * Determine whether the specified class is excluded from decoration
 	 * by this class loader.
+	 * 判断给定的类是否被当前装饰类加载器剔除
 	 * <p>The default implementation checks against excluded packages and classes.
 	 * @param className the class name to check
 	 * @return whether the specified class is eligible

@@ -31,7 +31,8 @@ import org.springframework.util.ReflectionUtils;
  * matching in {@link AbstractApplicationContext}. Redefines classes from
  * a cached byte array for every {@code loadClass} call in order to
  * pick up recently loaded types in the parent ClassLoader.
- *
+ *ContextTypeMatchClassLoader为重载类加载器的变体，用于抽象应用上下文中的临时类型的匹配。
+ *为了重用父加载器中的最近加载的类型，将会从类字节缓冲中，重新定义类。
  * @author Juergen Hoeller
  * @since 2.5
  * @see AbstractApplicationContext
@@ -41,13 +42,14 @@ import org.springframework.util.ReflectionUtils;
 class ContextTypeMatchClassLoader extends DecoratingClassLoader implements SmartClassLoader {
 
 	static {
+		//注类加载器为具有并行处理能力的类加载器
 		if (parallelCapableClassLoaderAvailable) {
 			ClassLoader.registerAsParallelCapable();
 		}
 	}
 
 
-	private static Method findLoadedClassMethod;
+	private static Method findLoadedClassMethod;//加载类方法
 
 	static {
 		try {
@@ -59,7 +61,9 @@ class ContextTypeMatchClassLoader extends DecoratingClassLoader implements Smart
 	}
 
 
-	/** Cache for byte array per class name */
+	/** Cache for byte array per class name
+	 * 缓存每个类的字节内容
+	 *  */
 	private final Map<String, byte[]> bytesCache = new ConcurrentHashMap<String, byte[]>(256);
 
 
@@ -96,6 +100,7 @@ class ContextTypeMatchClassLoader extends DecoratingClassLoader implements Smart
 			ReflectionUtils.makeAccessible(findLoadedClassMethod);
 			ClassLoader parent = getParent();
 			while (parent != null) {
+				//父类加载器可以加载给定的类
 				if (ReflectionUtils.invokeMethod(findLoadedClassMethod, parent, className) != null) {
 					return false;
 				}
@@ -106,9 +111,9 @@ class ContextTypeMatchClassLoader extends DecoratingClassLoader implements Smart
 
 		@Override
 		protected Class<?> loadClassForOverriding(String name) throws ClassNotFoundException {
-			byte[] bytes = bytesCache.get(name);
+			byte[] bytes = bytesCache.get(name);//从缓存中获取
 			if (bytes == null) {
-				bytes = loadBytesForClass(name);
+				bytes = loadBytesForClass(name);//加载类文件字节内容
 				if (bytes != null) {
 					bytesCache.put(name, bytes);
 				}

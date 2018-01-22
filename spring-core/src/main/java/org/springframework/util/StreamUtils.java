@@ -122,6 +122,7 @@ public abstract class StreamUtils {
 	/**
 	 * Copy the contents of the given InputStream to the given OutputStream.
 	 * Leaves both streams open when done.
+	 * 拷贝给定输入流的内容到输出流。
 	 * @param in the InputStream to copy from
 	 * @param out the OutputStream to copy to
 	 * @return the number of bytes copied
