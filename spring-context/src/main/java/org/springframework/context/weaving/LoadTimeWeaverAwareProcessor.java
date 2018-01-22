@@ -28,11 +28,11 @@ import org.springframework.util.Assert;
  * {@link org.springframework.beans.factory.config.BeanPostProcessor}
  * implementation that passes the context's default {@link LoadTimeWeaver}
  * to beans that implement the {@link LoadTimeWeaverAware} interface.
- *
+ *加载时间织入后处理器用于设置实现LoadTimeWeaverAware接口的加载时间织入器。
  * <p>{@link org.springframework.context.ApplicationContext Application contexts}
  * will automatically register this with their underlying {@link BeanFactory bean factory},
  * provided that a default {@code LoadTimeWeaver} is actually available.
- *
+ *上下文将会自动注入底层的bean工厂中提供的实际加载时间织入器。
  * <p>Applications should not use this class directly.
  *
  * @author Juergen Hoeller
@@ -42,9 +42,9 @@ import org.springframework.util.Assert;
  */
 public class LoadTimeWeaverAwareProcessor implements BeanPostProcessor, BeanFactoryAware {
 
-	private LoadTimeWeaver loadTimeWeaver;
+	private LoadTimeWeaver loadTimeWeaver;//加载时间织入器
 
-	private BeanFactory beanFactory;
+	private BeanFactory beanFactory;//bean工厂
 
 
 	/**
@@ -89,6 +89,7 @@ public class LoadTimeWeaverAwareProcessor implements BeanPostProcessor, BeanFact
 
 	@Override
 	public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+		//如果bean为LoadTimeWeaverAware的实例，则设置加载时间织入器
 		if (bean instanceof LoadTimeWeaverAware) {
 			LoadTimeWeaver ltw = this.loadTimeWeaver;
 			if (ltw == null) {

@@ -33,6 +33,7 @@ public interface LoadTimeWeaverAware extends Aware {
 	/**
 	 * Set the {@link LoadTimeWeaver} of this object's containing
 	 * {@link org.springframework.context.ApplicationContext ApplicationContext}.
+	 * 设置包含在上下文中对象的LoadTimeWeaver。
 	 * <p>Invoked after the population of normal bean properties but before an
 	 * initialization callback like
 	 * {@link org.springframework.beans.factory.InitializingBean InitializingBean's}
@@ -40,10 +41,14 @@ public interface LoadTimeWeaverAware extends Aware {
 	 * or a custom init-method. Invoked after
 	 * {@link org.springframework.context.ApplicationContextAware ApplicationContextAware's}
 	 * {@link org.springframework.context.ApplicationContextAware#setApplicationContext setApplicationContext(..)}.
+	 * 在正常的bean初始化之后，在初始化回调之前，如InitializingBean的afterPropertiesSet方法或一般初始化方法。
+	 * 在ApplicationContextAware的setApplicationContext方法之后。
 	 * <p><b>NOTE:</b> This method will only be called if there actually is a
 	 * {@code LoadTimeWeaver} available in the application context. If
 	 * there is none, the method will simply not get invoked, assuming that the
 	 * implementing object is able to activate its weaving dependency accordingly.
+	 * 注意，如果应用上下文中存在可使用的实际加载时间织入器，此方法将会被调用。如果没有，此方法将不会被调用，
+	 * 假设具体的实现可以激活根据具体情况织入。
 	 * @param loadTimeWeaver the {@code LoadTimeWeaver} instance (never {@code null})
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet
 	 * @see org.springframework.context.ApplicationContextAware#setApplicationContext
