@@ -43,7 +43,7 @@ import org.springframework.core.PriorityOrdered;
 
 /**
  * Delegate for AbstractApplicationContext's post-processor handling.
- *
+ *代理抽象上下文的后处理器处理操作。
  * @author Juergen Hoeller
  * @since 4.0
  */
@@ -53,6 +53,7 @@ class PostProcessorRegistrationDelegate {
 			ConfigurableListableBeanFactory beanFactory, List<BeanFactoryPostProcessor> beanFactoryPostProcessors) {
 
 		// Invoke BeanDefinitionRegistryPostProcessors first, if any.
+		//首先调用bean定义注册后处理器
 		Set<String> processedBeans = new HashSet<String>();
 
 		if (beanFactory instanceof BeanDefinitionRegistry) {
