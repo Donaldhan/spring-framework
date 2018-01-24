@@ -39,10 +39,10 @@ import org.springframework.util.StringUtils;
  * and their dependencies from either a local {@code ApplicationContext} (with a
  * local {@code LiveBeansView} bean definition) or all registered ApplicationContexts
  * (driven by the {@value #MBEAN_DOMAIN_PROPERTY_NAME} environment property).
- *
+ * 激活bean视图暴露适配器，从本地应用上下文或所有注册的应用上下文，构建上下文中的bean和其依赖的JSON快照。
  * <p>Note: This feature is still in beta and primarily designed for use with
  * Spring Tool Suite 3.1 and higher.
- *
+ *注意：此特性当前为beta版本，主要用于Spring Tool Suite 3.1或更高版本。
  * @author Juergen Hoeller
  * @author Stephane Nicoll
  * @since 3.2
@@ -58,9 +58,13 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 	private static final Set<ConfigurableApplicationContext> applicationContexts =
 			new LinkedHashSet<ConfigurableApplicationContext>();
 
-	private static String applicationName;
+	private static String applicationName;//应用名称
 
 
+	/**
+	 * 注册应用上下文到当前Mbean
+	 * @param applicationContext
+	 */
 	static void registerApplicationContext(ConfigurableApplicationContext applicationContext) {
 		String mbeanDomain = applicationContext.getEnvironment().getProperty(MBEAN_DOMAIN_PROPERTY_NAME);
 		if (mbeanDomain != null) {
@@ -81,6 +85,10 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 		}
 	}
 
+	/**
+	 * 从当前 反注册应用上下文
+	 * @param applicationContext
+	 */
 	static void unregisterApplicationContext(ConfigurableApplicationContext applicationContext) {
 		synchronized (applicationContexts) {
 			if (applicationContexts.remove(applicationContext) && applicationContexts.isEmpty()) {
@@ -100,7 +108,7 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 	}
 
 
-	private ConfigurableApplicationContext applicationContext;
+	private ConfigurableApplicationContext applicationContext;//应用上下文
 
 
 	@Override
@@ -115,6 +123,9 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 	 * Generate a JSON snapshot of current beans and their dependencies,
 	 * finding all active ApplicationContexts through {@link #findApplicationContexts()},
 	 * then delegating to {@link #generateJson(java.util.Set)}.
+	 * 产生当前应用上下文的bean和其依赖的JSON快照，通过{@link #findApplicationContexts()}
+	 * 方法获取所有激活的应用上下文，然后代理{@link #generateJson(java.util.Set)}
+	 * 产生所有上下文的快照。
 	 */
 	@Override
 	public String getSnapshotAsJson() {
@@ -130,7 +141,9 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 
 	/**
 	 * Find all applicable ApplicationContexts for the current application.
+	 * 获取所用当前应用的应用上下文
 	 * <p>Called if no specific ApplicationContext has been set for this LiveBeansView.
+	 * 当LiveBeansView没有配置应用上下文时，调用
 	 * @return the set of ApplicationContexts
 	 */
 	protected Set<ConfigurableApplicationContext> findApplicationContexts() {
@@ -141,12 +154,15 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 
 	/**
 	 * Actually generate a JSON snapshot of the beans in the given ApplicationContexts.
+	 * 产生实际给定应用上下文的中bean的JSON快照。
 	 * <p>This implementation doesn't use any JSON parsing libraries in order to avoid
 	 * third-party library dependencies. It produces an array of context description
 	 * objects, each containing a context and parent attribute as well as a beans
 	 * attribute with nested bean description objects. Each bean object contains a
 	 * bean, scope, type and resource attribute, as well as a dependencies attribute
 	 * with a nested array of bean names that the present bean depends on.
+	 * 当前实现，为了避免第三方依赖，没有使用JSON解析库。产生上下文描述数组，及上下文中的bean和bean的依赖、
+	 * 嵌入式bean。每个bean包含作用域，类型，资源属性，及依赖属性。
 	 * @param contexts the set of ApplicationContexts
 	 * @return the JSON document
 	 */
@@ -154,6 +170,7 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 		StringBuilder result = new StringBuilder("[\n");
 		for (Iterator<ConfigurableApplicationContext> it = contexts.iterator(); it.hasNext();) {
 			ConfigurableApplicationContext context = it.next();
+			//上下文
 			result.append("{\n\"context\": \"").append(context.getId()).append("\",\n");
 			if (context.getParent() != null) {
 				result.append("\"parent\": \"").append(context.getParent().getId()).append("\",\n");
@@ -163,6 +180,7 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 			}
 			result.append("\"beans\": [\n");
 			ConfigurableListableBeanFactory bf = context.getBeanFactory();
+			//处理上下文中的bean
 			String[] beanNames = bf.getBeanDefinitionNames();
 			boolean elementAppended = false;
 			for (String beanName : beanNames) {
@@ -173,13 +191,16 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 					}
 					result.append("{\n\"bean\": \"").append(beanName).append("\",\n");
 					result.append("\"aliases\": ");
+					//别名
 					appendArray(result, bf.getAliases(beanName));
 					result.append(",\n");
+					//作用域
 					String scope = bd.getScope();
 					if (!StringUtils.hasText(scope)) {
 						scope = BeanDefinition.SCOPE_SINGLETON;
 					}
 					result.append("\"scope\": \"").append(scope).append("\",\n");
+					//类型
 					Class<?> beanType = bf.getType(beanName);
 					if (beanType != null) {
 						result.append("\"type\": \"").append(beanType.getName()).append("\",\n");
@@ -187,8 +208,10 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 					else {
 						result.append("\"type\": null,\n");
 					}
+					//资源描述
 					result.append("\"resource\": \"").append(getEscapedResourceDescription(bd)).append("\",\n");
 					result.append("\"dependencies\": ");
+					//依赖bean
 					appendArray(result, bf.getDependenciesForBean(beanName));
 					result.append("\n}");
 					elementAppended = true;
@@ -207,6 +230,7 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 	/**
 	 * Determine whether the specified bean is eligible for inclusion in the
 	 * LiveBeansView JSON snapshot.
+	 * 判断给定的bean是否适合在当前LiveBeansView的JSON快照中
 	 * @param beanName the name of the bean
 	 * @param bd the corresponding bean definition
 	 * @param bf the containing bean factory
@@ -220,6 +244,7 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 	/**
 	 * Determine a resource description for the given bean definition and
 	 * apply basic JSON escaping (backslashes, double quotes) to it.
+	 * 获取bean定义的资源描述信息，并返回替换反斜杠和双引号的JSON格式
 	 * @param bd the bean definition to build the resource description for
 	 * @return the JSON-escaped resource description
 	 */
@@ -244,6 +269,11 @@ public class LiveBeansView implements LiveBeansViewMBean, ApplicationContextAwar
 		return result.toString();
 	}
 
+	/**
+	 * 添加字符串数组JSON格式
+	 * @param result
+	 * @param arr
+	 */
 	private void appendArray(StringBuilder result, String[] arr) {
 		result.append('[');
 		if (arr.length > 0) {
