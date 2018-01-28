@@ -53,21 +53,23 @@ public class SimpleAliasRegistry implements AliasRegistry {
 			if (registeredName != null) {
 				if (registeredName.equals(name)) {
 					// An existing alias - no need to re-register
+					//bean的别名已经存在，不需要注册
 					return;
 				}
 				if (!allowAliasOverriding()) {
 					throw new IllegalStateException("Cannot register alias '" + alias + "' for name '" +
 							name + "': It is already registered for name '" + registeredName + "'.");
 				}
-			}
-			checkForAliasCircle(name, alias);
-			this.aliasMap.put(alias, name);
+			} 
+			checkForAliasCircle(name, alias);//检查别名是否存在循环引用
+			this.aliasMap.put(alias, name);//注册bean别名
 		}
 	}
 
 	/**
 	 * Return whether alias overriding is allowed.
 	 * Default is {@code true}.
+	 * 是否允许重写别名，默认为true。
 	 */
 	protected boolean allowAliasOverriding() {
 		return true;
@@ -75,6 +77,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 
 	/**
 	 * Determine whether the given name has the given alias registered.
+	 * 判断给定的别名是否注册
 	 * @param name the name to check
 	 * @param alias the alias to look for
 	 * @since 4.2.1
@@ -84,6 +87,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 			String registeredName = entry.getValue();
 			if (registeredName.equals(name)) {
 				String registeredAlias = entry.getKey();
+				//当且仅当存在别名注册，或bean别名的别名注册时，返回true
 				return (registeredAlias.equals(alias) || hasAlias(registeredAlias, alias));
 			}
 		}
@@ -114,6 +118,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 
 	/**
 	 * Transitively retrieve all aliases for the given name.
+	 * 获取给定bean的别名，包括别名的别名
 	 * @param name the target name to find aliases for
 	 * @param result the resulting aliases list
 	 */
@@ -131,8 +136,10 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	/**
 	 * Resolve all alias target names and aliases registered in this
 	 * factory, applying the given StringValueResolver to them.
+	 * 解决所有别名目标name和工作中注册的别名，并使用给定的字符串值解决器，处理它们。
 	 * <p>The value resolver may for example resolve placeholders
 	 * in target bean names and even in alias names.
+	 * 值解决器，可以为解决目标bean的name或别名中的占位符。
 	 * @param valueResolver the StringValueResolver to apply
 	 */
 	public void resolveAliases(StringValueResolver valueResolver) {
@@ -174,6 +181,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 	 * Check whether the given name points back to the given alias as an alias
 	 * in the other direction already, catching a circular reference upfront
 	 * and throwing a corresponding IllegalStateException.
+	 * 检查给定的name是否存在指向给定别名的循环引用
 	 * @param name the candidate name
 	 * @param alias the candidate alias
 	 * @see #registerAlias
@@ -189,6 +197,7 @@ public class SimpleAliasRegistry implements AliasRegistry {
 
 	/**
 	 * Determine the raw name, resolving aliases to canonical names.
+	 * 获取bean的标准name的别名
 	 * @param name the user-specified name
 	 * @return the transformed name
 	 */

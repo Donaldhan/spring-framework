@@ -170,6 +170,7 @@ public abstract class Assert {
 	/**
 	 * Assert that the given String contains valid text content; that is, it must not
 	 * be {@code null} and must contain at least one non-whitespace character.
+	 * 断言给定的字符串中，是否包含有效的文本；也就是说，字符串不能为null，且至少包含一个非空字符串。
 	 * <pre class="code">Assert.hasText(name, "'name' must not be empty");</pre>
 	 * @param text the String to check
 	 * @param message the exception message to use if the assertion fails
